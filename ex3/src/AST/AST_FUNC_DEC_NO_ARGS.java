@@ -87,7 +87,7 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
         // enter the function as a class member of current class
         if(currCls != null){
-            SYMBOL_TABLE.getInstance().currentClassFunctionMembers.insertAtEnd(new TYPE_CLASS_VAR_DEC(currFunc.returnType, funcName));
+            SYMBOL_TABLE.getInstance().currentClassFunctionMembers.insertAtEnd(new TYPE_CLASS_VAR_DEC(currFunc, funcName));
         }
 
         // begin scope of function in symbol table and set current function and inside function

@@ -48,45 +48,35 @@ public class AST_VAR_SIMPLE extends AST_VAR
 	public TYPE SemantMe()
     {
         TYPE varFindType = null;
+		//we now check to see if the variable has already been declared in the following order:
+		//first we check from the inner scope
+		varFindType = SYMBOL_TABLE.getInstance().findInClass(varName);
 
-		// Check if we're inside a class
-		if (SYMBOL_TABLE.getInstance().get_inside_class()) {
-    		// We're inside a class, search in the class' variables (including inheritance tree)
-    		varFindType = SYMBOL_TABLE.getInstance().currentClassVariableMembers.search(varName);
-
-    		// Get the current class
-    		TYPE currClass = SYMBOL_TABLE.getInstance().get_current_class();
-    		if (currClass != null) {
-        		// If the variable was not found in the current class, check the superclass (inheritance tree)
-        		if (varFindType == null || !((varFindType instanceof TYPE_INT) || (varFindType instanceof TYPE_CLASS) || (varFindType instanceof TYPE_NIL))) {
-            		// If the class has no father (no superclass), print error
-            		if (((TYPE_CLASS) currClass).father == null) {
-                		System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
-                		printError(this.line);
-            		}
-
-           			// Search in the inheritance tree
-            		varFindType = ((TYPE_CLASS)currClass).findVariableInInheritanceTree(varName);
-
-            		// If still not found, print error
-            		if (varFindType == null || !((varFindType instanceof TYPE_INT) || (varFindType instanceof TYPE_CLASS) || (varFindType instanceof TYPE_NIL))) {
-                		System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
-                		printError(this.line);
-            		}
-        		}
-    		}
-		} 
-		else {
-    		// If not inside a class, search in the global scope
-    		varFindType = SYMBOL_TABLE.getInstance().find(varName);
-
-    		// If the variable is still not found in the global scope, print error
-    		if (varFindType == null || !((varFindType instanceof TYPE_INT) || (varFindType instanceof TYPE_ARRAY) || (varFindType instanceof TYPE_CLASS) || (varFindType instanceof TYPE_NIL))) {
-        		System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
-        		printError(this.line);
-    		}
+		if (varFindType == null){
+			// we want to check in inheritance tree
+			TYPE currClass = SYMBOL_TABLE.getInstance().get_current_class();
+			if (currClass != null && ((TYPE_CLASS)currClass).father != null){
+				varFindType = ((TYPE_CLASS)currClass).findVariableInInheritanceTree(varName);
+				if (varFindType == null){
+					// only left to check if it is in global scope
+					varFindType = SYMBOL_TABLE.getInstance().find(varName);
+					if (varFindType == null){
+						// we didnt find it
+						System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
+						printError(this.line);
+					}
+				}
+			}
+			else {
+				varFindType = SYMBOL_TABLE.getInstance().find(varName);
+				if (varFindType == null){
+					// we didnt find it
+					System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
+					printError(this.line);
+				}
+			}
 		}
-        
+		
         return varFindType;
     }
 }

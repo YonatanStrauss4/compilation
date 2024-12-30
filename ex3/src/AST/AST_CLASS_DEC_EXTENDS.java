@@ -29,6 +29,7 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
         /*******************************/
         this.className = className;
         this.superClassName = superClassName;
+        this.classBody = classBody;
         this.line = line;
     }
 
@@ -99,6 +100,7 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
         SYMBOL_TABLE.getInstance().set_inside_class(false);
         SYMBOL_TABLE.getInstance().set_current_class(null);
         SYMBOL_TABLE.getInstance().endScope();
+
         SYMBOL_TABLE.getInstance().enter(className, class_build);
 
         return null;

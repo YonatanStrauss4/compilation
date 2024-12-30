@@ -167,7 +167,10 @@ public class SYMBOL_TABLE
 	
 	public TYPE findInScope(String name) {
 		SYMBOL_TABLE_ENTRY e;
-		for (e = top; e != null && e.name != "SCOPE-BOUNDARY"; e = e.prevtop) {
+		for (e = top; e != null; e = e.prevtop) {
+			if (e.name.equals("SCOPE-BOUNDARY")){
+				break;
+			}
 			if (name.equals(e.name)) {
 				return e.type;
 			}
@@ -181,7 +184,10 @@ public class SYMBOL_TABLE
 		}
 
 		SYMBOL_TABLE_ENTRY e;
-		for (e = top; !(e.type instanceof TYPE_CLASS); e = e.prevtop) {
+		for (e = top; e != null; e = e.prevtop) {
+			if (e.type instanceof TYPE_CLASS){
+				break;
+			}
 			if (name.equals(e.name)) {
 				return e.type;
 			}

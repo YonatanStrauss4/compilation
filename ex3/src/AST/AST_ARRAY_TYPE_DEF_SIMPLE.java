@@ -64,6 +64,7 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 
 	public TYPE SemantMe()
 	{
+		
 		TYPE type = t.SemantMe();
 
 		// check if array has type
@@ -73,8 +74,8 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 		}
 
 		// check if array has been declared with type void
-		if(type instanceof TYPE_VOID){
-			System.out.format(">> ERROR(%d) array type cannot be of void type\n",line);
+		if(type instanceof TYPE_VOID || type instanceof TYPE_NIL){
+			System.out.format(">> ERROR(%d) array type cannot be of void or nil type\n",line);
 			printError(line);
 		}
 
@@ -82,13 +83,6 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 		// check if array has been defined in global scope
 		if(SYMBOL_TABLE.getInstance().get_scope_level() != 0){
 			System.out.format(">> ERROR(%d) array type definition must be in global scope\n",line);
-			printError(line);
-		}
-
-		// check if the type has already been declared
-		TYPE declaration = SYMBOL_TABLE.getInstance().find(type.name);
-		if (declaration != null && (declaration instanceof TYPE_CLASS || declaration instanceof TYPE_ARRAY)){
-			System.out.format(">> ERROR(%d) type %s not declared\n",line,type.name);
 			printError(line);
 		}
 
@@ -100,7 +94,7 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 
 		// create an array instance
 		TYPE_ARRAY array = new TYPE_ARRAY(type, name);
-
+		
 		// enter the array to the symbol table
 		SYMBOL_TABLE.getInstance().enter(name, array);
 

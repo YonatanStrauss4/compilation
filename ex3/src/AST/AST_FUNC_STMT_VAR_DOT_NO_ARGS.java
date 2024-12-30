@@ -68,18 +68,24 @@ public class AST_FUNC_STMT_VAR_DOT_NO_ARGS extends AST_FUNC_STMT
 			System.out.format(">> ERROR(%d) variable is not an instance of a class\n", this.line);
 				printError(this.line);
 		}
-
-        // check if the function is indeed a data member of the class or the classes it extends
-		varType = (TYPE_CLASS)varType;
-		TYPE funcSearch = SYMBOL_TABLE.getInstance().currentClassFunctionMembers.search(funcName);
-		if(funcSearch == null){
-			funcSearch = ((TYPE_CLASS)varType).findFunctionInInheritanceTree(funcName);
-			if(funcSearch == null){
-				System.out.format(">> ERROR(%d) %s is not a data memeber of the class or the classes it extends\n", this.line, funcName);
-				printError(this.line);
-			}
-			
-		}
+        
+        varType = (TYPE_CLASS)varType;
+        if (SYMBOL_TABLE.getInstance().get_inside_class()){
+            TYPE funcSearch = SYMBOL_TABLE.getInstance().currentClassFunctionMembers.search(funcName);
+            if (funcSearch == null && ((TYPE_CLASS)varType).father != null){
+                funcSearch = ((TYPE_CLASS)varType).findFunctionInInheritanceTree(funcName);
+                if (funcSearch == null) {
+                    System.out.format(">> ERROR(%d) %s is not a data memeber of the class or the classes it extends\n", this.line, funcName);
+                    printError(this.line);
+                }
+            }
+        }
+       
+        TYPE funcSearch = ((TYPE_CLASS)varType).findFunctionInInheritanceTree(funcName);
+        if (funcSearch == null){
+            System.out.format(">> ERROR(%d) %s is not a data memeber of the class or the classes it extends\n", this.line, funcName);
+            printError(this.line);
+        }
 
         // return the return type of the function
 		return ((TYPE_FUNCTION)funcSearch).returnType;

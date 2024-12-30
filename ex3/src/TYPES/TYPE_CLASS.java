@@ -30,8 +30,8 @@ public class TYPE_CLASS extends TYPE
 			return null;
 		}
 		TYPE func = current.data_members.search(name);
-		if(func != null && func instanceof TYPE_FUNCTION){
-			return (TYPE_FUNCTION)func;
+		if(func != null && ((TYPE_CLASS_VAR_DEC)func).type instanceof TYPE_FUNCTION){
+			return (TYPE_FUNCTION)((TYPE_CLASS_VAR_DEC)func).type;
 		}
 		return null;
 	}
@@ -41,7 +41,6 @@ public class TYPE_CLASS extends TYPE
 		if(current.data_members == null){
 			return null;
 		}
-		System.out.println(current.data_members.head.name);
 		TYPE var = current.data_members.search(name);
 		if(var != null && var instanceof TYPE_CLASS_VAR_DEC){
 			return (TYPE_CLASS_VAR_DEC)var;
@@ -83,7 +82,7 @@ public class TYPE_CLASS extends TYPE
 		while(curr_father != null){
 			TYPE_CLASS_VAR_DEC var = curr_father.findVariable(name);
 			if(var != null){
-				return (TYPE_CLASS_VAR_DEC)var;
+				return ((TYPE_CLASS_VAR_DEC)var).type;
 			}
 			curr_father = curr_father.father;
 		}

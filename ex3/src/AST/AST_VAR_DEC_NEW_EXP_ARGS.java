@@ -60,7 +60,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         if (new_exp != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, new_exp.SerialNumber);
     }
 
-    public TYPE semantMe()
+    public TYPE SemantMe()
     {
         // check if variable with new is a data member
         if (SYMBOL_TABLE.getInstance().get_inside_class() && !SYMBOL_TABLE.getInstance().get_inside_function()){
@@ -84,8 +84,15 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 
 		// check if variable has a name that already been used in scope, or is a reserved word
         TYPE findName = SYMBOL_TABLE.getInstance().findInScope(variable);
-        if(findName != null || isReservedWord(variable)){
-            System.out.format(">> ERROR(%d) the name %s already been used scope or is a reserved word\n", this.line, variable);
+		TYPE currFunc = SYMBOL_TABLE.getInstance().get_current_function();
+
+		TYPE findParam = null;
+		if (currFunc != null && ((TYPE_FUNCTION)currFunc).params != null){
+			findParam = ((TYPE_FUNCTION)currFunc).params.search(variable);
+		}
+
+        if(findName != null || isReservedWord(variable) || findParam != null){
+            System.out.format(">> ERROR(%d) the name %s already been used scope or is a reserved word or is an argument\n", this.line, variable);
             printError(this.line);
         }
 
@@ -105,7 +112,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         TYPE new_exp_type = new_exp.SemantMe();
 
         // check for array declaration incompatible types
-        if(!arrayType.equals(new_exp_type)){
+        if(arrayType != null && !arrayType.equals(new_exp_type)){
             System.out.format(">> ERROR(%d) Incompatible types: array %s declared with type %s and used with type %s  \n", this.line, variable, arrayType.name, new_exp_type.name);
             printError(this.line);
         }

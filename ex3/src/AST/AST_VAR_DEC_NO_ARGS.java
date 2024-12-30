@@ -77,8 +77,15 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
 
 		// check if variable has a name that already been used in scope, or is a reserved word
         TYPE findName = SYMBOL_TABLE.getInstance().findInScope(varName);
-        if(findName != null || isReservedWord(varName)){
-            System.out.format(">> ERROR(%d) the name %s already been used scope or is a reserved word\n", this.line, varName);
+		TYPE currFunc = SYMBOL_TABLE.getInstance().get_current_function();
+
+		TYPE findParam = null;
+		if (currFunc != null && ((TYPE_FUNCTION)currFunc).params != null){
+			findParam = ((TYPE_FUNCTION)currFunc).params.search(varName);
+		}
+
+        if(findName != null || isReservedWord(varName) || findParam != null){
+            System.out.format(">> ERROR(%d) the name %s already been used scope or is a reserved word or is an argument\n", this.line, varName);
             printError(this.line);
         }
 
@@ -99,6 +106,7 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
         }
 
 		// return the varible as a declared var
+
 		return new TYPE_CLASS_VAR_DEC(type, varName);
 	}
 }

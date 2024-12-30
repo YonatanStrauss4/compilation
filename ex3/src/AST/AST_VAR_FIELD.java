@@ -66,12 +66,11 @@ public class AST_VAR_FIELD extends AST_VAR
 		// check if the variable is TYPE_CLASS
 		if(!(type instanceof TYPE_CLASS)){
 			System.out.format(">> ERROR(%d) variable is not an instance of a class\n", this.line);
-				printError(this.line);
+			printError(this.line);
 		}
 
 		// check if the variable is indeed a data member of the class or the classes it extends, if we are in the class currently
 		type = (TYPE_CLASS)type;
-		System.out.println(type.name);
 
 		TYPE varSearch = null;
 		if(SYMBOL_TABLE.getInstance().get_current_class() != null && SYMBOL_TABLE.getInstance().get_current_class().name.equals(type.name)){

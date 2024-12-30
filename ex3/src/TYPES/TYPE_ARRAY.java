@@ -7,7 +7,6 @@ public class TYPE_ARRAY extends TYPE
     /* DATA MEMBERS */
     /****************/
     public TYPE type;
-    public String name;
 
     /******************/
     /* CONSTRUCTOR(S) */

@@ -53,6 +53,7 @@ public class AST_TYPE_ID extends AST_TYPE
     public TYPE SemantMe()
     {
         // search if the type is a class or array that has been defiend before
+
         TYPE t = SYMBOL_TABLE.getInstance().find(typeName);
 
         //check also if maybe we are currently in the class that we are using as type for the variable
@@ -62,11 +63,10 @@ public class AST_TYPE_ID extends AST_TYPE
             System.out.format(">> ERROR(%d) type not defined: %s\n",line,typeName);
             printError(line);
         }
-
-        if(t == null){
+        
+        if (t == null){
             return currClass;
         }
-
         return t;
     }
 }

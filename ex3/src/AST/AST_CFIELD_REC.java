@@ -63,7 +63,7 @@ public class AST_CFIELD_REC extends AST_Node
 	{
 		// semant recursively
 		TYPE t = cF.SemantMe();
-    
+
 		if(cFR == null)
 		{
 			return new TYPE_LIST(t,null);

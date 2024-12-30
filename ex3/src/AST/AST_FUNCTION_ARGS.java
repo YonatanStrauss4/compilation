@@ -102,8 +102,12 @@ public class AST_FUNCTION_ARGS extends AST_FUNCTION
             args = funcArgs.SemantMe();  // semant the arguments of the function call
         }
         
+        //System.out.println((((TYPE_FUNCTION)funcFindType).params).head.name);
+        //System.out.println(((TYPE_CLASS_VAR_DEC)(((TYPE_FUNCTION)funcFindType).params).head).type.name);
+        //System.out.println(args.head.name);
+
         if(!(args.checkArgumentsList(((TYPE_FUNCTION)funcFindType).params))){
-            System.out.format(">> ERROR(%d) mismatch in types of arguments in function call (\n", this.line, funcName);
+            System.out.format(">> ERROR(%d) mismatch in types of arguments in function call\n", this.line, funcName);
             printError(this.line);
         }
 
