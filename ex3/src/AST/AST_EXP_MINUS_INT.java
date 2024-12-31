@@ -36,7 +36,7 @@ public class AST_EXP_MINUS_INT extends AST_EXP
 		/* AST NODE TYPE = EXP MINUS INT */
 		/*******************************/
 
-		System.out.println("AST NODE EXP MINUS INT\n");
+		System.out.print("AST NODE EXP MINUS INT\n");
 
         	/******************************************/
         	/* PRINT i ... */

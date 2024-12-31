@@ -65,16 +65,16 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 	public TYPE SemantMe()
 	{
 		//semant variable type
-		TYPE type = t.SemantMe();
+		TYPE varType = t.SemantMe();
 
 		// check if variable is of type void
-		if(type instanceof TYPE_VOID){
+		if(varType instanceof TYPE_VOID){
 			System.out.format(">> ERROR(%d) variable cannot be of void type\n", this.line);
 			printError(this.line);
 		}
 
 		// check if type is null
-        if(type == null){
+        if(varType == null){
             System.out.format(">> ERROR(%d) no type declared\n", this.line);
             printError(this.line);
         }
@@ -96,7 +96,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 
 		// check if variable is shadowing a variable in the current class
 		TYPE_CLASS curr_cls = SYMBOL_TABLE.getInstance().get_current_class();
-		TYPE_CLASS_VAR_DEC curr_variable = new TYPE_CLASS_VAR_DEC(type, varName);
+		TYPE_CLASS_VAR_DEC curr_variable = new TYPE_CLASS_VAR_DEC(varType, varName);
 		if(!checkIfShadowingIsCorrect(curr_cls, curr_variable)){
 			System.out.format(">> ERROR(%d) Shadowing is not allowed\n", this.line, varName);
 			printError(this.line);
@@ -108,46 +108,81 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 			printError(this.line);
 		}
 
+		
+		TYPE expType = exp.SemantMe();
+
+		if (varType instanceof TYPE_CLASS){
+			if (expType instanceof TYPE_CLASS){
+				if(!(((TYPE_CLASS)expType).checkIfInherit((TYPE_CLASS)varType))){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+		}
+		else if (varType instanceof TYPE_ARRAY){
+			if (expType instanceof TYPE_ARRAY){
+				if(!((((TYPE_ARRAY)expType).name).equals(((TYPE_ARRAY)varType).name))){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+		}
+		else if (!(varType.equals(expType))){
+			System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+			printError(line);	
+		}
+
 		// enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(varName, type);
+		SYMBOL_TABLE.getInstance().enter(varName, varType);
 
 		// enter the variable as a class member of current class
         if(curr_cls != null && !(SYMBOL_TABLE.getInstance().get_inside_function())){
-            SYMBOL_TABLE.getInstance().currentClassVariableMembers.insertAtEnd(new TYPE_CLASS_VAR_DEC(type, varName));
+            SYMBOL_TABLE.getInstance().currentClassVariableMembers.insertAtEnd(new TYPE_CLASS_VAR_DEC(varType, varName));
         }
 
 		// return the varible as a class member
-		return new TYPE_CLASS_VAR_DEC(type, varName);
+		return new TYPE_CLASS_VAR_DEC(varType, varName);
 	}
 
 	// a function to check if shadowing is correct
 	public static boolean checkIfShadowingIsCorrect(TYPE_CLASS curr_cls, TYPE_CLASS_VAR_DEC curr_variable) {
-	if(curr_cls == null){
-		return true;
-	}
-    TYPE_CLASS father_cls = curr_cls.father;
+		if(curr_cls == null){
+			return true;
+		}
+    	TYPE_CLASS father_cls = curr_cls.father;
 
-    while (father_cls != null) {
-        // Check if the variable exists in the father class
-        TYPE_CLASS_VAR_DEC variable_in_father = father_cls.findVariable(curr_variable.name);
+    	while (father_cls != null) {
+        	// Check if the variable exists in the father class
+        	TYPE_CLASS_VAR_DEC variable_in_father = father_cls.findVariable(curr_variable.name);
         
-        // If the variable exists and its type is the same as the current variable, return false (shadowing)
-        if (variable_in_father != null) {
-            if (variable_in_father.type.equals(curr_variable.type)) {
-                return false;   
-            }
-        }
-        // Check if a function with the same name exists in the father class
-        TYPE_FUNCTION function_in_father = father_cls.findFunction(curr_variable.name);
-        // If the function exists, return false (shadowing)
-        if (function_in_father != null) {
-            return false;
-        }
-        // Move to the next parent class
-        father_cls = father_cls.father;
-    }
-    // If no shadowing is detected, return true
-    return true;
-}
-
+        	// If the variable exists and its type is the same as the current variable, return false (shadowing)
+        	if (variable_in_father != null) {
+            	if (variable_in_father.type.equals(curr_variable.type)) {
+                	return false;   
+            	}
+        	}
+        	// Check if a function with the same name exists in the father class
+        	TYPE_FUNCTION function_in_father = father_cls.findFunction(curr_variable.name);
+        	// If the function exists, return false (shadowing)
+        	if (function_in_father != null) {
+            	return false;
+        	}
+        	// Move to the next parent class
+        	father_cls = father_cls.father;
+    	}
+    	// If no shadowing is detected, return true
+    	return true;
+	}
 }

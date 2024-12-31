@@ -71,6 +71,11 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
 
         // get return type and create function type 
         TYPE returnType = t.SemantMe();
+
+        //
+        SYMBOL_TABLE.getInstance().beginScope();
+        //
+
         TYPE_FUNCTION currFunc = new TYPE_FUNCTION(returnType, funcName, args.SemantMe());
 
         // check if function name is already declared in scope or is a reserved word       
@@ -95,7 +100,7 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
         }
 
         // begin scope of function in symbol table and set current function and inside function
-        SYMBOL_TABLE.getInstance().beginScope();
+        
         SYMBOL_TABLE.getInstance().enter(funcName, currFunc);
         SYMBOL_TABLE.getInstance().set_current_function(currFunc);
         SYMBOL_TABLE.getInstance().set_inside_function(true);
@@ -112,7 +117,7 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
         SYMBOL_TABLE.getInstance().enter(funcName, currFunc);
 
         // return the function as a class member
-        return new TYPE_CLASS_VAR_DEC(currFunc, funcName);
+        return new TYPE_CLASS_FUNC_DEC(currFunc, funcName);
     }
 
 

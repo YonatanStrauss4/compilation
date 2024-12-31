@@ -54,34 +54,32 @@ public class AST_FUNC_STMT_NO_ARGS extends AST_FUNC_STMT
         // get the current class
         TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
         TYPE funcFindType = null;
-        
-        // class is null, so we are in global scope
-        if(currClass == null){
-            // search for the function and check if it is a function
-            funcFindType = SYMBOL_TABLE.getInstance().find(funcName);
-            if(funcFindType == null || (funcFindType != null && !(funcFindType instanceof TYPE_FUNCTION))){
-                System.out.format(">> ERROR(%d) function %s has not been declared\n", this.line, funcName);
-				printError(this.line);
-            }
-        }
-        
-        // we are in a class scope
-        else{
-            //first, we search the function in the data members of the function
-            funcFindType = SYMBOL_TABLE.getInstance().currentClassFunctionMembers.search(funcName);
-            if(funcFindType == null || (funcFindType != null && !(funcFindType instanceof TYPE_FUNCTION))){
-                if(((TYPE_CLASS)currClass).father == null){
-                    System.out.format(">> ERROR(%d) function %s has not been declared\n", this.line, funcName);
-                    printError(this.line);
-                }
-                // there is an inheritance tree, search in the data members of the fathers
-                funcFindType = ((TYPE_CLASS)currClass).findFunctionInInheritanceTree(funcName);
-                if(funcFindType == null || (funcFindType != null && !(funcFindType instanceof TYPE_FUNCTION))){
-                    System.out.format(">> ERROR(%d) function %s has not been declared\n", this.line, funcName);
-                    printError(this.line);
-                }
-            }
-        }
+
+        funcFindType = SYMBOL_TABLE.getInstance().findInClass(funcName);
+
+		if (funcFindType == null){
+			// we want to check in inheritance tree
+			if (currClass != null && ((TYPE_CLASS)currClass).father != null){
+				funcFindType = ((TYPE_CLASS)currClass).findFunctionInInheritanceTree(funcName);
+				if (funcFindType == null){
+					// only left to check if it is in global scope
+					funcFindType = SYMBOL_TABLE.getInstance().find(funcName);
+					if (funcFindType == null){
+						// we didnt find it
+						System.out.format(">> ERROR(%d) function %s has not been declared\n", this.line, funcName);
+						printError(this.line);
+					}
+				}
+			}
+			else {
+				funcFindType = SYMBOL_TABLE.getInstance().find(funcName);
+				if (funcFindType == null){
+					// we didnt find it
+					System.out.format(">> ERROR(%d) function %s has not been declared\n", this.line, funcName);
+					printError(this.line);
+				}
+			}
+		}
 
         // return the return type of the function
         return ((TYPE_FUNCTION)funcFindType).returnType;

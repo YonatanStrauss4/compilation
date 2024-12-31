@@ -64,7 +64,6 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
     public TYPE SemantMe()
     {
-
         // get return type and create function type
         TYPE returnType = t.SemantMe();
         TYPE_FUNCTION currFunc = new TYPE_FUNCTION(returnType, funcName, null);
@@ -108,6 +107,6 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
         SYMBOL_TABLE.getInstance().enter(funcName, currFunc);
 
         // return the function as a class member
-        return new TYPE_CLASS_VAR_DEC(currFunc, funcName);
+        return new TYPE_CLASS_FUNC_DEC(currFunc, funcName);
     }
 }

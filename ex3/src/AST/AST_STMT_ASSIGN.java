@@ -5,13 +5,13 @@ public class AST_STMT_ASSIGN extends AST_STMT
 {
 
 	public AST_VAR var;
-	public AST_EXP newExp;
+	public AST_EXP exp;
 	public int line;
 
 	/*******************/
 	/*  CONSTRUCTOR(S) */
 	/*******************/
-	public AST_STMT_ASSIGN(AST_VAR var,AST_EXP newExp, int line)
+	public AST_STMT_ASSIGN(AST_VAR var,AST_EXP exp, int line)
 	{
 		/******************************/
 		/* SET A UNIQUE SERIAL NUMBER */
@@ -27,7 +27,7 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		/* COPY INPUT DATA NENBERS ... */
 		/*******************************/
 		this.var = var;
-		this.newExp = newExp;
+		this.exp = exp;
 		this.line = line;
 	}
 
@@ -42,7 +42,7 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		/* RECURSIVELY PRINT VAR + EXP ... */
 		/***********************************/
 		if (var != null) var.PrintMe();
-		if (newExp != null) newExp.PrintMe();
+		if (exp != null) exp.PrintMe();
 
 		/***************************************/
 		/* PRINT Node to AST GRAPHVIZ DOT file */
@@ -55,24 +55,46 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		/* PRINT Edges to AST GRAPHVIZ DOT file */
 		/****************************************/
 		AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,var.SerialNumber);
-		AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,newExp.SerialNumber);
+		AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,exp.SerialNumber);
 	}
 
 	public TYPE SemantMe()
 	{
 		// semant the variavble and the NEW expression
 		TYPE varType = var.SemantMe();
-		TYPE expType = newExp.SemantMe();
+		TYPE expType = exp.SemantMe();
 
-		
-		// we check: if the type of the variable is: class/array/nil and the expression type is nil, and the types are equal
-		if(!(varType instanceof TYPE_ARRAY || varType instanceof TYPE_CLASS || varType instanceof TYPE_NIL && expType instanceof TYPE_NIL) && !varType.equals(expType)){
-			if(varType instanceof TYPE_CLASS && expType instanceof TYPE_CLASS){
+		if (varType instanceof TYPE_CLASS){
+			if (expType instanceof TYPE_CLASS){
 				if(!(((TYPE_CLASS)expType).checkIfInherit((TYPE_CLASS)varType))){
 					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
 				}
 			}
-
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+		}
+		else if (varType instanceof TYPE_ARRAY){
+			if (expType instanceof TYPE_ARRAY){
+				if(!((((TYPE_ARRAY)expType).name).equals(((TYPE_ARRAY)varType).name))){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+		}
+		else if (!(varType.equals(expType))){
+			System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+			printError(line);	
 		}
 
 		return null;

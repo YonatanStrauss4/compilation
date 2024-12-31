@@ -92,11 +92,11 @@ public class AST_FUNC_DEC_ARGS_LIST extends AST_Node
 		// semant the argument list recursively
 		if(args == null)
 		{
-			return new TYPE_LIST(new TYPE_CLASS_VAR_DEC(type, variable) ,null);
+			return new TYPE_LIST(type ,null);
 		}
 		else
 		{
-			return new TYPE_LIST(new TYPE_CLASS_VAR_DEC(type, variable), args.SemantMe());
+			return new TYPE_LIST(type, args.SemantMe());
 		}
 	}
 

@@ -49,8 +49,6 @@ public class TYPE_FUNCTION extends TYPE
 		}
 		
 		return true;
-		
 	}
 
-	
 }

@@ -30,8 +30,8 @@ public class TYPE_CLASS extends TYPE
 			return null;
 		}
 		TYPE func = current.data_members.search(name);
-		if(func != null && ((TYPE_CLASS_VAR_DEC)func).type instanceof TYPE_FUNCTION){
-			return (TYPE_FUNCTION)((TYPE_CLASS_VAR_DEC)func).type;
+		if(func != null && ((TYPE_CLASS_FUNC_DEC)func).type instanceof TYPE_FUNCTION){
+			return (TYPE_FUNCTION)((TYPE_CLASS_FUNC_DEC)func).type;
 		}
 		return null;
 	}
@@ -52,10 +52,7 @@ public class TYPE_CLASS extends TYPE
 		if(!(t2 instanceof TYPE_CLASS)){
 			return false;
 		}
-		if(this.father == null){
-			return false;
-		}
-		TYPE_CLASS curr_father = this.father;
+		TYPE_CLASS curr_father = this;
 		while(curr_father != null){
 			if(curr_father.name.equals(t2.name)){
 				return true;

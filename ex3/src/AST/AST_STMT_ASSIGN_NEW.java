@@ -76,16 +76,16 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
             elemType = varType;
         }
 
-        // check if variable typs are equal
+        // check if variable types are equal
         if(!elemType.equals(newType)){
             // check if the type of the variable is TYPE_CLASS
-            if(!(varType instanceof TYPE_CLASS)){
+            if(!(varType instanceof TYPE_CLASS) && !(varType instanceof TYPE_ARRAY)){
                 System.out.format(">> ERROR(%d) type missmatch, cannot assign %s to %s\n",line, newType.name, varType.name);
                 printError(line);
             }
 
             // variable type is a class but not equal to newExp type, so we check for inheritance
-            if(!((TYPE_CLASS)newType).checkIfInherit(newType)){
+            if(!((TYPE_CLASS)newType).checkIfInherit((TYPE_CLASS)varType)){
                 System.out.format(">> ERROR(%d) type missmatch, cannot assign %s to %s\n",line, newType.name, varType.name);
                 printError(line);
                 }

@@ -22,7 +22,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         /***************************************/
         /* PRINT CORRESPONDING DERIVATION RULE */
         /***************************************/
-        System.out.println("====================== varDec -> type ID( %s ) ASSIGN newExp SEMICOLON\n" + variable);
+        System.out.format("====================== varDec -> type ID( %s ) ASSIGN newExp SEMICOLON\n", variable);
 
         /*******************************/
         /* COPY INPUT DATA MEMBERS ... */
@@ -67,17 +67,16 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
             System.out.format(">> ERROR(%d) variable with new cannot be a data member\n", this.line);
         }
 
-        TYPE type = t.SemantMe();
-        TYPE arrayType = null;
+        TYPE varType = t.SemantMe();
 
         // check if variable is of type void
-        if(type instanceof TYPE_VOID){
+        if(varType instanceof TYPE_VOID){
             System.out.format(">> ERROR(%d) variable cannot be of void type\n", this.line);
             printError(this.line);
         }
 
         // check if type is null
-        if(type == null){
+        if(varType == null){
             System.out.format(">> ERROR(%d) no type declared\n", this.line);
             printError(this.line);
         }
@@ -98,29 +97,54 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 
         // check if variable is shadowing a variable in the current class
 		TYPE_CLASS curr_cls = SYMBOL_TABLE.getInstance().get_current_class();
-		TYPE_CLASS_VAR_DEC curr_variable = new TYPE_CLASS_VAR_DEC(type, variable);
+		TYPE_CLASS_VAR_DEC curr_variable = new TYPE_CLASS_VAR_DEC(varType, variable);
 		if(!AST_VAR_DEC_ARGS.checkIfShadowingIsCorrect(curr_cls, curr_variable)){
 			System.out.format(">> ERROR(%d) Shadowing is not allowed\n", this.line, variable);
 			printError(this.line);
 		}
 
-        if(type instanceof TYPE_ARRAY){
-            arrayType = ((TYPE_ARRAY)type).type;
+        TYPE newType = new_exp.SemantMe();
+        TYPE elemType = null;
+
+        if (varType instanceof TYPE_ARRAY){
+            elemType = ((TYPE_ARRAY)varType).type;
+        }
+        else {
+            elemType = varType;
         }
 
-        // semant the expression
-        TYPE new_exp_type = new_exp.SemantMe();
+        // check if variable types are equal
+        if(!elemType.equals(newType)){
+            // check if the type of the variable is TYPE_CLASS
+            if(!(varType instanceof TYPE_CLASS) && !(varType instanceof TYPE_ARRAY)){
+                System.out.format(">> ERROR(%d) type missmatch, cannot assign %s to %s\n",line, newType.name, varType.name);
+                printError(line);
+            }
 
-        // check for array declaration incompatible types
-        if(arrayType != null && !arrayType.equals(new_exp_type)){
-            System.out.format(">> ERROR(%d) Incompatible types: array %s declared with type %s and used with type %s  \n", this.line, variable, arrayType.name, new_exp_type.name);
-            printError(this.line);
+            // variable type is a class but not equal to newExp type, so we check for inheritance
+            if(!((TYPE_CLASS)newType).checkIfInherit((TYPE_CLASS)varType)){
+                System.out.format(">> ERROR(%d) type missmatch, cannot assign %s to %s\n",line, newType.name, varType.name);
+                printError(line);
+                }
+            }
+
+        // check if we assign a non array type to an array
+        if(varType instanceof TYPE_ARRAY && !(new_exp instanceof AST_NEW_TYPE_EXP_IN_BRACKS)){
+            System.out.format(">> ERROR(%d) type missmatch, cannot assign non array to array\n",line);
+            printError(line);
         }
+
+        // check if we assign assign array type to a non array type
+        if(!(varType instanceof TYPE_ARRAY) && !(new_exp instanceof AST_NEW_TYPE)){
+            System.out.format(">> ERROR(%d) type missmatch, cannot assign array to non array\n",line);
+            printError(line);
+        }
+
         
         // enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(variable, type);
+		SYMBOL_TABLE.getInstance().enter(variable, varType);
 
 		// return the varible as a class member
-		return new TYPE_CLASS_VAR_DEC(type, variable);
+		return new TYPE_CLASS_VAR_DEC(varType, variable);
     }
 }
