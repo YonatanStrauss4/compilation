@@ -11,7 +11,7 @@ class Person
 	IntArray lastYearSalaries;
 
 	int getAge()  { return age;   }
-	void birthday(){ age := age+1; }
+	int birthday(){ age := age+1; return age; }
 }
 
 string bestFriend := "Jesse";

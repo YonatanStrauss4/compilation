@@ -1,0 +1,97 @@
+digraph
+{
+graph [ordering = "out"]
+v0 [label = "TYPE
+INT"];
+v1 [label = "ARRAY
+TYPEDEF
+...->IntArray"];
+v1 -> v0;
+v2 [label = "DEC
+ARRAY TYPE DEF"];
+v2 -> v1;
+v3 [label = "TYPE
+ID
+...->IntArray"];
+v4 [label = "EXP
+NIL"];
+v5 [label = "VAR DEC
+ARGSd"];
+v5 -> v3;
+v5 -> v4;
+v6 [label = "DECLARATION
+VAR DEC"];
+v6 -> v5;
+v49 [label = "DEC
+CLASS DEC
+"];
+v49 -> v48;
+v50 [label = "TYPE
+STRING"];
+v51 [label = "STRING
+'Jesse'"];
+v52 [label = "VAR DEC
+ARGSbestFriend"];
+v52 -> v50;
+v52 -> v51;
+v53 [label = "DECLARATION
+VAR DEC"];
+v53 -> v52;
+v133 [label = "DEC
+CLASS DEC
+"];
+v133 -> v132;
+v134 [label = "TYPE
+VOID"];
+v135 [label = "VAR
+SIMPLE
+(bestFriend)"];
+v136 [label = "STRING
+'AlonzoMorales'"];
+v137 [label = "STMT
+ASSIGN
+"];
+v137 -> v135;
+v137 -> v136;
+v138 [label = "STMT
+LIST
+"];
+v138 -> v137;
+v139 [label = "FUNC DEC
+NO ARGS
+Function name:main"];
+v139 -> v134;
+v139 -> v138;
+v140 [label = "DEC
+FUNC DEC"];
+v140 -> v139;
+v141 [label = "DEC
+LIST
+"];
+v141 -> v140;
+v142 [label = "DEC
+LIST
+"];
+v142 -> v133;
+v142 -> v141;
+v143 [label = "DEC
+LIST
+"];
+v143 -> v53;
+v143 -> v142;
+v144 [label = "DEC
+LIST
+"];
+v144 -> v49;
+v144 -> v143;
+v145 [label = "DEC
+LIST
+"];
+v145 -> v6;
+v145 -> v144;
+v146 [label = "DEC
+LIST
+"];
+v146 -> v2;
+v146 -> v145;
+}

@@ -194,6 +194,30 @@ public class SYMBOL_TABLE
 		}
 		return null;
 	}
+
+	public TYPE findClassInSymbolTable(String name)
+	{
+		SYMBOL_TABLE_ENTRY e = table[hash(name)];
+		SYMBOL_TABLE_ENTRY[] path = new SYMBOL_TABLE_ENTRY[hashArraySize]; // To store the path as we go down
+		int pathIndex = 0;
+	
+		// Go down the list and store the path
+		while (e != null) {
+			path[pathIndex++] = e; // Store the current entry in the path
+			e = e.next;
+		}
+	
+		// Go back up and check each entry along the way
+		for (int i = pathIndex - 1; i >= 0; i--) {
+			e = path[i];
+			if (e.name.equals(name)) {
+				return e.type; // Return the type of the first match
+			}
+		}
+	
+		return null; // Return null if not found
+	}
+	
 	
 	public static int n=0;
 	

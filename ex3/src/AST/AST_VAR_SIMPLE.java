@@ -51,15 +51,24 @@ public class AST_VAR_SIMPLE extends AST_VAR
 		//we now check to see if the variable has already been declared in the following order:
 		//first we check from the inner scope
 		varFindType = SYMBOL_TABLE.getInstance().findInClass(varName);
+		if (varFindType != null && varFindType instanceof TYPE_CLASS){
+			varFindType = SYMBOL_TABLE.getInstance().findClassInSymbolTable(((TYPE_CLASS)varFindType).name);
+		}
 
 		if (varFindType == null){
 			// we want to check in inheritance tree
 			TYPE currClass = SYMBOL_TABLE.getInstance().get_current_class();
 			if (currClass != null && ((TYPE_CLASS)currClass).father != null){
 				varFindType = ((TYPE_CLASS)currClass).findVariableInInheritanceTree(varName);
-				if (varFindType == null){
+				if (varFindType != null && varFindType instanceof TYPE_CLASS){
+					varFindType = SYMBOL_TABLE.getInstance().findClassInSymbolTable(((TYPE_CLASS)varFindType).name);
+				}
+				if (varFindType == null && varFindType instanceof TYPE_CLASS){
 					// only left to check if it is in global scope
 					varFindType = SYMBOL_TABLE.getInstance().find(varName);
+					if (varFindType != null && varFindType instanceof TYPE_CLASS){
+						varFindType = SYMBOL_TABLE.getInstance().findClassInSymbolTable(((TYPE_CLASS)varFindType).name);
+					}
 					if (varFindType == null){
 						// we didnt find it
 						System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
@@ -69,6 +78,9 @@ public class AST_VAR_SIMPLE extends AST_VAR
 			}
 			else {
 				varFindType = SYMBOL_TABLE.getInstance().find(varName);
+				if (varFindType != null && varFindType instanceof TYPE_CLASS){
+					varFindType = SYMBOL_TABLE.getInstance().findClassInSymbolTable(((TYPE_CLASS)varFindType).name);
+				}
 				if (varFindType == null){
 					// we didnt find it
 					System.out.format(">> ERROR(%d) variable %s has not been declared\n", this.line, varName);
@@ -76,7 +88,6 @@ public class AST_VAR_SIMPLE extends AST_VAR
 				}
 			}
 		}
-		
-        return varFindType;
-    }
+		return varFindType;
+	}
 }

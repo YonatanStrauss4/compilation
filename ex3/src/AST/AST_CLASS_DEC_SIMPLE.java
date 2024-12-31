@@ -83,6 +83,12 @@ public class AST_CLASS_DEC_SIMPLE extends AST_CLASS_DEC
         // build class with semant me of class body
         TYPE_CLASS class_build = new TYPE_CLASS(null, className, classBody.SemantMe());
 
+        // TYPE_LIST curr = ((TYPE_CLASS)class_build).data_members;
+        // while(curr != null){
+        //     System.out.println(curr.head.name);
+        //     curr = curr.tail;
+        // }
+
         // end scope, adjust inside class and current class and enter class into symbol table
         SYMBOL_TABLE.getInstance().currentClassFunctionMembers.clear();
         SYMBOL_TABLE.getInstance().currentClassVariableMembers.clear();
@@ -90,6 +96,13 @@ public class AST_CLASS_DEC_SIMPLE extends AST_CLASS_DEC
         SYMBOL_TABLE.getInstance().set_current_class(null);
         SYMBOL_TABLE.getInstance().endScope();
         SYMBOL_TABLE.getInstance().enter(className, class_build);
+
+        // TYPE cls = SYMBOL_TABLE.getInstance().find(className);
+        // TYPE_LIST curr = ((TYPE_CLASS)cls).data_members;
+        // while(curr != null){
+        //     System.out.println(curr.head.name);
+        //     curr = curr.tail;
+        // }
 
         return null;
     }
