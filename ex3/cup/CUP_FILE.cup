@@ -76,7 +76,6 @@ terminal PLUS;
 terminal MINUS;
 terminal TIMES; 
 terminal DIVIDE;
-terminal LPAREN;
 terminal RPAREN;
 terminal LBRACK;
 terminal RBRACK;
@@ -90,7 +89,6 @@ terminal ASSIGN;
 terminal EQ;
 terminal LT;
 terminal GT;
-terminal CLASS;
 terminal ARRAY;
 terminal EXTENDS;
 terminal RETURN;
@@ -111,6 +109,10 @@ terminal END_COMMENT;
 terminal Integer INT;
 terminal String ID;
 terminal String STRING;
+terminal Integer CLASS;
+terminal Integer LPAREN;
+
+
 
 /*****************/
 /* NON TERMINALS */
@@ -194,15 +196,15 @@ varDec:var_dec {: RESULT = new AST_STMT_VAR_DEC(var_dec); :}
 | var:v ASSIGN newExp:new_exp SEMICOLON {: RESULT = new AST_STMT_ASSIGN_NEW(v, new_exp, parser.lastTokenLine); :}
 | RETURN SEMICOLON {: RESULT = new AST_STMT_RETURN_NO_EXP(parser.lastTokenLine); :}
 | RETURN exp:e SEMICOLON {: RESULT = new AST_STMT_RETURN_EXP(e, parser.lastTokenLine); :}
-| IF LPAREN exp:cond RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_STMT_IF(cond,body, parser.lastTokenLine); :}
-| WHILE LPAREN exp:cond RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_STMT_WHILE(cond,body, parser.lastTokenLine); :}
+| IF LPAREN:line exp:cond RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_STMT_IF(cond,body, line); :}
+| WHILE LPAREN:line exp:cond RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_STMT_WHILE(cond,body, line); :}
 | funcStmt:f {: RESULT = new AST_STMT_FUNC_STMT(f); :}
 ;
 
 
 classDec ::=
-CLASS ID:name LBRACE cFieldRec:cFR  RBRACE {: RESULT = new AST_CLASS_DEC_SIMPLE(name, cFR, parser.lastTokenLine); :}
-| CLASS ID:className EXTENDS ID:superClassName LBRACE cFieldRec:cFR  RBRACE {: RESULT = new AST_CLASS_DEC_EXTENDS(className, superClassName, cFR, parser.lastTokenLine); :}
+CLASS:line ID:name LBRACE cFieldRec:cFR  RBRACE {: RESULT = new AST_CLASS_DEC_SIMPLE(name, cFR, line); :}
+| CLASS:line ID:className EXTENDS ID:superClassName LBRACE cFieldRec:cFR  RBRACE {: RESULT = new AST_CLASS_DEC_EXTENDS(className, superClassName, cFR, line); :}
 ;
 
 
@@ -213,8 +215,8 @@ cField:cF {: RESULT = new AST_CFIELD_REC(cF, null); :}
 
 
 funcDec ::=
-type:t ID:name LPAREN RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_FUNC_DEC_NO_ARGS(t, name, body, parser.lastTokenLine); :}
-| type:t ID:name LPAREN funcDecArgs:args RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_FUNC_DEC_ARGS(t, name, args, body, parser.lastTokenLine); :}
+type:t ID:name LPAREN:line RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_FUNC_DEC_NO_ARGS(t, name, body, line); :}
+| type:t ID:name LPAREN:line funcDecArgs:args RPAREN LBRACE stmtList:body RBRACE {: RESULT = new AST_FUNC_DEC_ARGS(t, name, args, body, line); :}
 ;
 
 funcDecArgs ::=

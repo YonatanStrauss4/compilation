@@ -91,9 +91,10 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
         // begin scope of function in symbol table and set current function and inside function
         SYMBOL_TABLE.getInstance().beginScope();
-        SYMBOL_TABLE.getInstance().enter(funcName, currFunc);
+        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false);
         SYMBOL_TABLE.getInstance().set_current_function(currFunc);
         SYMBOL_TABLE.getInstance().set_inside_function(true);
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
 
         // semant me of function body
         body.SemantMe();
@@ -101,10 +102,11 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
         // end scope of function in symbol table and set inside function and current function
         SYMBOL_TABLE.getInstance().set_inside_function(false);
         SYMBOL_TABLE.getInstance().set_current_function(null);
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
         SYMBOL_TABLE.getInstance().endScope();
 
         // enter function into symbol table (as TYPE_FUNCTION)
-        SYMBOL_TABLE.getInstance().enter(funcName, currFunc);
+        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false);
 
         // return the function as a class member
         return new TYPE_CLASS_FUNC_DEC(currFunc, funcName);

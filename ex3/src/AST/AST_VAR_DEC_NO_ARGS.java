@@ -98,7 +98,7 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
 		}
         
 		// enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(varName, type);
+		SYMBOL_TABLE.getInstance().enter(varName, type, false);
 
         // enter the variable as a class member of current class
         if(curr_cls != null && !(SYMBOL_TABLE.getInstance().get_inside_function())){

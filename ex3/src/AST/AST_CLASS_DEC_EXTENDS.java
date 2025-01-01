@@ -65,7 +65,7 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
     {
 
         //check if class has been defined in global scope
-        if (SYMBOL_TABLE.getInstance().get_scope_level() != 0)
+        if (SYMBOL_TABLE.getInstance().getCurrentScopeLevel() != 0)
         {
             System.out.format(">> ERROR(%d) classes can only be defined in global scope\n", this.line, className);
             printError(this.line);
@@ -90,18 +90,30 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
         SYMBOL_TABLE.getInstance().beginScope();
         SYMBOL_TABLE.getInstance().set_current_class(new TYPE_CLASS((TYPE_CLASS)father, className, new TYPE_LIST(null, null)));
         SYMBOL_TABLE.getInstance().set_inside_class(true);
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
+
 
         // build class with semant me of class body
         TYPE_CLASS class_build = new TYPE_CLASS((TYPE_CLASS)father, className, classBody.SemantMe());
 
-        // end scope, adjust inside class and current class and enter class into symbol table
         SYMBOL_TABLE.getInstance().currentClassFunctionMembers.clear();
         SYMBOL_TABLE.getInstance().currentClassVariableMembers.clear();
         SYMBOL_TABLE.getInstance().set_inside_class(false);
         SYMBOL_TABLE.getInstance().set_current_class(null);
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
         SYMBOL_TABLE.getInstance().endScope();
 
-        SYMBOL_TABLE.getInstance().enter(className, class_build);
+        SYMBOL_TABLE.getInstance().enter(className, class_build, true);
+        TYPE cls = SYMBOL_TABLE.getInstance().find(className);
+        for(TYPE_LIST t = ((TYPE_CLASS)cls).data_members; t != null; t = t.tail){
+            if(t.head instanceof TYPE_CLASS_FUNC_DEC){
+                continue;
+            }
+             if (((TYPE_CLASS_VAR_DEC)t.head).type.name.equals(className)) {
+                // Update the variable's type to classBuild
+                ((TYPE_CLASS_VAR_DEC)t.head).type = class_build;
+            }
+        }
 
         return null;
     }

@@ -103,7 +103,7 @@ ERROR			= "//" {COMMENT_CHAR}* {STRING} {COMMENT_CHAR}* {LineTerminator}
 
 <YYINITIAL> {
 	"/"					{ return symbol(TokenNames.DIVIDE);}
-	"("					{ return symbol(TokenNames.LPAREN);}
+	"("					{ return symbol(TokenNames.LPAREN, yyline+1);}
 	")"					{ return symbol(TokenNames.RPAREN);}
 	"["					{ return symbol(TokenNames.LBRACK);}
 	"]" 				{ return symbol(TokenNames.RBRACK);}
@@ -122,7 +122,6 @@ ERROR			= "//" {COMMENT_CHAR}* {STRING} {COMMENT_CHAR}* {LineTerminator}
 	"="					{ return symbol(TokenNames.EQ);}
 	"<"					{ return symbol(TokenNames.LT);}
 	">"					{ return symbol(TokenNames.GT);}
-	"class"				{ return symbol(TokenNames.CLASS);}
 	"array"				{ return symbol(TokenNames.ARRAY);}
 	"extends"			{ return symbol(TokenNames.EXTENDS);}
 	"return"			{ return symbol(TokenNames.RETURN);}
@@ -130,7 +129,7 @@ ERROR			= "//" {COMMENT_CHAR}* {STRING} {COMMENT_CHAR}* {LineTerminator}
 	"if"				{ return symbol(TokenNames.IF);}
 	"new"				{ return symbol(TokenNames.NEW);}
 	"string"			{ return symbol(TokenNames.TYPE_STRING);}
-	"class"				{ return symbol(TokenNames.CLASS);}
+	"class"				{ return symbol(TokenNames.CLASS, yyline+1);}
 	"/*" ( [^*] | \*+[^*/] )* \*+ "/"    { }
 	{INT}	    		{ return symbol(TokenNames.INT, Integer.parseInt(yytext()));}
 	{ID}				{ return symbol(TokenNames.ID, new String( yytext()));}  

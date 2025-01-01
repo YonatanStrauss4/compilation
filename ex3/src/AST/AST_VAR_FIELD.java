@@ -62,7 +62,7 @@ public class AST_VAR_FIELD extends AST_VAR
 	{
 		// semant the variable
 		TYPE type = var.SemantMe();
-
+		
 		// check if the variable is TYPE_CLASS
 		if(!(type instanceof TYPE_CLASS)){
 			System.out.format(">> ERROR(%d) variable is not an instance of a class\n", this.line);

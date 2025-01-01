@@ -79,7 +79,7 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
         // check if variable types are equal
         if(!elemType.equals(newType)){
             // check if the type of the variable is TYPE_CLASS
-            if(!(varType instanceof TYPE_CLASS) && !(varType instanceof TYPE_ARRAY)){
+            if(!(varType instanceof TYPE_CLASS)){
                 System.out.format(">> ERROR(%d) type missmatch, cannot assign %s to %s\n",line, newType.name, varType.name);
                 printError(line);
             }

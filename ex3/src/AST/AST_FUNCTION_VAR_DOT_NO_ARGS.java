@@ -66,7 +66,7 @@ public class AST_FUNCTION_VAR_DOT_NO_ARGS extends AST_FUNCTION
         // check if the variable is TYPE_CLASS
 		if(!(varType instanceof TYPE_CLASS)){
 			System.out.format(">> ERROR(%d) variable is not an instance of a class\n", this.line);
-				printError(this.line);
+			printError(this.line);
 		}
 
         TYPE funcSearch = null;

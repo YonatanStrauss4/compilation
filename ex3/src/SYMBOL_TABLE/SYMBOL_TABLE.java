@@ -32,6 +32,7 @@ public class SYMBOL_TABLE
 	private boolean insideClass = false;
 	public TYPE_CLASS_VAR_DEC_LIST currentClassVariableMembers = new TYPE_CLASS_VAR_DEC_LIST(null, null);
 	public TYPE_CLASS_VAR_DEC_LIST currentClassFunctionMembers = new TYPE_CLASS_VAR_DEC_LIST(null, null);
+	public int currentScopeLevel = 0;
 	
 	/**************************************************************/
 	/* A very primitive hash function for exposition purposes ... */
@@ -52,7 +53,7 @@ public class SYMBOL_TABLE
 	/****************************************************************************/
 	/* Enter a variable, function, class type or array type to the symbol table */
 	/****************************************************************************/
-	public void enter(String name,TYPE t)
+	public void enter(String name,TYPE t, boolean isClassDec)
 	{
 		/*************************************************/
 		/* [1] Compute the hash value for this new entry */
@@ -68,7 +69,7 @@ public class SYMBOL_TABLE
 		/**************************************************************************/
 		/* [3] Prepare a new symbol table entry with name, type, next and prevtop */
 		/**************************************************************************/
-		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++);
+		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++, isClassDec, getCurrentScopeLevel());
 
 		/**********************************************/
 		/* [4] Update the top of the symbol table ... */
@@ -117,7 +118,7 @@ public class SYMBOL_TABLE
 		/************************************************************************/
 		enter(
 			"SCOPE-BOUNDARY",
-			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"));
+			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"), false);
 
 		/*********************************************/
 		/* Print the symbol table after every change */
@@ -153,17 +154,6 @@ public class SYMBOL_TABLE
 		PrintMe();
 	}
 
-	public int get_scope_level() {
-		int level = 0;
-		SYMBOL_TABLE_ENTRY e = instance.top;
-		while (e != null) {
-			if (e.name.equals("SCOPE-BOUNDARY")) {
-				level++;
-			}
-			e = e.prevtop;
-		}
-		return level;
-	}
 	
 	public TYPE findInScope(String name) {
 		SYMBOL_TABLE_ENTRY e;
@@ -185,7 +175,7 @@ public class SYMBOL_TABLE
 
 		SYMBOL_TABLE_ENTRY e;
 		for (e = top; e != null; e = e.prevtop) {
-			if (e.type instanceof TYPE_CLASS){
+			if ((e.type instanceof TYPE_CLASS && e.isClassDec) || e.scopeLevel == 0){
 				break;
 			}
 			if (name.equals(e.name)) {
@@ -325,8 +315,8 @@ public class SYMBOL_TABLE
 			/*****************************************/
 			/* [1] Enter primitive types int, string */
 			/*****************************************/
-			instance.enter("int",   TYPE_INT.getInstance());
-			instance.enter("string",TYPE_STRING.getInstance());
+			instance.enter("int",   TYPE_INT.getInstance(), false);
+			instance.enter("string",TYPE_STRING.getInstance(), false);
 
 			/*************************************/
 			/* [2] How should we handle void ??? */
@@ -335,25 +325,12 @@ public class SYMBOL_TABLE
 			/***************************************/
 			/* [3] Enter library function PrintInt */
 			/***************************************/
-			instance.enter(
-				"PrintInt",
-				new TYPE_FUNCTION(
-					TYPE_VOID.getInstance(),
-					"PrintInt",
-					new TYPE_LIST(
-						TYPE_INT.getInstance(),
-						null)));
+			instance.enter("PrintInt",new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintInt",new TYPE_LIST(TYPE_INT.getInstance(),null)), false);
 			
 			/***************************************/
 			/* [4] Enter library function PrintString */
 			/***************************************/
-			instance.enter(
-				"PrintString", 
-				new TYPE_FUNCTION(
-					TYPE_VOID.getInstance(),
-					"PrintString",
-					new TYPE_LIST(TYPE_STRING.getInstance(),
-					null)));
+			instance.enter("PrintString", new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintString",new TYPE_LIST(TYPE_STRING.getInstance(),null)), false);
 		}
 		return instance;
 	}
@@ -389,6 +366,18 @@ public class SYMBOL_TABLE
 
 	public boolean get_inside_class() {
 		return this.insideClass;
+	}
+
+	public void updateCurrentScopeLevelUp() {
+		this.currentScopeLevel = this.currentScopeLevel + 1; 
+	}
+
+	public void updateCurrentScopeLevelDown() {
+		this.currentScopeLevel = this.currentScopeLevel - 1; 
+	}
+
+	public int getCurrentScopeLevel() {
+		return this.currentScopeLevel;
 	}
 
 	

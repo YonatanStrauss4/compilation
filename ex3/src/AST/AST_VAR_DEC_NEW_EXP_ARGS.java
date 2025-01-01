@@ -63,8 +63,10 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
     public TYPE SemantMe()
     {
         // check if variable with new is a data member
+
         if (SYMBOL_TABLE.getInstance().get_inside_class() && !SYMBOL_TABLE.getInstance().get_inside_function()){
             System.out.format(">> ERROR(%d) variable with new cannot be a data member\n", this.line);
+            printError(this.line);
         }
 
         TYPE varType = t.SemantMe();
@@ -142,7 +144,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 
         
         // enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(variable, varType);
+		SYMBOL_TABLE.getInstance().enter(variable, varType, false);
 
 		// return the varible as a class member
 		return new TYPE_CLASS_VAR_DEC(varType, variable);

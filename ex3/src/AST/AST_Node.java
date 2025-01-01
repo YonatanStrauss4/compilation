@@ -25,7 +25,7 @@ public abstract class AST_Node
     	}
 	public void printError(int line) {
 		try {
-			fileWriter.write("ERROR (" + line + ")\n");
+			fileWriter.write("ERROR(" + line + ")\n");
 			fileWriter.close();
 		} catch (Exception e) {
 			e.printStackTrace();

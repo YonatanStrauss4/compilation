@@ -81,7 +81,7 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 
 
 		// check if array has been defined in global scope
-		if(SYMBOL_TABLE.getInstance().get_scope_level() != 0){
+		if(SYMBOL_TABLE.getInstance().getCurrentScopeLevel() != 0){
 			System.out.format(">> ERROR(%d) array type definition must be in global scope\n",line);
 			printError(line);
 		}
@@ -96,7 +96,7 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 		TYPE_ARRAY array = new TYPE_ARRAY(type, name);
 		
 		// enter the array to the symbol table
-		SYMBOL_TABLE.getInstance().enter(name, array);
+		SYMBOL_TABLE.getInstance().enter(name, array, false);
 
 		//return the array
 		return array;

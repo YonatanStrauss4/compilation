@@ -103,7 +103,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 		}
 		
 		// check, for a variable that is a data member of a class, if it is assigned a constant
-		if(!SYMBOL_TABLE.getInstance().get_inside_function() && SYMBOL_TABLE.getInstance().get_inside_class() && !(exp instanceof AST_EXP_INT || exp instanceof AST_EXP_STRING || exp instanceof AST_EXP_NIL)){
+		if(!SYMBOL_TABLE.getInstance().get_inside_function() && SYMBOL_TABLE.getInstance().get_inside_class() && !(exp instanceof AST_EXP_INT || exp instanceof AST_EXP_MINUS_INT || exp instanceof AST_EXP_STRING || exp instanceof AST_EXP_NIL)){
 			System.out.format(">> ERROR(%d) variable data members of classes can only be assigned constants\n", this.line, varName);
 			printError(this.line);
 		}
@@ -145,7 +145,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 		}
 
 		// enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(varName, varType);
+		SYMBOL_TABLE.getInstance().enter(varName, varType, false);
 
 		// enter the variable as a class member of current class
         if(curr_cls != null && !(SYMBOL_TABLE.getInstance().get_inside_function())){

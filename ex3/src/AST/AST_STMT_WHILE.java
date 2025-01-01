@@ -81,11 +81,13 @@ public class AST_STMT_WHILE extends AST_STMT
         
         // begin while scope
         SYMBOL_TABLE.getInstance().beginScope();
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
 
         // semant while body
         body.SemantMe();
 
         // end while scope
+        SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
         SYMBOL_TABLE.getInstance().endScope();
 
         return null;

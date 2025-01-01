@@ -56,6 +56,13 @@ public class AST_STMT_IF extends AST_STMT
 
 	public TYPE SemantMe()
 	{
+
+		// check if missing condition
+        if(cond == null){
+            System.out.format(">> ERROR [%d] missing condition for while loop\n", line);
+            printError(line);
+        }
+		
 		// semant the condition and checck if it is of TYPE_INT
 		TYPE conditionType = cond.SemantMe();
 		if (!(conditionType instanceof TYPE_INT))
@@ -66,11 +73,13 @@ public class AST_STMT_IF extends AST_STMT
 
 		// begin if scope
 		SYMBOL_TABLE.getInstance().beginScope();
+		SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
 
 		// semant if body
 		body.SemantMe();
 
 		// end if scope
+		SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
 		SYMBOL_TABLE.getInstance().endScope();
 
 		return null;		

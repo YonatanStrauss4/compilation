@@ -63,8 +63,10 @@ public boolean checkArgumentsList(TYPE_LIST params) {
                 return false;
             }
 
-            if((current.head instanceof TYPE_ARRAY && !(other.head instanceof TYPE_ARRAY)) || (other.head instanceof TYPE_ARRAY && !(current.head instanceof TYPE_ARRAY))){
-                return false;
+            if(current.head instanceof TYPE_ARRAY && other.head instanceof TYPE_ARRAY){
+                if(!((TYPE_ARRAY)current.head).name.equals(((TYPE_ARRAY)other.head).name)){
+                    return false;
+                }
             }
         }
 

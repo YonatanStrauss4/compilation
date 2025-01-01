@@ -7,41 +7,41 @@
 public class TokenNames {
   /* terminals */
   public static final int DIVIDE = 5;
-  public static final int TYPE_VOID = 14;
-  public static final int LPAREN = 6;
-  public static final int START_COMMENT = 31;
-  public static final int INT = 33;
-  public static final int ARRAY = 21;
+  public static final int TYPE_VOID = 13;
+  public static final int LPAREN = 35;
+  public static final int START_COMMENT = 29;
+  public static final int INT = 31;
+  public static final int ARRAY = 19;
   public static final int MINUS = 3;
-  public static final int RPAREN = 7;
-  public static final int SEMICOLON = 12;
-  public static final int LT = 18;
-  public static final int NIL = 27;
-  public static final int COMMA = 10;
-  public static final int CLASS = 20;
-  public static final int TYPE_INT = 13;
+  public static final int RPAREN = 6;
+  public static final int SEMICOLON = 11;
+  public static final int LT = 17;
+  public static final int NIL = 25;
+  public static final int COMMA = 9;
+  public static final int CLASS = 34;
+  public static final int TYPE_INT = 12;
   public static final int PLUS = 2;
-  public static final int ASSIGN = 16;
-  public static final int IF = 25;
-  public static final int DOT = 11;
-  public static final int ID = 34;
+  public static final int ASSIGN = 15;
+  public static final int IF = 23;
+  public static final int DOT = 10;
+  public static final int ID = 32;
   public static final int EOF = 0;
-  public static final int RETURN = 23;
-  public static final int NEW = 26;
+  public static final int RETURN = 21;
+  public static final int NEW = 24;
   public static final int error = 1;
-  public static final int EQ = 17;
-  public static final int ERROR = 30;
-  public static final int LBRACK = 8;
+  public static final int EQ = 16;
+  public static final int ERROR = 28;
+  public static final int LBRACK = 7;
   public static final int TIMES = 4;
-  public static final int LBRACE = 29;
-  public static final int TYPE_STRING = 15;
-  public static final int RBRACK = 9;
-  public static final int WHILE = 24;
-  public static final int RBRACE = 28;
-  public static final int EXTENDS = 22;
-  public static final int STRING = 35;
-  public static final int END_COMMENT = 32;
-  public static final int GT = 19;
+  public static final int LBRACE = 27;
+  public static final int TYPE_STRING = 14;
+  public static final int RBRACK = 8;
+  public static final int WHILE = 22;
+  public static final int RBRACE = 26;
+  public static final int EXTENDS = 20;
+  public static final int STRING = 33;
+  public static final int END_COMMENT = 30;
+  public static final int GT = 18;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -49,7 +49,6 @@ public class TokenNames {
   "MINUS",
   "TIMES",
   "DIVIDE",
-  "LPAREN",
   "RPAREN",
   "LBRACK",
   "RBRACK",
@@ -63,7 +62,6 @@ public class TokenNames {
   "EQ",
   "LT",
   "GT",
-  "CLASS",
   "ARRAY",
   "EXTENDS",
   "RETURN",
@@ -78,7 +76,9 @@ public class TokenNames {
   "END_COMMENT",
   "INT",
   "ID",
-  "STRING"
+  "STRING",
+  "CLASS",
+  "LPAREN"
   };
 }
 
