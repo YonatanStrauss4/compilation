@@ -145,7 +145,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 		}
 
 		// enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(varName, varType, false);
+		SYMBOL_TABLE.getInstance().enter(varName, varType, false, false);
 
 		// enter the variable as a class member of current class
         if(curr_cls != null && !(SYMBOL_TABLE.getInstance().get_inside_function())){
@@ -169,9 +169,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
         
         	// If the variable exists and its type is the same as the current variable, return false (shadowing)
         	if (variable_in_father != null) {
-            	if (variable_in_father.type.equals(curr_variable.type)) {
-                	return false;   
-            	}
+				return false;
         	}
         	// Check if a function with the same name exists in the father class
         	TYPE_FUNCTION function_in_father = father_cls.findFunction(curr_variable.name);

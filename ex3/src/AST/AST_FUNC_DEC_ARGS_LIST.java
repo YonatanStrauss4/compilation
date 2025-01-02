@@ -87,7 +87,7 @@ public class AST_FUNC_DEC_ARGS_LIST extends AST_Node
 
 
 		// enter the variable to the symbol table
-		SYMBOL_TABLE.getInstance().enter(variable, type, false);
+		SYMBOL_TABLE.getInstance().enter(variable, type, false, true);
 
 		// semant the argument list recursively
 		if(args == null)

@@ -834,7 +834,7 @@ class Lexer implements java_cup.runtime.Scanner {
           // fall through
           case 37: break;
           case 3:
-            { return symbol(TokenNames.LPAREN);
+            { return symbol(TokenNames.LPAREN, yyline+1);
             }
           // fall through
           case 38: break;
@@ -974,7 +974,7 @@ class Lexer implements java_cup.runtime.Scanner {
           // fall through
           case 65: break;
           case 31:
-            { return symbol(TokenNames.CLASS);
+            { return symbol(TokenNames.CLASS, yyline+1);
             }
           // fall through
           case 66: break;

@@ -69,7 +69,7 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
         TYPE_FUNCTION currFunc = new TYPE_FUNCTION(returnType, funcName, null);
 
         // check if function name is already declared in scope or is a reserved word
-        if (SYMBOL_TABLE.getInstance().find(funcName) != null || isReservedWord(funcName))
+        if (SYMBOL_TABLE.getInstance().findInScope(funcName) != null || isReservedWord(funcName))
         {
             System.out.format(">> ERROR(%d) the name %s already been used in scope or is a reserved word\n", this.line, funcName);
             printError(this.line);
@@ -91,7 +91,7 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
         // begin scope of function in symbol table and set current function and inside function
         SYMBOL_TABLE.getInstance().beginScope();
-        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false);
+        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false, false);
         SYMBOL_TABLE.getInstance().set_current_function(currFunc);
         SYMBOL_TABLE.getInstance().set_inside_function(true);
         SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
@@ -106,7 +106,7 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
         SYMBOL_TABLE.getInstance().endScope();
 
         // enter function into symbol table (as TYPE_FUNCTION)
-        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false);
+        SYMBOL_TABLE.getInstance().enter(funcName, currFunc, false, false);
 
         // return the function as a class member
         return new TYPE_CLASS_FUNC_DEC(currFunc, funcName);

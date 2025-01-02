@@ -96,7 +96,7 @@ public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF
 		TYPE_ARRAY array = new TYPE_ARRAY(type, name);
 		
 		// enter the array to the symbol table
-		SYMBOL_TABLE.getInstance().enter(name, array, false);
+		SYMBOL_TABLE.getInstance().enter(name, array, false, false);
 
 		//return the array
 		return array;

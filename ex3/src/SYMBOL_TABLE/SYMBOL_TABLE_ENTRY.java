@@ -40,12 +40,13 @@ public class SYMBOL_TABLE_ENTRY
 	public int prevtop_index;
 	public boolean isClassDec;
 	public int scopeLevel;
+	public boolean isFuncArg;
 	
 	
 	/******************/
 	/* CONSTRUCTOR(S) */
 	/******************/
-	public SYMBOL_TABLE_ENTRY(String name, TYPE type, int index, SYMBOL_TABLE_ENTRY next, SYMBOL_TABLE_ENTRY prevtop, int prevtop_index, boolean isClassDec, int scopeLevel)
+	public SYMBOL_TABLE_ENTRY(String name, TYPE type, int index, SYMBOL_TABLE_ENTRY next, SYMBOL_TABLE_ENTRY prevtop, int prevtop_index, boolean isClassDec, int scopeLevel, boolean isFuncArg)
 	{
 		this.index = index;
 		this.name = name;
@@ -55,5 +56,6 @@ public class SYMBOL_TABLE_ENTRY
 		this.prevtop_index = prevtop_index;
 		this.isClassDec = isClassDec;
 		this.scopeLevel = scopeLevel;
+		this.isFuncArg = isFuncArg;
 	}
 }

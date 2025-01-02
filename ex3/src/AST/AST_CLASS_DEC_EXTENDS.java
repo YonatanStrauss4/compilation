@@ -102,8 +102,9 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
         SYMBOL_TABLE.getInstance().set_current_class(null);
         SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
         SYMBOL_TABLE.getInstance().endScope();
+        SYMBOL_TABLE.getInstance().enter(className, class_build, true, false);
 
-        SYMBOL_TABLE.getInstance().enter(className, class_build, true);
+
         TYPE cls = SYMBOL_TABLE.getInstance().find(className);
         for(TYPE_LIST t = ((TYPE_CLASS)cls).data_members; t != null; t = t.tail){
             if(t.head instanceof TYPE_CLASS_FUNC_DEC){

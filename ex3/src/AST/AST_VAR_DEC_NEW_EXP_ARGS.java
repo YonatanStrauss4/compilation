@@ -144,7 +144,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 
         
         // enter the variable declaration to the symbol table
-		SYMBOL_TABLE.getInstance().enter(variable, varType, false);
+		SYMBOL_TABLE.getInstance().enter(variable, varType, false, false);
 
 		// return the varible as a class member
 		return new TYPE_CLASS_VAR_DEC(varType, variable);

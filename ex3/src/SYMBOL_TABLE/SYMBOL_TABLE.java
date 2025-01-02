@@ -53,7 +53,7 @@ public class SYMBOL_TABLE
 	/****************************************************************************/
 	/* Enter a variable, function, class type or array type to the symbol table */
 	/****************************************************************************/
-	public void enter(String name,TYPE t, boolean isClassDec)
+	public void enter(String name,TYPE t, boolean isClassDec, boolean isFuncArg)
 	{
 		/*************************************************/
 		/* [1] Compute the hash value for this new entry */
@@ -69,7 +69,7 @@ public class SYMBOL_TABLE
 		/**************************************************************************/
 		/* [3] Prepare a new symbol table entry with name, type, next and prevtop */
 		/**************************************************************************/
-		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++, isClassDec, getCurrentScopeLevel());
+		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++, isClassDec, getCurrentScopeLevel(), isFuncArg);
 
 		/**********************************************/
 		/* [4] Update the top of the symbol table ... */
@@ -118,7 +118,7 @@ public class SYMBOL_TABLE
 		/************************************************************************/
 		enter(
 			"SCOPE-BOUNDARY",
-			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"), false);
+			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"), false, false);
 
 		/*********************************************/
 		/* Print the symbol table after every change */
@@ -315,8 +315,8 @@ public class SYMBOL_TABLE
 			/*****************************************/
 			/* [1] Enter primitive types int, string */
 			/*****************************************/
-			instance.enter("int",   TYPE_INT.getInstance(), false);
-			instance.enter("string",TYPE_STRING.getInstance(), false);
+			instance.enter("int",   TYPE_INT.getInstance(), false, false);
+			instance.enter("string",TYPE_STRING.getInstance(), false, false);
 
 			/*************************************/
 			/* [2] How should we handle void ??? */
@@ -325,12 +325,12 @@ public class SYMBOL_TABLE
 			/***************************************/
 			/* [3] Enter library function PrintInt */
 			/***************************************/
-			instance.enter("PrintInt",new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintInt",new TYPE_LIST(TYPE_INT.getInstance(),null)), false);
+			instance.enter("PrintInt",new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintInt",new TYPE_LIST(TYPE_INT.getInstance(),null)), false, false);
 			
 			/***************************************/
 			/* [4] Enter library function PrintString */
 			/***************************************/
-			instance.enter("PrintString", new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintString",new TYPE_LIST(TYPE_STRING.getInstance(),null)), false);
+			instance.enter("PrintString", new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintString",new TYPE_LIST(TYPE_STRING.getInstance(),null)), false, false);
 		}
 		return instance;
 	}
