@@ -58,7 +58,7 @@ public class AST_TYPE_ID extends AST_TYPE
 
         //check also if maybe we are currently in the class that we are using as type for the variable
         TYPE currClass = SYMBOL_TABLE.getInstance().get_current_class();
-        if ((t == null || !((t != null && !(t instanceof TYPE_CLASS)) || (t != null && !(t instanceof TYPE_ARRAY)))) && !currClass.name.equals(typeName))
+        if ((t == null || !((t != null && !(t instanceof TYPE_CLASS)) || (t != null && !(t instanceof TYPE_ARRAY)))) && currClass != null && !currClass.name.equals(typeName))
         {
             System.out.format(">> ERROR(%d) type not defined: %s\n",line,typeName);
             printError(line);
