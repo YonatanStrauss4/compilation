@@ -36,7 +36,7 @@ public abstract class AST_Node
 	// a function to check if a string is a reserved word in the L language
 	public boolean isReservedWord(String name) {
 		// add equals to class, nil, extends, new, if, while, int, string, array, void, return
-		return name.equals("class") || name.equals("nil") || name.equals("extends") || name.equals("new") || name.equals("if") || name.equals("while") || name.equals("int") || name.equals("string") || name.equals("array") || name.equals("void") || name.equals("return") || name.equals("PrintInt") || name.equals("PrintString");
+		return name.equals("class") || name.equals("nil") || name.equals("extends") || name.equals("new") || name.equals("if") || name.equals("while") || name.equals("int") || name.equals("string") || name.equals("array") || name.equals("void") || name.equals("return");
 	}
 }
 
