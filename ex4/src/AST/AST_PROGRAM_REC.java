@@ -1,47 +1,24 @@
 package AST;
-
 import TYPES.*;
-import TEMP.*;
 
-public class AST_DEC_LIST extends AST_Node
+public class AST_PROGRAM_REC extends AST_PROGRAM
 {
-	/****************/
-	/* DATA MEMBERS */
-	/****************/
-	public AST_DEC head;
-	public AST_DEC_LIST tail;
+
+	public AST_DEC dec;
+	public AST_PROGRAM decList;
 
 	/******************/
 	/* CONSTRUCTOR(S) */
 	/******************/
-	public AST_DEC_LIST(AST_DEC head,AST_DEC_LIST tail)
+	public AST_PROGRAM_REC(AST_DEC dec ,AST_PROGRAM decList)
 	{
 		/******************************/
 		/* SET A UNIQUE SERIAL NUMBER */
 		/******************************/
 		SerialNumber = AST_Node_Serial_Number.getFresh();
 
-		this.head = head;
-		this.tail = tail;
-	}
-
-	public TEMP IRme()
-	{
-		if (head != null) head.IRme();
-		if (tail != null) tail.IRme();
-		
-		return null;			
-	}
-
-	public TYPE SemantMe()
-	{		
-		/*************************************/
-		/* RECURSIVELY PRINT HEAD + TAIL ... */
-		/*************************************/
-		if (head != null) head.SemantMe();
-		if (tail != null) tail.SemantMe();
-		
-		return null;	
+		this.dec = dec;
+		this.decList = decList;
 	}
 
 	/********************************************************/
@@ -57,8 +34,8 @@ public class AST_DEC_LIST extends AST_Node
 		/*************************************/
 		/* RECURSIVELY PRINT HEAD + TAIL ... */
 		/*************************************/
-		if (head != null) head.PrintMe();
-		if (tail != null) tail.PrintMe();
+		if (dec != null) dec.PrintMe();
+		if (decList != null) decList.PrintMe();
 
 		/**********************************/
 		/* PRINT to AST GRAPHVIZ DOT file */
@@ -70,7 +47,22 @@ public class AST_DEC_LIST extends AST_Node
 		/****************************************/
 		/* PRINT Edges to AST GRAPHVIZ DOT file */
 		/****************************************/
-		if (head != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,head.SerialNumber);
-		if (tail != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,tail.SerialNumber);
+		if (dec != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, dec.SerialNumber);
+		if (decList != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, decList.SerialNumber);
+	}
+
+	public TYPE SemantMe()
+	{		
+		// recursively semant the declarations of the program
+		if (dec != null) 
+		{
+			dec.SemantMe();
+		}
+		if (decList != null)
+		{
+			decList.SemantMe();
+		}
+		
+		return null;	
 	}
 }

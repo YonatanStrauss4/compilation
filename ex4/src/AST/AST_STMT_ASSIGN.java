@@ -1,21 +1,17 @@
 package AST;
-
 import TYPES.*;
-import TEMP.*;
-import IR.*;
 
 public class AST_STMT_ASSIGN extends AST_STMT
 {
-	/***************/
-	/*  var := exp */
-	/***************/
-	public AST_EXP_VAR var;
+
+	public AST_VAR var;
 	public AST_EXP exp;
+	public int line;
 
 	/*******************/
 	/*  CONSTRUCTOR(S) */
 	/*******************/
-	public AST_STMT_ASSIGN(AST_EXP_VAR var,AST_EXP exp)
+	public AST_STMT_ASSIGN(AST_VAR var,AST_EXP exp, int line)
 	{
 		/******************************/
 		/* SET A UNIQUE SERIAL NUMBER */
@@ -25,24 +21,22 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		/***************************************/
 		/* PRINT CORRESPONDING DERIVATION RULE */
 		/***************************************/
-		System.out.print("====================== stmt -> var ASSIGN exp SEMICOLON\n");
+		System.out.print("====================== stmt-> var ASSIGN exp SEMICOLON\n");
 
 		/*******************************/
 		/* COPY INPUT DATA NENBERS ... */
 		/*******************************/
 		this.var = var;
 		this.exp = exp;
+		this.line = line;
 	}
 
-	/*********************************************************/
-	/* The printing message for an assign statement AST node */
-	/*********************************************************/
 	public void PrintMe()
 	{
 		/********************************************/
-		/* AST NODE TYPE = AST ASSIGNMENT STATEMENT */
+		/* AST NODE TYPE = AST STMT ASSIGN */
 		/********************************************/
-		System.out.print("AST NODE ASSIGN STMT\n");
+		System.out.print("AST NODE STMT ASSIGN\n");
 
 		/***********************************/
 		/* RECURSIVELY PRINT VAR + EXP ... */
@@ -55,7 +49,7 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		/***************************************/
 		AST_GRAPHVIZ.getInstance().logNode(
 			SerialNumber,
-			"ASSIGN\nleft := right\n");
+			"STMT\nASSIGN\n");
 		
 		/****************************************/
 		/* PRINT Edges to AST GRAPHVIZ DOT file */
@@ -63,28 +57,46 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,var.SerialNumber);
 		AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,exp.SerialNumber);
 	}
+
 	public TYPE SemantMe()
 	{
-		TYPE t1 = null;
-		TYPE t2 = null;
-		
-		if (var != null) t1 = var.SemantMe();
-		if (exp != null) t2 = exp.SemantMe();
-		
-		if (t1 != t2)
-		{
-			System.out.format(">> ERROR [%d:%d] type mismatch for var := exp\n",6,6);				
+		// semant the variavble and the NEW expression
+		TYPE varType = var.SemantMe();
+		TYPE expType = exp.SemantMe();
+
+		if (varType instanceof TYPE_CLASS){
+			if (expType instanceof TYPE_CLASS){
+				if(!(((TYPE_CLASS)expType).checkIfInherit((TYPE_CLASS)varType))){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
 		}
-		return null;
-	}
-	public TEMP IRme()
-	{
-		TEMP src = exp.IRme();
-		IR.
-		getInstance().
-		Add_IRcommand(new IRcommand_Store(((AST_EXP_VAR_SIMPLE) var).name,src));
+		else if (varType instanceof TYPE_ARRAY){
+			if (expType instanceof TYPE_ARRAY){
+				if(!((((TYPE_ARRAY)expType).name).equals(((TYPE_ARRAY)varType).name))){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+			else{
+				if (!(expType instanceof TYPE_NIL)){
+					System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+					printError(line);
+				}
+			}
+		}
+		else if (!(varType.equals(expType))){
+			System.out.format(">> ERROR [%d] Type mismatch in assignment: %s cannot be assigned to %s\n", line, expType.name, varType.name);
+			printError(line);	
+		}
 
 		return null;
 	}
-
 }

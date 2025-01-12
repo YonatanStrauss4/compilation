@@ -1,17 +1,18 @@
 package AST;
-
 import TYPES.*;
 import SYMBOL_TABLE.*;
 
 public class AST_STMT_IF extends AST_STMT
 {
+	
 	public AST_EXP cond;
 	public AST_STMT_LIST body;
+	public int line;
 
 	/*******************/
 	/*  CONSTRUCTOR(S) */
 	/*******************/
-	public AST_STMT_IF(AST_EXP cond,AST_STMT_LIST body)
+	public AST_STMT_IF(AST_EXP cond,AST_STMT_LIST body, int line)
 	{
 		/******************************/
 		/* SET A UNIQUE SERIAL NUMBER */
@@ -20,6 +21,7 @@ public class AST_STMT_IF extends AST_STMT
 
 		this.cond = cond;
 		this.body = body;
+		this.line = line;
 	}
 
 	/*************************************************/
@@ -54,32 +56,32 @@ public class AST_STMT_IF extends AST_STMT
 
 	public TYPE SemantMe()
 	{
-		/****************************/
-		/* [0] Semant the Condition */
-		/****************************/
-		if (cond.SemantMe() != TYPE_INT.getInstance())
-		{
-			System.out.format(">> ERROR [%d:%d] condition inside IF is not integral\n",2,2);
-		}
-		
-		/*************************/
-		/* [1] Begin Class Scope */
-		/*************************/
-		SYMBOL_TABLE.getInstance().beginScope();
 
-		/***************************/
-		/* [2] Semant Data Members */
-		/***************************/
+		// check if missing condition
+        if(cond == null){
+            System.out.format(">> ERROR [%d] missing condition for while loop\n", line);
+            printError(line);
+        }
+		
+		// semant the condition and checck if it is of TYPE_INT
+		TYPE conditionType = cond.SemantMe();
+		if (!(conditionType instanceof TYPE_INT))
+		{
+			System.out.format(">> ERROR [%d] condition of if statement is not integral\n", this.line);
+			printError(line);
+		}
+
+		// begin if scope
+		SYMBOL_TABLE.getInstance().beginScope();
+		SYMBOL_TABLE.getInstance().updateCurrentScopeLevelUp();
+
+		// semant if body
 		body.SemantMe();
 
-		/*****************/
-		/* [3] End Scope */
-		/*****************/
+		// end if scope
+		SYMBOL_TABLE.getInstance().updateCurrentScopeLevelDown();
 		SYMBOL_TABLE.getInstance().endScope();
 
-		/*********************************************************/
-		/* [4] Return value is irrelevant for class declarations */
-		/*********************************************************/
 		return null;		
 	}	
 }

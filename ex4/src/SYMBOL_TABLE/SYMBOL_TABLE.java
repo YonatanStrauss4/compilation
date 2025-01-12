@@ -26,6 +26,13 @@ public class SYMBOL_TABLE
 	private SYMBOL_TABLE_ENTRY[] table = new SYMBOL_TABLE_ENTRY[hashArraySize];
 	private SYMBOL_TABLE_ENTRY top;
 	private int top_index = 0;
+	private TYPE_CLASS currentClass = null;
+	private TYPE_FUNCTION currentFunction = null;
+	private boolean insideFunction = false;
+	private boolean insideClass = false;
+	public TYPE_CLASS_VAR_DEC_LIST currentClassVariableMembers = new TYPE_CLASS_VAR_DEC_LIST(null, null);
+	public TYPE_CLASS_VAR_DEC_LIST currentClassFunctionMembers = new TYPE_CLASS_VAR_DEC_LIST(null, null);
+	public int currentScopeLevel = 0;
 	
 	/**************************************************************/
 	/* A very primitive hash function for exposition purposes ... */
@@ -46,7 +53,7 @@ public class SYMBOL_TABLE
 	/****************************************************************************/
 	/* Enter a variable, function, class type or array type to the symbol table */
 	/****************************************************************************/
-	public void enter(String name,TYPE t)
+	public void enter(String name,TYPE t, boolean isClassDec, boolean isFuncArg)
 	{
 		/*************************************************/
 		/* [1] Compute the hash value for this new entry */
@@ -62,7 +69,7 @@ public class SYMBOL_TABLE
 		/**************************************************************************/
 		/* [3] Prepare a new symbol table entry with name, type, next and prevtop */
 		/**************************************************************************/
-		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++);
+		SYMBOL_TABLE_ENTRY e = new SYMBOL_TABLE_ENTRY(name,t,hashValue,next,top,top_index++, isClassDec, getCurrentScopeLevel(), isFuncArg);
 
 		/**********************************************/
 		/* [4] Update the top of the symbol table ... */
@@ -111,7 +118,7 @@ public class SYMBOL_TABLE
 		/************************************************************************/
 		enter(
 			"SCOPE-BOUNDARY",
-			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"));
+			new TYPE_FOR_SCOPE_BOUNDARIES("NONE"), false, false);
 
 		/*********************************************/
 		/* Print the symbol table after every change */
@@ -146,6 +153,61 @@ public class SYMBOL_TABLE
 		/*********************************************/
 		PrintMe();
 	}
+
+	
+	public TYPE findInScope(String name) {
+		SYMBOL_TABLE_ENTRY e;
+		for (e = top; e != null; e = e.prevtop) {
+			if (e.name.equals("SCOPE-BOUNDARY")){
+				break;
+			}
+			if (name.equals(e.name)) {
+				return e.type;
+			}
+		}
+		return null;
+	}
+
+	public TYPE findInClass(String name){
+		if (!insideClass){
+			return null;
+		}
+
+		SYMBOL_TABLE_ENTRY e;
+		for (e = top; e != null; e = e.prevtop) {
+			if ((e.type instanceof TYPE_CLASS && e.isClassDec) || e.scopeLevel == 0){
+				break;
+			}
+			if (name.equals(e.name)) {
+				return e.type;
+			}
+		}
+		return null;
+	}
+
+	public TYPE findClassInSymbolTable(String name)
+	{
+		SYMBOL_TABLE_ENTRY e = table[hash(name)];
+		SYMBOL_TABLE_ENTRY[] path = new SYMBOL_TABLE_ENTRY[hashArraySize]; // To store the path as we go down
+		int pathIndex = 0;
+	
+		// Go down the list and store the path
+		while (e != null) {
+			path[pathIndex++] = e; // Store the current entry in the path
+			e = e.next;
+		}
+	
+		// Go back up and check each entry along the way
+		for (int i = pathIndex - 1; i >= 0; i--) {
+			e = path[i];
+			if (e.name.equals(name)) {
+				return e.type; // Return the type of the first match
+			}
+		}
+	
+		return null; // Return null if not found
+	}
+	
 	
 	public static int n=0;
 	
@@ -238,6 +300,9 @@ public class SYMBOL_TABLE
 	/******************************/
 	/* GET SINGLETON INSTANCE ... */
 	/******************************/
+
+
+
 	public static SYMBOL_TABLE getInstance()
 	{
 		if (instance == null)
@@ -250,8 +315,8 @@ public class SYMBOL_TABLE
 			/*****************************************/
 			/* [1] Enter primitive types int, string */
 			/*****************************************/
-			instance.enter("int",   TYPE_INT.getInstance());
-			instance.enter("string",TYPE_STRING.getInstance());
+			instance.enter("int",   TYPE_INT.getInstance(), false, false);
+			instance.enter("string",TYPE_STRING.getInstance(), false, false);
 
 			/*************************************/
 			/* [2] How should we handle void ??? */
@@ -260,16 +325,60 @@ public class SYMBOL_TABLE
 			/***************************************/
 			/* [3] Enter library function PrintInt */
 			/***************************************/
-			instance.enter(
-				"PrintInt",
-				new TYPE_FUNCTION(
-					TYPE_VOID.getInstance(),
-					"PrintInt",
-					new TYPE_LIST(
-						TYPE_INT.getInstance(),
-						null)));
+			instance.enter("PrintInt",new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintInt",new TYPE_LIST(TYPE_INT.getInstance(),null)), false, false);
 			
+			/***************************************/
+			/* [4] Enter library function PrintString */
+			/***************************************/
+			instance.enter("PrintString", new TYPE_FUNCTION(TYPE_VOID.getInstance(),"PrintString",new TYPE_LIST(TYPE_STRING.getInstance(),null)), false, false);
 		}
 		return instance;
 	}
+
+
+	public void set_current_class(TYPE_CLASS c) {
+		this.currentClass = c;
+	}
+
+	public TYPE_CLASS get_current_class() {
+		return this.currentClass;
+	}
+
+	public void set_current_function(TYPE_FUNCTION f) {
+		this.currentFunction = f;
+	}
+
+	public TYPE_FUNCTION get_current_function() {
+		return this.currentFunction;
+	}
+
+	public void set_inside_function(boolean b) {
+		this.insideFunction = b;
+	}
+
+	public boolean get_inside_function() {
+		return this.insideFunction;
+	}
+
+	public void set_inside_class(boolean b) {
+		this.insideClass = b;
+	}
+
+	public boolean get_inside_class() {
+		return this.insideClass;
+	}
+
+	public void updateCurrentScopeLevelUp() {
+		this.currentScopeLevel = this.currentScopeLevel + 1; 
+	}
+
+	public void updateCurrentScopeLevelDown() {
+		this.currentScopeLevel = this.currentScopeLevel - 1; 
+	}
+
+	public int getCurrentScopeLevel() {
+		return this.currentScopeLevel;
+	}
+
+	
 }

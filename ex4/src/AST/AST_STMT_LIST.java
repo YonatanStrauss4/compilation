@@ -1,13 +1,9 @@
 package AST;
-
 import TYPES.*;
-import TEMP.*;
 
 public class AST_STMT_LIST extends AST_Node
 {
-	/****************/
-	/* DATA MEMBERS */
-	/****************/
+
 	public AST_STMT head;
 	public AST_STMT_LIST tail;
 
@@ -64,18 +60,17 @@ public class AST_STMT_LIST extends AST_Node
 		if (tail != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber,tail.SerialNumber);
 	}
 	
-	public TEMP IRme()
-	{
-		if (head != null) head.IRme();
-		if (tail != null) tail.IRme();
-		
-		return null;
-	}
-	
 	public TYPE SemantMe()
 	{
-		if (head != null) head.SemantMe();
-		if (tail != null) tail.SemantMe();
+		//semant the stmt list recursively, if not null
+		if (head != null) 
+		{
+			head.SemantMe();
+		}
+		if (tail != null) 
+		{
+			tail.SemantMe();
+		}
 		
 		return null;
 	}

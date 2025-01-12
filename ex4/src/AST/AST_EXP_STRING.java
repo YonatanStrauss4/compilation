@@ -1,9 +1,9 @@
 package AST;
-
 import TYPES.*;
 
 public class AST_EXP_STRING extends AST_EXP
 {
+	
 	public String value;
 	
 	/******************/
@@ -37,8 +37,10 @@ public class AST_EXP_STRING extends AST_EXP
 			SerialNumber,
 			String.format("STRING\n%s",value.replace('"','\'')));
 	}
+
 	public TYPE SemantMe()
 	{
+		// return TYPE_STRING
 		return TYPE_STRING.getInstance();
 	}
 }

@@ -1,13 +1,12 @@
 package TYPES;
 
-public class TYPE_CLASS_VAR_DEC
+public class TYPE_CLASS_VAR_DEC extends TYPE
 {
-	public TYPE t;
-	public String name;
+	public TYPE type;
 	
-	public TYPE_CLASS_VAR_DEC(TYPE t,String name)
+	public TYPE_CLASS_VAR_DEC(TYPE type,String name)
 	{
-		this.t = t;
+		this.type = type;
 		this.name = name;
 	}
 }
