@@ -12,12 +12,14 @@ package IR;
 /*******************/
 import TEMP.*;
 
-public class IRcommand_PrintInt extends IRcommand
-{
+public class IRcommand_PrintInt extends IRcommand {
 	TEMP t;
 	
-	public IRcommand_PrintInt(TEMP t)
-	{
+	public IRcommand_PrintInt(TEMP t) {
 		this.t = t;
+	}
+
+	public void printIR() {
+		System.out.println("PrintInt(" + t.toString() + ")");
 	}
 }

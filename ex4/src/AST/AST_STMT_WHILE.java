@@ -1,6 +1,8 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import IR.*;
+import TEMP.*;
 
 public class AST_STMT_WHILE extends AST_STMT
 {
@@ -14,9 +16,7 @@ public class AST_STMT_WHILE extends AST_STMT
     /******************/
     public AST_STMT_WHILE(AST_EXP cond, AST_STMT_LIST body, int line)
     {
-        /******************************/
-        /* SET A UNIQUE SERIAL NUMBER */
-        /******************************/
+        // SET A UNIQUE SERIAL NUMBER
         SerialNumber = AST_Node_Serial_Number.getFresh();
 
         // PRINT CORRESPONDING DERIVATION RULE

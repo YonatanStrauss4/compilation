@@ -1,5 +1,7 @@
 package AST;
 import TYPES.TYPE;
+import TEMP.*;
+
 
 public abstract class AST_CLASS_DEC extends AST_Node 
 {

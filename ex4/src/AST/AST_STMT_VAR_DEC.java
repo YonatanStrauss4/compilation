@@ -1,5 +1,7 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+
 
 public class AST_STMT_VAR_DEC extends AST_STMT
 {
@@ -42,6 +44,16 @@ public class AST_STMT_VAR_DEC extends AST_STMT
 		if(varDec != null) 
 		{
 			return varDec.SemantMe();
+		}
+
+		return null;
+	}
+
+	public TEMP IRme() {
+		// IRme the variable declaration
+		if(varDec != null) 
+		{
+			return varDec.IRme();
 		}
 
 		return null;

@@ -1,5 +1,8 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+import IR.*;
+
 
 public class AST_STMT_ASSIGN extends AST_STMT
 {
@@ -104,7 +107,7 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		TEMP src = exp.IRme();
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Store(((AST_EXP_VAR_SIMPLE) var).name,src));
+		Add_IRcommand(new IRcommand_Store(((AST_VAR_SIMPLE) var).varName, src));
 
 		return null;
 	}

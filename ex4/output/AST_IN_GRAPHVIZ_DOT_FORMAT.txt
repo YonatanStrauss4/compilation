@@ -1,0 +1,119 @@
+digraph
+{
+graph [ordering = "out"]
+v0 [label = "TYPE
+INT"];
+v1 [label = "TYPE
+INT"];
+v2 [label = "VAR DEC
+NO ARGS
+i"];
+v2 -> v1;
+v3 [label = "STMT
+VAR
+DEC"];
+v3 -> v2;
+v4 [label = "TYPE
+INT"];
+v5 [label = "VAR DEC
+NO ARGS
+j"];
+v5 -> v4;
+v6 [label = "STMT
+VAR
+DEC"];
+v6 -> v5;
+v7 [label = "VAR
+SIMPLE
+(i)"];
+v8 [label = "INT(3)"];
+v9 [label = "STMT
+ASSIGN
+"];
+v9 -> v7;
+v9 -> v8;
+v10 [label = "VAR
+SIMPLE
+(j)"];
+v11 [label = "INT(2)"];
+v12 [label = "STMT
+ASSIGN
+"];
+v12 -> v10;
+v12 -> v11;
+v13 [label = "TYPE
+INT"];
+v14 [label = "VAR
+SIMPLE
+(i)"];
+v15 [label = "EXP
+VAR"];
+v15 -> v14;
+v16 [label = "VAR
+SIMPLE
+(j)"];
+v17 [label = "EXP
+VAR"];
+v17 -> v16;
+v18 [label = "BINOP(+)"];
+v18 -> v15;
+v18 -> v17;
+v19 [label = "VAR DEC
+ARGSm"];
+v19 -> v13;
+v19 -> v18;
+v20 [label = "STMT
+VAR
+DEC"];
+v20 -> v19;
+v21 [label = "VAR
+SIMPLE
+(m)"];
+v22 [label = "EXP
+VAR"];
+v22 -> v21;
+v23 [label = "STMT
+RETURN EXP"];
+v23 -> v22;
+v24 [label = "STMT
+LIST
+"];
+v24 -> v23;
+v25 [label = "STMT
+LIST
+"];
+v25 -> v20;
+v25 -> v24;
+v26 [label = "STMT
+LIST
+"];
+v26 -> v12;
+v26 -> v25;
+v27 [label = "STMT
+LIST
+"];
+v27 -> v9;
+v27 -> v26;
+v28 [label = "STMT
+LIST
+"];
+v28 -> v6;
+v28 -> v27;
+v29 [label = "STMT
+LIST
+"];
+v29 -> v3;
+v29 -> v28;
+v30 [label = "FUNC DEC
+NO ARGS
+Function name:main"];
+v30 -> v0;
+v30 -> v29;
+v31 [label = "DEC
+FUNC DEC"];
+v31 -> v30;
+v32 [label = "DEC
+LIST
+"];
+v32 -> v31;
+}

@@ -24,4 +24,8 @@ public class IRcommand_Binop_Mul_Integers extends IRcommand
 		this.t1 = t1;
 		this.t2 = t2;
 	}
+
+	public void printIR(){
+		System.out.println(dst.toString() + " := " + t1.toString() + " * " + t2.toString());
+	}
 }

@@ -1,5 +1,8 @@
 package AST;
 import TYPES.*;
+import TEMP.TEMP;
+import IR.*;
+import TEMP.*;
 
 public class AST_EXP_BINOP extends AST_EXP
 {
@@ -7,6 +10,7 @@ public class AST_EXP_BINOP extends AST_EXP
 	public AST_EXP left;
 	public AST_EXP right;
 	public int line;
+	public boolean isString;
 	
 	/******************/
 	/* CONSTRUCTOR(S) */
@@ -30,6 +34,7 @@ public class AST_EXP_BINOP extends AST_EXP
 		this.right = right;
 		this.OP = OP;
 		this.line = line;
+		this.isString = false;
 	}
 	
 	/*************************************************/
@@ -114,7 +119,7 @@ public class AST_EXP_BINOP extends AST_EXP
 			if(t1 instanceof TYPE_INT){
 				return TYPE_INT.getInstance();
 			}
-
+			this.isString = true;
 			//return TYPE_STRING
 			return TYPE_STRING.getInstance();
 		}
@@ -177,29 +182,47 @@ public class AST_EXP_BINOP extends AST_EXP
 		if (left  != null) t1 = left.IRme();
 		if (right != null) t2 = right.IRme();
 		
-		if (OP == 0)
-		{
+		if (OP == 0) {
+			if (this.isString) {
+				IR.
+				getInstance().
+				Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2));
+			}
+			else {
+				IR.
+				getInstance().
+				Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2));
+			}
+		}
+		if (OP == 1) {
 			IR.
 			getInstance().
 			Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2));
 		}
-		if (OP == 2)
-		{
+		if (OP == 2) {
 			IR.
 			getInstance().
 			Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2));
 		}
-		if (OP == 3)
-		{
+		if (OP == 3) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2));
 		}
-		if (OP == 4)
-		{
+		if (OP == 4) {
 			IR.
 			getInstance().
 			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2));
+		}
+		if (OP == 5) {
+			IR.
+			getInstance().
+			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1));
+		}
+		if (OP == 6) {
+			IR.
+			getInstance().
+			Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2));
 		}
 		return dst;
 	}

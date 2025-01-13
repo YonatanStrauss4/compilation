@@ -1,5 +1,6 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
 
 public class AST_TYPE_VOID extends AST_TYPE
 {

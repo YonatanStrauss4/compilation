@@ -1,6 +1,8 @@
 package AST;
 import TYPES.*;
+import IR.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
 {
@@ -109,4 +111,11 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
 
 		return new TYPE_CLASS_VAR_DEC(type, varName);
 	}
+    
+    public TEMP IRme() {
+		IR.getInstance().Add_IRcommand(new IRcommand_Allocate(varName));
+		
+		return null;
+	}
+
 }

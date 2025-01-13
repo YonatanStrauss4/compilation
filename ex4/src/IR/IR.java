@@ -11,16 +11,14 @@ package IR;
 /* PROJECT IMPORTS */
 /*******************/
 
-public class IR
-{
+public class IR {
 	private IRcommand head=null;
 	private IRcommandList tail=null;
 
 	/******************/
 	/* Add IR command */
 	/******************/
-	public void Add_IRcommand(IRcommand cmd)
-	{
+	public void Add_IRcommand(IRcommand cmd) {
 		if ((head == null) && (tail == null))
 		{
 			this.head = cmd;
@@ -63,5 +61,14 @@ public class IR
 			instance = new IR();
 		}
 		return instance;
+	}
+
+	public void printIR() {
+		IRcommandList it = new IRcommandList(this.head,this.tail);
+		while (it != null)
+		{
+			it.head.printIR();
+			it = it.tail;
+		}
 	}
 }

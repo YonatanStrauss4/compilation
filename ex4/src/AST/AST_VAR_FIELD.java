@@ -1,6 +1,7 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_VAR_FIELD extends AST_VAR
 {

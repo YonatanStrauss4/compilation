@@ -22,4 +22,8 @@ public class IRcommandConstInt extends IRcommand
 		this.t = t;
 		this.value = value;
 	}
+
+	public void printIR() {
+		System.out.println(t.toString() + " := " + String.format("%d", value));
+	}
 }

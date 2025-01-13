@@ -1,6 +1,7 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_STMT_RETURN_NO_EXP extends AST_STMT
 {

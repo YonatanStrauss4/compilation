@@ -1,6 +1,8 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
+import IR.*;
 
 public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 {
@@ -110,5 +112,24 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
         // return the function as a class member
         return new TYPE_CLASS_FUNC_DEC(currFunc, funcName);
+    }
+
+    public TEMP IRme() {
+        // [1] Allocate fresh labels for function entry and exit
+        String label_func_start = IRcommand.getFreshLabel(this.funcName + "_start");
+        String label_func_end = IRcommand.getFreshLabel(this.funcName + "_end");
+
+        // [2] Add function entry label
+        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_start));
+
+        // [3] Generate IR code for the function body
+        if (this.body != null) {
+            body.IRme();
+        }
+
+        // [4] Add function exit label
+        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_end));
+
+        return null;
     }
 }

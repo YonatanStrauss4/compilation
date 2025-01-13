@@ -1,6 +1,7 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_CLASS_DEC_SIMPLE extends AST_CLASS_DEC
 {

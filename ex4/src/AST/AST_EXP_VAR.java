@@ -1,34 +1,25 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+import IR.*;
 
-public class AST_EXP_VAR extends AST_EXP
-{
+public class AST_EXP_VAR extends AST_EXP {
 
 	public AST_VAR var;
 
-	/******************/
-	/* CONSTRUCTOR(S) */
-	/******************/
-	public AST_EXP_VAR(AST_VAR var)
-	{
-		/******************************/
-		/* SET A UNIQUE SERIAL NUMBER */
-		/******************************/
+	// CONSTRUCTOR(S)
+	public AST_EXP_VAR(AST_VAR var) {
+		// SET A UNIQUE SERIAL NUMBER
 		SerialNumber = AST_Node_Serial_Number.getFresh();
 
-		/***************************************/
-		/* PRINT CORRESPONDING DERIVATION RULE */
-		/***************************************/
+		// PRINT CORRESPONDING DERIVATION RULE
 		System.out.print("====================== exp -> var\n");
 
-		/*******************************/
-		/* COPY INPUT DATA NENBERS ... */
-		/*******************************/
+		// COPY INPUT DATA NENBERS ...
 		this.var = var;
 	}
 	
-	public void PrintMe()
-	{
+	public void PrintMe() {
 		/************************************/
 		/* AST NODE TYPE = EXP VAR */
 		/************************************/
@@ -53,12 +44,14 @@ public class AST_EXP_VAR extends AST_EXP
 			
 	}
 
-	public TYPE SemantMe()
-	{
+	public TYPE SemantMe() {
 		// semant the variable
 		TYPE type = var.SemantMe();
-		
-		//return its type
 		return type;
+	}
+
+	public TEMP IRme() {
+		TEMP vari = var.IRme();
+		return vari;
 	}
 }

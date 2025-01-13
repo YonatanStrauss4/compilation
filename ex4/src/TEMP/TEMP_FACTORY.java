@@ -17,7 +17,8 @@ public class TEMP_FACTORY
 	
 	public TEMP getFreshTEMP()
 	{
-		return new TEMP(counter++);
+		return new TEMP(
+			counter++);
 	}
 	
 	/**************************************/

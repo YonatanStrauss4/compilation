@@ -1,6 +1,7 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 {

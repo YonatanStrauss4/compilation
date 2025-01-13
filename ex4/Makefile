@@ -54,7 +54,7 @@ CUP_FLAGS =                                \
 # DEFINITIONS :: PARSER #
 #########################
 INPUT    = ${INPUT_DIR}/Input.txt
-OUTPUT   = ${OUTPUT_DIR}/Output.txt
+OUTPUT   = ${OUTPUT_DIR}/output.txt
 
 ##########
 # TARGET #

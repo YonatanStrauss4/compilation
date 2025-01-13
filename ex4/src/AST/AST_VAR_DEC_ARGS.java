@@ -1,6 +1,8 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
+import IR.*;
 
 public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 {
@@ -10,9 +12,6 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 	public AST_EXP exp;
   	public int line;
 	
-	/******************/
-	/* CONSTRUCTOR(S) */
-	/******************/
 	public AST_VAR_DEC_ARGS(AST_TYPE t, String varName, AST_EXP exp, int line)
 	{
 		/******************************/
@@ -183,4 +182,14 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
     	// If no shadowing is detected, return true
     	return true;
 	}
+
+	public TEMP IRme() {
+		IR.getInstance().Add_IRcommand(new IRcommand_Allocate(varName));
+		
+		if (exp != null){
+			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme()));
+		}
+		return null;
+	}
+
 }

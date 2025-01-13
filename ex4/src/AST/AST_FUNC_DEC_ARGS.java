@@ -1,6 +1,7 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
+import TEMP.*;
 
 public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
 {

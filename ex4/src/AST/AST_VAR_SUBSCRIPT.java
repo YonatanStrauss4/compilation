@@ -1,5 +1,6 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
 
 public class AST_VAR_SUBSCRIPT extends AST_VAR
 {

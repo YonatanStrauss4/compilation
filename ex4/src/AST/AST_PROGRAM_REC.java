@@ -1,5 +1,7 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+import IR.*;
 
 public class AST_PROGRAM_REC extends AST_PROGRAM
 {
@@ -64,5 +66,25 @@ public class AST_PROGRAM_REC extends AST_PROGRAM
 		}
 		
 		return null;	
+	}
+
+	public TEMP IRme() {
+
+		// recursively generate IR for the declarations of the program
+		if (dec != null) {
+			dec.IRme();
+		}
+
+		if (decList != null) {
+			decList.IRme();
+		}
+
+		// Print the IR commands list
+		IR.getInstance().printIR();
+
+
+		
+		
+		return null;
 	}
 }

@@ -1,5 +1,6 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
 
 public class AST_NEW_TYPE_EXP_IN_BRACKS extends AST_NEW_EXP
 {

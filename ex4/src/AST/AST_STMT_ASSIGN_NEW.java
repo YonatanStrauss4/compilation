@@ -1,5 +1,6 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
 
 public class AST_STMT_ASSIGN_NEW extends AST_STMT
 {
@@ -11,8 +12,7 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
     /******************/
     /* CONSTRUCTOR(S) */
     /******************/
-    public AST_STMT_ASSIGN_NEW(AST_VAR var, AST_NEW_EXP newExp, int line)
-    {
+    public AST_STMT_ASSIGN_NEW(AST_VAR var, AST_NEW_EXP newExp, int line) {
         /******************************/
         /* SET A UNIQUE SERIAL NUMBER */
         /******************************/

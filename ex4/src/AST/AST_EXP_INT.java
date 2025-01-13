@@ -1,5 +1,8 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+import IR.*;
+
 
 public class AST_EXP_INT extends AST_EXP
 {
@@ -51,10 +54,9 @@ public class AST_EXP_INT extends AST_EXP
 		return TYPE_INT.getInstance();
 	}
 
-	public TEMP IRme()
-	{
+	public TEMP IRme() {
 		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
-		IR.getInstance().Add_IRcommand(new IRcommandConstInt(t,value));
+		IR.getInstance().Add_IRcommand(new IRcommandConstInt(t, this.i));
 		return t;
 	}
 
