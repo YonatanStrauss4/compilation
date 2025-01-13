@@ -2,22 +2,17 @@
 /* FILE NAME: LEX_FILE.lex */
 /***************************/
 
-/***************************/
-/* AUTHOR: OREN ISH SHALOM */
-/***************************/
-
 /*************/
 /* USER CODE */
 /*************/
-   
 import java_cup.runtime.*;
 
 /******************************/
 /* DOLAR DOLAR - DON'T TOUCH! */
 /******************************/
-      
+
 %%
-   
+
 /************************************/
 /* OPTIONS AND DECLARATIONS SECTION */
 /************************************/
@@ -34,9 +29,9 @@ import java_cup.runtime.*;
 /********************************************************************/
 %line
 %column
-    
+
 /*******************************************************************************/
-/* Note that this has to be the EXACT smae name of the class the CUP generates */
+/* Note that this has to be the EXACT same name of the class the CUP generates */
 /*******************************************************************************/
 %cupsym TokenNames
 
@@ -44,13 +39,13 @@ import java_cup.runtime.*;
 /* CUP compatibility mode interfaces with a CUP generated parser. */
 /******************************************************************/
 %cup
-   
+
 /****************/
 /* DECLARATIONS */
 /****************/
 /*****************************************************************************/   
 /* Code between %{ and %}, both of which must be at the beginning of a line, */
-/* will be copied letter to letter into the Lexer class code.                */
+/* will be copied verbatim (letter to letter) into the Lexer class code.     */
 /* Here you declare member variables and functions that are used inside the  */
 /* scanner actions.                                                          */  
 /*****************************************************************************/   
@@ -64,19 +59,32 @@ import java_cup.runtime.*;
 	/*******************************************/
 	/* Enable line number extraction from main */
 	/*******************************************/
-	public int getLine()    { return yyline + 1; }
-	public int getCharPos() { return yycolumn;   } 
+	public int getLine() { return yyline + 1; } 
+
+	/**********************************************/
+	/* Enable token position extraction from main */
+	/**********************************************/
+	public int getCharPos() { return yycolumn + 1; } 
 %}
 
 /***********************/
 /* MACRO DECALARATIONS */
 /***********************/
 LineTerminator	= \r|\n|\r\n
-WhiteSpace		= {LineTerminator} | [ \t\f]
-INTEGER			= 0 | [1-9][0-9]*
-ID				= [a-zA-Z]+
-STRING			= \"[a-z|A-Z]*\"
-   
+WhiteSpace		= {LineTerminator} | [ \t]
+INT		     	= [0-9]+
+ID				= [a-zA-Z][a-zA-Z0-9]*
+START_COMMENT 	= \/\*
+END_COMMENT		= \*\/
+LINE_COMMENT 	= "//" [a-zA-Z0-9\t\+\-\*\/\.\;\(\)\[\]\{\}\?\!\t ]* {LineTerminator}
+STRING  		= \"[a-zA-Z]*\" //\"(\\.|[^\"\\])*\"
+COMMENT_CHAR	= [a-zA-Z0-9\t\r|\n|\r\n\+\-\*\/\.\;\(\)\[\]\{\}\s\?\!]
+ERROR			= "//" {COMMENT_CHAR}* {STRING} {COMMENT_CHAR}* {LineTerminator}
+
+%state COMMENT
+%state STRING
+
+
 /******************************/
 /* DOLAR DOLAR - DON'T TOUCH! */
 /******************************/
@@ -86,7 +94,7 @@ STRING			= \"[a-z|A-Z]*\"
 /************************************************************/
 /* LEXER matches regular expressions to actions (Java code) */
 /************************************************************/
-   
+
 /**************************************************************/
 /* YYINITIAL is the state at which the lexer begins scanning. */
 /* So these regular expressions will only be matched if the   */
@@ -94,31 +102,52 @@ STRING			= \"[a-z|A-Z]*\"
 /**************************************************************/
 
 <YYINITIAL> {
-
-"if"				{ return symbol(TokenNames.IF);}
-"="					{ return symbol(TokenNames.EQ);}
-"<"					{ return symbol(TokenNames.LT);}
-"."					{ return symbol(TokenNames.DOT);}
-"+"					{ return symbol(TokenNames.PLUS);}
-"-"					{ return symbol(TokenNames.MINUS);}
-"class"				{ return symbol(TokenNames.CLASS);}
-"while"				{ return symbol(TokenNames.WHILE);}
-"return"			{ return symbol(TokenNames.RETURN);}
-"*"					{ return symbol(TokenNames.TIMES);}
-"/"					{ return symbol(TokenNames.DIVIDE);}
-":="				{ return symbol(TokenNames.ASSIGN);}
-"("					{ return symbol(TokenNames.LPAREN);}
-")"					{ return symbol(TokenNames.RPAREN);}
-"["					{ return symbol(TokenNames.LBRACK);}
-"]"					{ return symbol(TokenNames.RBRACK);}
-"{"					{ return symbol(TokenNames.LBRACE);}
-"}"					{ return symbol(TokenNames.RBRACE);}
-","					{ return symbol(TokenNames.COMMA);}
-";"					{ return symbol(TokenNames.SEMICOLON);}
-{ID}				{ return symbol(TokenNames.ID, new String(yytext()));}
-{INTEGER}			{ return symbol(TokenNames.INT, new Integer(yytext()));}
-{STRING}			{ return symbol(TokenNames.STRING, new String(yytext()));}
-{WhiteSpace}		{ /* just skip what was found, do nothing */ }
-{LineTerminator}	{ /* just skip what was found, do nothing */ }
-<<EOF>>				{ return symbol(TokenNames.EOF);}
+	"/"					{ return symbol(TokenNames.DIVIDE);}
+	"("					{ return symbol(TokenNames.LPAREN, yyline+1);}
+	")"					{ return symbol(TokenNames.RPAREN);}
+	"["					{ return symbol(TokenNames.LBRACK);}
+	"]" 				{ return symbol(TokenNames.RBRACK);}
+	"{"					{ return symbol(TokenNames.LBRACE);}
+	"}"					{ return symbol(TokenNames.RBRACE);}
+	"nil"				{ return symbol(TokenNames.NIL);}
+	"+"					{ return symbol(TokenNames.PLUS);}
+	"-"					{ return symbol(TokenNames.MINUS);}
+	"*"					{ return symbol(TokenNames.TIMES);}
+	","					{ return symbol(TokenNames.COMMA);}
+	"."					{ return symbol(TokenNames.DOT);}
+	";"					{ return symbol(TokenNames.SEMICOLON);}
+	"int"				{ return symbol(TokenNames.TYPE_INT);}
+	"void"				{ return symbol(TokenNames.TYPE_VOID);}
+	":="				{ return symbol(TokenNames.ASSIGN);}
+	"="					{ return symbol(TokenNames.EQ);}
+	"<"					{ return symbol(TokenNames.LT);}
+	">"					{ return symbol(TokenNames.GT);}
+	"array"				{ return symbol(TokenNames.ARRAY);}
+	"extends"			{ return symbol(TokenNames.EXTENDS);}
+	"return"			{ return symbol(TokenNames.RETURN);}
+	"while"				{ return symbol(TokenNames.WHILE);}
+	"if"				{ return symbol(TokenNames.IF);}
+	"new"				{ return symbol(TokenNames.NEW);}
+	"string"			{ return symbol(TokenNames.TYPE_STRING);}
+	"class"				{ return symbol(TokenNames.CLASS, yyline+1);}
+	"/*" ( [^*] | \*+[^*/] )* \*+ "/"    { }
+	{INT}	    		{ return symbol(TokenNames.INT, Integer.parseInt(yytext()));}
+	{ID}				{ return symbol(TokenNames.ID, new String( yytext()));}  
+	{LineTerminator}	{ } 
+	{WhiteSpace}		{ }
+	{LINE_COMMENT}		{ }
+	{START_COMMENT}		{ yybegin(COMMENT); }
+	{STRING}			{ return symbol(TokenNames.STRING, new String( yytext())); }
+	<<EOF>>				{ return symbol(TokenNames.EOF); }
 }
+
+<COMMENT> {
+	[^*\n]+					{ }
+	"*"+[^*/\n]*		    { }
+	\n                      { }
+	"*/"				    { yybegin(YYINITIAL);}
+
+}
+
+{ERROR}					{ return symbol(TokenNames.error, new String( yytext()));}
+.						{ return symbol(TokenNames.error, new String( yytext()));}
