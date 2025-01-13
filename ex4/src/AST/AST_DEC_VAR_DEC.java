@@ -23,11 +23,8 @@ public class AST_DEC_VAR_DEC extends AST_DEC
 	/********************************************************/
 	/* The printing message for a declaration list AST node */
 	/********************************************************/
-	public void PrintMe()
-    {
-        /*********************************/
-        /* AST NODE TYPE = VAR DECLARATION */
-        /*********************************/
+	public void PrintMe() {
+        // AST NODE TYPE = VAR DECLARATION
         System.out.println("AST NODE DECLARATION VAR DEC");
 
         /******************************************/
@@ -35,21 +32,16 @@ public class AST_DEC_VAR_DEC extends AST_DEC
         /******************************************/
         if (varDec != null) varDec.PrintMe();
 
-        /***************************************/
-        /* PRINT Node to AST GRAPHVIZ DOT file */
-        /***************************************/
+        // PRINT Node to AST GRAPHVIZ DOT file
         AST_GRAPHVIZ.getInstance().logNode(
             SerialNumber,
             "DECLARATION\nVAR DEC");
 
-        /****************************************/
-        /* PRINT Edges to AST GRAPHVIZ DOT file */
-        /****************************************/
+        // PRINT Edges to AST GRAPHVIZ DOT file
         if (varDec != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, varDec.SerialNumber);
     }
 
-	public TYPE SemantMe()
-	{
+	public TYPE SemantMe(){
 		// semant the variable declaration
 		if(varDec != null) 
 			return varDec.SemantMe();

@@ -52,8 +52,7 @@ public class AST_STMT_FUNC_STMT extends AST_STMT
         if (funcStmt != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, funcStmt.SerialNumber);
     }
 
-    public TYPE SemantMe()
-    {
+    public TYPE SemantMe() {
         // semant the function statement
         if (funcStmt != null)
         { 
@@ -61,4 +60,11 @@ public class AST_STMT_FUNC_STMT extends AST_STMT
         }
         return null;
     }
+
+    public TEMP IRme() {
+		if (callExp != null) callExp.IRme();
+		
+		return null;
+	}
+
 }

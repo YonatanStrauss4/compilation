@@ -30,11 +30,8 @@ public class AST_VAR_SIMPLE extends AST_VAR
 	}
 
 
-	public void PrintMe()
-	{
-		/**********************************/
-		/* AST NODE TYPE = AST VAR SIMPLE */
-		/**********************************/
+	public void PrintMe() {
+		// AST NODE TYPE = AST VAR SIMPLE
 		System.out.format("AST NODE VAR SIMPLE( %s )\n",varName);
 
 		/*********************************/
@@ -103,4 +100,11 @@ public class AST_VAR_SIMPLE extends AST_VAR
 		}
 		return varFindType;
 	}
+
+	public TEMP IRme() {
+		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
+		IR.getInstance().Add_IRcommand(new IRcommand_Load(t,name));
+		return t;
+	}
+
 }
