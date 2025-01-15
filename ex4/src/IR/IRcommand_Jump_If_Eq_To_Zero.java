@@ -1,15 +1,6 @@
-/***********/
-/* PACKAGE */
-/***********/
 package IR;
 
-/*******************/
-/* GENERAL IMPORTS */
-/*******************/
-
-/*******************/
-/* PROJECT IMPORTS */
-/*******************/
+import java.util.*;
 import TEMP.*;
 
 public class IRcommand_Jump_If_Eq_To_Zero extends IRcommand
@@ -21,6 +12,14 @@ public class IRcommand_Jump_If_Eq_To_Zero extends IRcommand
 	{
 		this.t          = t;
 		this.label_name = label_name;
+	}
+
+	public Set<String> usedVars() {
+		return new HashSet<>(Arrays.asList(t.toString()));
+	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>();
 	}
 
 	public void printIR() {

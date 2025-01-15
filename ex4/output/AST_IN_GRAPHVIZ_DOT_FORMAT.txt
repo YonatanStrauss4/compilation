@@ -3,117 +3,75 @@ digraph
 graph [ordering = "out"]
 v0 [label = "TYPE
 INT"];
-v1 [label = "TYPE
-INT"];
-v2 [label = "VAR DEC
+v1 [label = "VAR DEC
 NO ARGS
-i"];
+x"];
+v1 -> v0;
+v2 [label = "DECLARATION
+VAR DEC"];
 v2 -> v1;
-v3 [label = "STMT
-VAR
-DEC"];
-v3 -> v2;
-v4 [label = "TYPE
+v3 [label = "TYPE
 INT"];
-v5 [label = "VAR DEC
+v4 [label = "VAR DEC
 NO ARGS
-j"];
+y"];
+v4 -> v3;
+v5 [label = "DECLARATION
+VAR DEC"];
 v5 -> v4;
-v6 [label = "STMT
-VAR
-DEC"];
-v6 -> v5;
+v6 [label = "TYPE
+VOID"];
 v7 [label = "VAR
 SIMPLE
-(i)"];
-v8 [label = "INT(3)"];
-v9 [label = "STMT
-ASSIGN
-"];
-v9 -> v7;
-v9 -> v8;
-v10 [label = "VAR
-SIMPLE
-(j)"];
-v11 [label = "INT(2)"];
-v12 [label = "STMT
-ASSIGN
-"];
-v12 -> v10;
-v12 -> v11;
-v13 [label = "TYPE
-INT"];
-v14 [label = "VAR
-SIMPLE
-(i)"];
-v15 [label = "EXP
+(x)"];
+v8 [label = "EXP
 VAR"];
+v8 -> v7;
+v9 [label = "INT(0)"];
+v10 [label = "BINOP(>)"];
+v10 -> v8;
+v10 -> v9;
+v11 [label = "VAR
+SIMPLE
+(x)"];
+v12 [label = "INT(1)"];
+v13 [label = "STMT
+ASSIGN
+"];
+v13 -> v11;
+v13 -> v12;
+v14 [label = "STMT
+LIST
+"];
+v14 -> v13;
+v15 [label = "IF (left)
+THEN right"];
+v15 -> v10;
 v15 -> v14;
-v16 [label = "VAR
-SIMPLE
-(j)"];
-v17 [label = "EXP
-VAR"];
-v17 -> v16;
-v18 [label = "BINOP(+)"];
-v18 -> v15;
-v18 -> v17;
-v19 [label = "VAR DEC
-ARGSm"];
-v19 -> v13;
-v19 -> v18;
-v20 [label = "STMT
-VAR
-DEC"];
-v20 -> v19;
-v21 [label = "VAR
-SIMPLE
-(m)"];
-v22 [label = "EXP
-VAR"];
-v22 -> v21;
-v23 [label = "STMT
-RETURN EXP"];
-v23 -> v22;
-v24 [label = "STMT
+v16 [label = "STMT
 LIST
 "];
-v24 -> v23;
-v25 [label = "STMT
-LIST
-"];
-v25 -> v20;
-v25 -> v24;
-v26 [label = "STMT
-LIST
-"];
-v26 -> v12;
-v26 -> v25;
-v27 [label = "STMT
-LIST
-"];
-v27 -> v9;
-v27 -> v26;
-v28 [label = "STMT
-LIST
-"];
-v28 -> v6;
-v28 -> v27;
-v29 [label = "STMT
-LIST
-"];
-v29 -> v3;
-v29 -> v28;
-v30 [label = "FUNC DEC
+v16 -> v15;
+v17 [label = "FUNC DEC
 NO ARGS
 Function name:main"];
-v30 -> v0;
-v30 -> v29;
-v31 [label = "DEC
+v17 -> v6;
+v17 -> v16;
+v18 [label = "DEC
 FUNC DEC"];
-v31 -> v30;
-v32 [label = "DEC
+v18 -> v17;
+v19 [label = "DEC
 LIST
 "];
-v32 -> v31;
+v19 -> v18;
+v20 [label = "DEC
+LIST
+"];
+v20 -> v5;
+v20 -> v19;
+v21 [label = "DEC
+LIST
+"];
+v21 -> v2;
+v21 -> v20;
 }

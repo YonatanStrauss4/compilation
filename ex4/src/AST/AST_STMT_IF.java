@@ -2,6 +2,7 @@ package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
 import TEMP.*;
+import IR.*;
 
 public class AST_STMT_IF extends AST_STMT
 {
@@ -84,5 +85,34 @@ public class AST_STMT_IF extends AST_STMT
 		SYMBOL_TABLE.getInstance().endScope();
 
 		return null;		
-	}	
+	}
+
+    public TEMP IRme() {
+
+		// [1] Allocate 2 fresh labels
+		String label_end   = IRcommand.getFreshLabel("if_end");
+
+		// [2] cond.IRme();
+		TEMP cond_temp = cond.IRme();
+
+		// [3] Jump conditionally to the if end
+		IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp, label_end);
+		IR.
+		getInstance().
+		Add_IRcommand(jmp_if_eq_zero);		
+
+		// [4] body.IRme()
+		body.IRme();
+
+		// [5] If end label
+		IRcommand lbl_end_cmd = new IRcommand_Label(label_end);
+		IR.
+		getInstance().
+		Add_IRcommand(lbl_end_cmd);
+
+		IR.getInstance().controlGraph.update_CFG(jmp_if_eq_zero,lbl_end_cmd);
+
+		// [6] return null
+		return null;
+	}
 }

@@ -1,8 +1,9 @@
    
 import java.io.*;
-
+import java.util.ArrayList;
 import java_cup.runtime.Symbol;
 import AST.*;
+import IR.*;
 
 public class Main
 {
@@ -58,6 +59,18 @@ public class Main
 			System.out.println("===================================");
 			System.out.println("============= IR CMDS =============");
 			AST.IRme();
+			IR.getInstance().controlGraph.printControlGraph();
+			IR.getInstance().controlGraph.performUseBeforeDefAnalysis();
+
+
+
+
+
+
+
+
+
+			// All good
 			file_writer.write("OK\n");
 
 			/*************************/

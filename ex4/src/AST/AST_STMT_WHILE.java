@@ -79,35 +79,43 @@ public class AST_STMT_WHILE extends AST_STMT
     }
 
     public TEMP IRme() {
+
 		// [1] Allocate 2 fresh labels
-		String label_end   = IRcommand.getFreshLabel("end");
-		String label_start = IRcommand.getFreshLabel("start");
+		String label_end   = IRcommand.getFreshLabel("while_end");
+		String label_start = IRcommand.getFreshLabel("while_start");
 	
 		// [2] entry label for the while
+        IRcommand lbl_strt_cmd = new IRcommand_Label(label_start);
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Label(label_start));
+		Add_IRcommand(lbl_strt_cmd);
 
 		// [3] cond.IRme();
 		TEMP cond_temp = cond.IRme();
 
 		// [4] Jump conditionally to the loop end
+        IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp,label_end);
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Jump_If_Eq_To_Zero(cond_temp,label_end));		
+		Add_IRcommand(jmp_if_eq_zero);		
 
 		// [5] body.IRme()
 		body.IRme();
 
 		// [6] Jump to the loop entry
+        IRcommand jmp_to_strt = new IRcommand_Jump_Label(label_start);
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Jump_Label(label_start));		
+		Add_IRcommand(jmp_to_strt);		
 
 		// [7] Loop end label
+        IRcommand lbl_end_cmd = new IRcommand_Label(label_end);
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Label(label_end));
+		Add_IRcommand(lbl_end_cmd);
+
+        IR.getInstance().controlGraph.update_CFG(jmp_to_strt,lbl_strt_cmd);
+        IR.getInstance().controlGraph.update_CFG(jmp_if_eq_zero,lbl_end_cmd);
 
 		// [8] return null
 		return null;

@@ -2,6 +2,7 @@
 /* PACKAGE */
 /***********/
 package IR;
+import java.util.ArrayList;
 
 /*******************/
 /* GENERAL IMPORTS */
@@ -12,8 +13,10 @@ package IR;
 /*******************/
 
 public class IR {
-	private IRcommand head=null;
-	private IRcommandList tail=null;
+
+	private IRcommand head = null;
+	private IRcommandList tail = null;
+	public ControlFlowGraph controlGraph = new ControlFlowGraph();
 
 	/******************/
 	/* Add IR command */
@@ -36,6 +39,7 @@ public class IR {
 			}
 			it.tail = new IRcommandList(cmd,null);
 		}
+		this.controlGraph.addControlNode(cmd);
 	}
 	
 	/**************************************/
@@ -61,14 +65,5 @@ public class IR {
 			instance = new IR();
 		}
 		return instance;
-	}
-
-	public void printIR() {
-		IRcommandList it = new IRcommandList(this.head,this.tail);
-		while (it != null)
-		{
-			it.head.printIR();
-			it = it.tail;
-		}
 	}
 }

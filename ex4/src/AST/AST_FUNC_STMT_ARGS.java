@@ -2,6 +2,7 @@ package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
 import TEMP.*;
+import IR.*;
 
 public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
 {
@@ -109,5 +110,16 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
 
         // return the return type of the function
         return ((TYPE_FUNCTION)funcFindType).returnType;
+    }
+
+    public TEMP IRme() {
+        TEMP t = null;
+        if (funcArgs != null) t = funcArgs.IRme();
+        if (funcName.equals("PrintInt")) {
+            IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(t));    
+        } else {
+            IR.getInstance().Add_IRcommand(new IRcommand_CallFunction(funcName, t));
+        }
+        return null;
     }
 }

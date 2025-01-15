@@ -1,4 +1,6 @@
 package IR;
+import java.util.*;
+
 import TEMP.*;
 
 public class IRcommand_Binop_Add_Integers extends IRcommand
@@ -13,6 +15,14 @@ public class IRcommand_Binop_Add_Integers extends IRcommand
 		this.t2 = t2;
 	}
 
+	public Set<String> usedVars() {
+		return new HashSet<>(Arrays.asList(t1.toString(), t2.toString()));
+	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>(Arrays.asList(dst.toString()));
+	}
+	
 	public void printIR(){
 		System.out.println(dst.toString() + " := " + t1.toString() + " + " + t2.toString());
 	}

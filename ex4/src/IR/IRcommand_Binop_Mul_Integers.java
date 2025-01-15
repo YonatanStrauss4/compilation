@@ -1,15 +1,6 @@
-/***********/
-/* PACKAGE */
-/***********/
 package IR;
 
-/*******************/
-/* GENERAL IMPORTS */
-/*******************/
-
-/*******************/
-/* PROJECT IMPORTS */
-/*******************/
+import java.util.*;
 import TEMP.*;
 
 public class IRcommand_Binop_Mul_Integers extends IRcommand
@@ -23,6 +14,14 @@ public class IRcommand_Binop_Mul_Integers extends IRcommand
 		this.dst = dst;
 		this.t1 = t1;
 		this.t2 = t2;
+	}
+
+	public Set<String> usedVars() {
+		return new HashSet<>(Arrays.asList(t1.toString(), t2.toString()));
+	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>(Arrays.asList(dst.toString()));
 	}
 
 	public void printIR(){

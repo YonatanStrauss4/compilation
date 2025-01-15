@@ -1,15 +1,7 @@
-/***********/
-/* PACKAGE */
-/***********/
+
 package IR;
 
-/*******************/
-/* GENERAL IMPORTS */
-/*******************/
-
-/*******************/
-/* PROJECT IMPORTS */
-/*******************/
+import java.util.*;
 import TEMP.*;
 
 public class IRcommand_Store extends IRcommand {
@@ -21,8 +13,17 @@ public class IRcommand_Store extends IRcommand {
 		this.var_name = var_name;
 	}
 
+	public Set<String> usedVars() {
+		return new HashSet<>(Arrays.asList(src.toString()));
+	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>(Arrays.asList(var_name));
+	}
+
 	public void printIR() {
 		System.out.println(String.format("store(%s := %s)", var_name, src.toString()));
 	}
+
 
 }

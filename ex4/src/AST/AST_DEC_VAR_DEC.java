@@ -48,5 +48,12 @@ public class AST_DEC_VAR_DEC extends AST_DEC
 			return varDec.SemantMe();
 		return null;
 	}
+
+	public TEMP IRme() {
+		// IRme the variable declaration
+		if(varDec != null) 
+			return varDec.IRme();
+		return null;
+	}
 	
 }

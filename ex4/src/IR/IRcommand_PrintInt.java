@@ -1,15 +1,6 @@
-/***********/
-/* PACKAGE */
-/***********/
 package IR;
+import java.util.*;
 
-/*******************/
-/* GENERAL IMPORTS */
-/*******************/
-
-/*******************/
-/* PROJECT IMPORTS */
-/*******************/
 import TEMP.*;
 
 public class IRcommand_PrintInt extends IRcommand {
@@ -19,7 +10,16 @@ public class IRcommand_PrintInt extends IRcommand {
 		this.t = t;
 	}
 
-	public void printIR() {
-		System.out.println("PrintInt(" + t.toString() + ")");
+	public Set<String> usedVars() {
+		return new HashSet<>(Arrays.asList(t.toString()));
 	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>();
+	}
+
+	public void printIR() {
+		System.out.println("call PrintInt(" + t.toString() + ")");
+	}
+
 }

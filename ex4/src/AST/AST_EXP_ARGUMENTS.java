@@ -1,7 +1,7 @@
 package AST;
 import TYPES.*;
 import TEMP.*;
-
+import IR.*;
 
 public class AST_EXP_ARGUMENTS extends AST_Node
 {
@@ -78,5 +78,18 @@ public class AST_EXP_ARGUMENTS extends AST_Node
 			return new TYPE_LIST(type, argumentList.SemantMe());
 		}
 
+	}
+
+	public TEMP IRme() {
+		TEMP t1 = argument.IRme();
+		return t1;
+		// TEMP t2 = null;
+		// if(argumentList != null)
+		// {
+		// 	t2 = argumentList.IRme();
+		// }
+		// TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+		// IR.getInstance().Add_IRcommand(new IRcommand_DecFunction(t1, dst, t2));
+		// return dst;
 	}
 }

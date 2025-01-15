@@ -1,15 +1,6 @@
-/***********/
-/* PACKAGE */
-/***********/
 package IR;
 
-/*******************/
-/* GENERAL IMPORTS */
-/*******************/
-
-/*******************/
-/* PROJECT IMPORTS */
-/*******************/
+import java.util.*;
 import TEMP.*;
 
 public class IRcommandConstInt extends IRcommand
@@ -21,6 +12,14 @@ public class IRcommandConstInt extends IRcommand
 	{
 		this.t = t;
 		this.value = value;
+	}
+
+	public Set<String> usedVars() {
+		return new HashSet<>();
+	}
+
+	public Set<String> definedVars() {
+		return new HashSet<>(Arrays.asList(t.toString()));
 	}
 
 	public void printIR() {
