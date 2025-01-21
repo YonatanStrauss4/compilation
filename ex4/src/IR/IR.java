@@ -17,6 +17,7 @@ public class IR {
 	private IRcommand head = null;
 	private IRcommandList tail = null;
 	public ControlFlowGraph controlGraph = new ControlFlowGraph();
+	public int currLine = 0;
 
 	/******************/
 	/* Add IR command */
@@ -40,6 +41,8 @@ public class IR {
 			it.tail = new IRcommandList(cmd,null);
 		}
 		this.controlGraph.addControlNode(cmd);
+		this.currLine++;
+
 	}
 	
 	/**************************************/

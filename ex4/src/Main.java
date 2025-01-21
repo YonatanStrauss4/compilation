@@ -1,6 +1,6 @@
    
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 import java_cup.runtime.Symbol;
 import AST.*;
 import IR.*;
@@ -17,6 +17,8 @@ public class Main
 		PrintWriter file_writer;
 		String inputFilename = argv[0];
 		String outputFilename = argv[1];
+		Set<String> errors; 
+		List<String> sortedErrors;
 		
 		try
 		{
@@ -55,31 +57,37 @@ public class Main
 			/* [7] Semant the AST ... */
 			/**************************/
 			AST.SemantMe();
-			System.out.println();
-			System.out.println("===================================");
-			System.out.println("============= IR CMDS =============");
+
+			/**************************/
+			/* [8] IR the AST ... */
+			/**************************/
 			AST.IRme();
-			IR.getInstance().controlGraph.printControlGraph();
-			IR.getInstance().controlGraph.performUseBeforeDefAnalysis();
 
+			/***************************************************************************************/
+			/* PRINT IR CMDS                                                                       */
+			/* Comment out next line to print the IR Commands (true means next cmds also printed)  */
+			// System.out.println("========IR CMDS========");
+			// IR.getInstance().controlGraph.printControlGraph(false);                             
+			/***************************************************************************************/
 
-
-
-
-
-
-
-
-			// All good
-			file_writer.write("OK\n");
+			errors = IR.getInstance().controlGraph.performUseBeforeDefAnalysis();
+			sortedErrors = new ArrayList<>(errors);
+			Collections.sort(sortedErrors);
+			if (!sortedErrors.isEmpty())
+				for (String err : sortedErrors) {
+					file_writer.write(err+"\n");
+				}
+			else {
+				file_writer.write("!OK\n");
+			}
 
 			/*************************/
-			/* [8] Close output file */
+			/* [9] Close output file */
 			/*************************/
 			file_writer.close();
 
 			/*************************************/
-			/* [9] Finalize AST GRAPHIZ DOT file */
+			/* [10] Finalize AST GRAPHIZ DOT file */
 			/*************************************/
 			AST_GRAPHVIZ.getInstance().finalizeFile();			
     	}

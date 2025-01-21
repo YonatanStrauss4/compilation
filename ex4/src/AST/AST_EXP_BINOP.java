@@ -186,43 +186,43 @@ public class AST_EXP_BINOP extends AST_EXP
 			if (this.isString) {
 				IR.
 				getInstance().
-				Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2));
+				Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2,IR.getInstance().currLine));
 			}
 			else {
 				IR.
 				getInstance().
-				Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2));
+				Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
 		}
 		if (OP == 1) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 2) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 3) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 4) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 5) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1));
+			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1,IR.getInstance().currLine));
 		}
 		if (OP == 6) {
 			IR.
 			getInstance().
-			Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2));
+			Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		return dst;
 	}

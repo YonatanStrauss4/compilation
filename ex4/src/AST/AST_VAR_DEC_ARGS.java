@@ -184,10 +184,9 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 	}
 
 	public TEMP IRme() {
-		IR.getInstance().Add_IRcommand(new IRcommand_Allocate(varName));
-		
+		IR.getInstance().Add_IRcommand(new IRcommand_Allocate(varName,IR.getInstance().currLine));
 		if (exp != null){
-			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme()));
+			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme(),IR.getInstance().currLine));
 		}
 		return null;
 	}

@@ -107,7 +107,7 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		TEMP src = exp.IRme();
 		IR.
 		getInstance().
-		Add_IRcommand(new IRcommand_Store(((AST_VAR_SIMPLE) var).varName, src));
+		Add_IRcommand(new IRcommand_Store(((AST_VAR_SIMPLE) var).varName, src,IR.getInstance().currLine));
 
 		return null;
 	}

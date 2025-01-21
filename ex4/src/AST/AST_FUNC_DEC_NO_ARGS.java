@@ -116,11 +116,11 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
 
     public TEMP IRme() {
         // [1] Allocate fresh labels for function entry and exit
-        String label_func_start = IRcommand.getFreshLabel(this.funcName + "_start");
         String label_func_end = IRcommand.getFreshLabel(this.funcName + "_end");
+        String label_func_start = IRcommand.getFreshLabel(this.funcName + "_start");
 
         // [2] Add function entry label
-        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_start));
+        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_start,IR.getInstance().currLine,true));
 
         // [3] Generate IR code for the function body
         if (this.body != null) {
@@ -128,7 +128,7 @@ public class AST_FUNC_DEC_NO_ARGS extends AST_FUNC_DEC
         }
 
         // [4] Add function exit label
-        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_end));
+        IR.getInstance().Add_IRcommand(new IRcommand_Label(label_func_end,IR.getInstance().currLine,false));
 
         return null;
     }

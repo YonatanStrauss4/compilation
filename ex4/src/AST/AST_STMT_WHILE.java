@@ -81,11 +81,12 @@ public class AST_STMT_WHILE extends AST_STMT
     public TEMP IRme() {
 
 		// [1] Allocate 2 fresh labels
+        int line = IR.getInstance().currLine;
 		String label_end   = IRcommand.getFreshLabel("while_end");
 		String label_start = IRcommand.getFreshLabel("while_start");
 	
 		// [2] entry label for the while
-        IRcommand lbl_strt_cmd = new IRcommand_Label(label_start);
+        IRcommand lbl_strt_cmd = new IRcommand_Label(label_start,IR.getInstance().currLine,true);
 		IR.
 		getInstance().
 		Add_IRcommand(lbl_strt_cmd);
@@ -94,7 +95,7 @@ public class AST_STMT_WHILE extends AST_STMT
 		TEMP cond_temp = cond.IRme();
 
 		// [4] Jump conditionally to the loop end
-        IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp,label_end);
+        IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp,label_end,IR.getInstance().currLine);
 		IR.
 		getInstance().
 		Add_IRcommand(jmp_if_eq_zero);		
@@ -103,21 +104,22 @@ public class AST_STMT_WHILE extends AST_STMT
 		body.IRme();
 
 		// [6] Jump to the loop entry
-        IRcommand jmp_to_strt = new IRcommand_Jump_Label(label_start);
+        IRcommand jmp_to_strt = new IRcommand_Jump_Label(label_start,IR.getInstance().currLine);
 		IR.
 		getInstance().
 		Add_IRcommand(jmp_to_strt);		
 
 		// [7] Loop end label
-        IRcommand lbl_end_cmd = new IRcommand_Label(label_end);
+        IRcommand lbl_end_cmd = new IRcommand_Label(label_end,IR.getInstance().currLine,false);
 		IR.
 		getInstance().
 		Add_IRcommand(lbl_end_cmd);
 
+        // [8] update CFG
         IR.getInstance().controlGraph.update_CFG(jmp_to_strt,lbl_strt_cmd);
         IR.getInstance().controlGraph.update_CFG(jmp_if_eq_zero,lbl_end_cmd);
 
-		// [8] return null
+		// [9] return null
 		return null;
 	}
 

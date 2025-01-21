@@ -3,75 +3,352 @@ digraph
 graph [ordering = "out"]
 v0 [label = "TYPE
 INT"];
-v1 [label = "VAR DEC
-NO ARGS
-x"];
-v1 -> v0;
-v2 [label = "DECLARATION
-VAR DEC"];
+v1 [label = "INT(0)"];
+v2 [label = "VAR DEC
+ARGSg0"];
+v2 -> v0;
 v2 -> v1;
-v3 [label = "TYPE
-INT"];
-v4 [label = "VAR DEC
-NO ARGS
-y"];
-v4 -> v3;
-v5 [label = "DECLARATION
+v3 [label = "DECLARATION
 VAR DEC"];
-v5 -> v4;
-v6 [label = "TYPE
-VOID"];
-v7 [label = "VAR
+v3 -> v2;
+v4 [label = "TYPE
+INT"];
+v5 [label = "VAR
 SIMPLE
-(x)"];
-v8 [label = "EXP
+(g0)"];
+v6 [label = "EXP
 VAR"];
+v6 -> v5;
+v7 [label = "INT(1)"];
+v8 [label = "BINOP(+)"];
+v8 -> v6;
 v8 -> v7;
-v9 [label = "INT(0)"];
-v10 [label = "BINOP(>)"];
-v10 -> v8;
+v9 [label = "VAR DEC
+ARGSg"];
+v9 -> v4;
+v9 -> v8;
+v10 [label = "DECLARATION
+VAR DEC"];
 v10 -> v9;
-v11 [label = "VAR
+v11 [label = "TYPE
+VOID"];
+v12 [label = "TYPE
+INT"];
+v13 [label = "VAR
+SIMPLE
+(g)"];
+v14 [label = "EXP
+VAR"];
+v14 -> v13;
+v15 [label = "INT(2)"];
+v16 [label = "BINOP(*)"];
+v16 -> v14;
+v16 -> v15;
+v17 [label = "INT(3)"];
+v18 [label = "BINOP(+)"];
+v18 -> v16;
+v18 -> v17;
+v19 [label = "VAR DEC
+ARGSx"];
+v19 -> v12;
+v19 -> v18;
+v20 [label = "STMT
+VAR
+DEC"];
+v20 -> v19;
+v21 [label = "TYPE
+INT"];
+v22 [label = "INT(10)"];
+v23 [label = "VAR DEC
+ARGSy"];
+v23 -> v21;
+v23 -> v22;
+v24 [label = "STMT
+VAR
+DEC"];
+v24 -> v23;
+v25 [label = "TYPE
+INT"];
+v26 [label = "VAR DEC
+NO ARGS
+z"];
+v26 -> v25;
+v27 [label = "STMT
+VAR
+DEC"];
+v27 -> v26;
+v28 [label = "TYPE
+INT"];
+v29 [label = "VAR DEC
+NO ARGS
+w"];
+v29 -> v28;
+v30 [label = "STMT
+VAR
+DEC"];
+v30 -> v29;
+v31 [label = "VAR
+SIMPLE
+(y)"];
+v32 [label = "EXP
+VAR"];
+v32 -> v31;
+v33 [label = "INT(0)"];
+v34 [label = "BINOP(>)"];
+v34 -> v32;
+v34 -> v33;
+v35 [label = "VAR
+SIMPLE
+(z)"];
+v36 [label = "VAR
 SIMPLE
 (x)"];
-v12 [label = "INT(1)"];
-v13 [label = "STMT
+v37 [label = "EXP
+VAR"];
+v37 -> v36;
+v38 [label = "INT(1)"];
+v39 [label = "BINOP(+)"];
+v39 -> v37;
+v39 -> v38;
+v40 [label = "VAR
+SIMPLE
+(y)"];
+v41 [label = "EXP
+VAR"];
+v41 -> v40;
+v42 [label = "BINOP(+)"];
+v42 -> v39;
+v42 -> v41;
+v43 [label = "STMT
 ASSIGN
 "];
-v13 -> v11;
-v13 -> v12;
-v14 [label = "STMT
+v43 -> v35;
+v43 -> v42;
+v44 [label = "VAR
+SIMPLE
+(g)"];
+v45 [label = "INT(1)"];
+v46 [label = "STMT
+ASSIGN
+"];
+v46 -> v44;
+v46 -> v45;
+v47 [label = "VAR
+SIMPLE
+(y)"];
+v48 [label = "VAR
+SIMPLE
+(y)"];
+v49 [label = "EXP
+VAR"];
+v49 -> v48;
+v50 [label = "INT(1)"];
+v51 [label = "BINOP(-)"];
+v51 -> v49;
+v51 -> v50;
+v52 [label = "STMT
+ASSIGN
+"];
+v52 -> v47;
+v52 -> v51;
+v53 [label = "INT(1)"];
+v54 [label = "TYPE
+INT"];
+v55 [label = "VAR DEC
+NO ARGS
+g"];
+v55 -> v54;
+v56 [label = "STMT
+VAR
+DEC"];
+v56 -> v55;
+v57 [label = "INT(1)"];
+v58 [label = "INT(1)"];
+v59 [label = "INT(1)"];
+v60 [label = "INT(1)"];
+v61 [label = "INT(1)"];
+v62 [label = "INT(1)"];
+v63 [label = "TYPE
+INT"];
+v64 [label = "INT(888)"];
+v65 [label = "VAR DEC
+ARGSgaxxxx"];
+v65 -> v63;
+v65 -> v64;
+v66 [label = "STMT
+VAR
+DEC"];
+v66 -> v65;
+v67 [label = "STMT
 LIST
 "];
-v14 -> v13;
-v15 [label = "IF (left)
-THEN right"];
-v15 -> v10;
-v15 -> v14;
-v16 [label = "STMT
+v67 -> v66;
+v68 [label = "STMT
+WHILE"];
+v68 -> v62;
+v68 -> v67;
+v69 [label = "STMT
 LIST
 "];
-v16 -> v15;
-v17 [label = "FUNC DEC
+v69 -> v68;
+v70 [label = "STMT
+WHILE"];
+v70 -> v61;
+v70 -> v69;
+v71 [label = "STMT
+LIST
+"];
+v71 -> v70;
+v72 [label = "STMT
+WHILE"];
+v72 -> v60;
+v72 -> v71;
+v73 [label = "STMT
+LIST
+"];
+v73 -> v72;
+v74 [label = "STMT
+WHILE"];
+v74 -> v59;
+v74 -> v73;
+v75 [label = "STMT
+LIST
+"];
+v75 -> v74;
+v76 [label = "STMT
+WHILE"];
+v76 -> v58;
+v76 -> v75;
+v77 [label = "STMT
+LIST
+"];
+v77 -> v76;
+v78 [label = "STMT
+WHILE"];
+v78 -> v57;
+v78 -> v77;
+v79 [label = "STMT
+LIST
+"];
+v79 -> v78;
+v80 [label = "STMT
+LIST
+"];
+v80 -> v56;
+v80 -> v79;
+v81 [label = "STMT
+WHILE"];
+v81 -> v53;
+v81 -> v80;
+v82 [label = "VAR
+SIMPLE
+(g)"];
+v83 [label = "EXP
+VAR"];
+v83 -> v82;
+v84 [label = "EXP
+ARGUMENTS
+"];
+v84 -> v83;
+v85 [label = "FUNC STMT ARGS
+Function name: PrintInt"];
+v85 -> v84;
+v86 [label = "STMT
+FUNC STMT"];
+v86 -> v85;
+v87 [label = "STMT
+LIST
+"];
+v87 -> v86;
+v88 [label = "STMT
+LIST
+"];
+v88 -> v81;
+v88 -> v87;
+v89 [label = "STMT
+LIST
+"];
+v89 -> v52;
+v89 -> v88;
+v90 [label = "STMT
+LIST
+"];
+v90 -> v46;
+v90 -> v89;
+v91 [label = "STMT
+LIST
+"];
+v91 -> v43;
+v91 -> v90;
+v92 [label = "STMT
+WHILE"];
+v92 -> v34;
+v92 -> v91;
+v93 [label = "VAR
+SIMPLE
+(g)"];
+v94 [label = "EXP
+VAR"];
+v94 -> v93;
+v95 [label = "EXP
+ARGUMENTS
+"];
+v95 -> v94;
+v96 [label = "FUNC STMT ARGS
+Function name: PrintInt"];
+v96 -> v95;
+v97 [label = "STMT
+FUNC STMT"];
+v97 -> v96;
+v98 [label = "STMT
+LIST
+"];
+v98 -> v97;
+v99 [label = "STMT
+LIST
+"];
+v99 -> v92;
+v99 -> v98;
+v100 [label = "STMT
+LIST
+"];
+v100 -> v30;
+v100 -> v99;
+v101 [label = "STMT
+LIST
+"];
+v101 -> v27;
+v101 -> v100;
+v102 [label = "STMT
+LIST
+"];
+v102 -> v24;
+v102 -> v101;
+v103 [label = "STMT
+LIST
+"];
+v103 -> v20;
+v103 -> v102;
+v104 [label = "FUNC DEC
 NO ARGS
 Function name:main"];
-v17 -> v6;
-v17 -> v16;
-v18 [label = "DEC
+v104 -> v11;
+v104 -> v103;
+v105 [label = "DEC
 FUNC DEC"];
-v18 -> v17;
-v19 [label = "DEC
+v105 -> v104;
+v106 [label = "DEC
 LIST
 "];
-v19 -> v18;
-v20 [label = "DEC
+v106 -> v105;
+v107 [label = "DEC
 LIST
 "];
-v20 -> v5;
-v20 -> v19;
-v21 [label = "DEC
+v107 -> v10;
+v107 -> v106;
+v108 [label = "DEC
 LIST
 "];
-v21 -> v2;
-v21 -> v20;
+v108 -> v3;
+v108 -> v107;
 }

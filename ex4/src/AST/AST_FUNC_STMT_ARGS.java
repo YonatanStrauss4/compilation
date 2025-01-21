@@ -116,9 +116,9 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
         TEMP t = null;
         if (funcArgs != null) t = funcArgs.IRme();
         if (funcName.equals("PrintInt")) {
-            IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(t));    
+            IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(t,IR.getInstance().currLine));    
         } else {
-            IR.getInstance().Add_IRcommand(new IRcommand_CallFunction(funcName, t));
+            IR.getInstance().Add_IRcommand(new IRcommand_CallFunction(funcName, t,IR.getInstance().currLine));
         }
         return null;
     }
