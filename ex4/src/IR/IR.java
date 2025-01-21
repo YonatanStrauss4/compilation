@@ -2,7 +2,6 @@
 /* PACKAGE */
 /***********/
 package IR;
-import java.util.ArrayList;
 
 /*******************/
 /* GENERAL IMPORTS */
@@ -19,9 +18,10 @@ public class IR {
 	public ControlFlowGraph controlGraph = new ControlFlowGraph();
 	public int currLine = 0;
 
-	/******************/
-	/* Add IR command */
-	/******************/
+	/*
+	 * Adds a new IR command to the list. Initializes the list if empty, appends to the end if not,
+	 * updates the control graph with the new command, and increments the command line counter.
+	 */
 	public void Add_IRcommand(IRcommand cmd) {
 		if ((head == null) && (tail == null))
 		{
@@ -40,31 +40,24 @@ public class IR {
 			}
 			it.tail = new IRcommandList(cmd,null);
 		}
+		// Add the command to the control graph for dataflow analysis or graph representation
 		this.controlGraph.addControlNode(cmd);
 		this.currLine++;
 
 	}
 	
-	/**************************************/
-	/* USUAL SINGLETON IMPLEMENTATION ... */
-	/**************************************/
+	// USUAL SINGLETON IMPLEMENTATION ...
 	private static IR instance = null;
 
-	/*****************************/
-	/* PREVENT INSTANTIATION ... */
-	/*****************************/
+	// PREVENT INSTANTIATION ...
 	protected IR() {}
 
-	/******************************/
-	/* GET SINGLETON INSTANCE ... */
-	/******************************/
+	// GET SINGLETON INSTANCE ...
 	public static IR getInstance()
 	{
 		if (instance == null)
 		{
-			/*******************************/
-			/* [0] The instance itself ... */
-			/*******************************/
+			// [0] The instance itself ...
 			instance = new IR();
 		}
 		return instance;

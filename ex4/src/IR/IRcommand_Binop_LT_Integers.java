@@ -19,10 +19,22 @@ public class IRcommand_Binop_LT_Integers extends IRcommand {
 		this.dstLabeled = dst.toString()+";"+line;
 	}
 
+	/**
+	 * Generates a set of variables used by this command.
+	 * 
+	 * @return A set containing the labeled destination variable
+	 */
+
 	public Set<String> genVars() {
 		return new HashSet<>(Arrays.asList(dstLabeled));
 	}
 
+	/**
+	 * Generates a set of variables killed by this command.
+	 * 
+	 * @param maxLine The maximum line number to consider
+	 * @return A set of labeled destination variables that are killed
+	 */
 	public Set<String> killVars(int maxLine) {
 		List<String> arr = new ArrayList<>();
 		for (int j=0;j<maxLine;j++) {
