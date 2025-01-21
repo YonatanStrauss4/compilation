@@ -1,7 +1,6 @@
 package AST;
 import TYPES.*;
 import TEMP.*;
-import IR.*;
 
 public class AST_EXP_VAR extends AST_EXP {
 
@@ -51,6 +50,7 @@ public class AST_EXP_VAR extends AST_EXP {
 	}
 
 	public TEMP IRme() {
+		// IRme the variable
 		TEMP vari = var.IRme();
 		return vari;
 	}

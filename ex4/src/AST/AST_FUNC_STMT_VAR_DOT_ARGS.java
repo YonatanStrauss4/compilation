@@ -1,7 +1,6 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
-import TEMP.*;
 
 public class AST_FUNC_STMT_VAR_DOT_ARGS extends AST_FUNC_STMT
 {

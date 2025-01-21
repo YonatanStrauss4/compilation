@@ -114,10 +114,14 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
 
     public TEMP IRme() {
         TEMP t = null;
+        // get the current class
         if (funcArgs != null) t = funcArgs.IRme();
+        // get the current class
         if (funcName.equals("PrintInt")) {
+            // PrintInt is a built-in function
             IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(t,IR.getInstance().currLine));    
         } else {
+            // call the function
             IR.getInstance().Add_IRcommand(new IRcommand_CallFunction(funcName, t,IR.getInstance().currLine));
         }
         return null;

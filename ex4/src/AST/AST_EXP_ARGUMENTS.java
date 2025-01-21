@@ -1,7 +1,6 @@
 package AST;
 import TYPES.*;
 import TEMP.*;
-import IR.*;
 
 public class AST_EXP_ARGUMENTS extends AST_Node
 {
@@ -81,6 +80,7 @@ public class AST_EXP_ARGUMENTS extends AST_Node
 	}
 
 	public TEMP IRme() {
+		// IRme the params list recursively
 		TEMP t1 = argument.IRme();
 		return t1;
 	}

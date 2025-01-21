@@ -1,6 +1,5 @@
 package AST;
 import TYPES.*;
-import TEMP.*;
 
 public class AST_CFIELD_REC extends AST_Node
 {

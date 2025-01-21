@@ -1,6 +1,5 @@
 package AST;
 import java.io.PrintWriter;
-import TEMP.*;
 
 public class AST_GRAPHVIZ
 {

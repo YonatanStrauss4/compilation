@@ -1,7 +1,6 @@
 package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
-import TEMP.*;
 
 public class AST_ARRAY_TYPE_DEF_SIMPLE extends AST_ARRAY_TYPE_DEF {
 

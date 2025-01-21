@@ -1,7 +1,6 @@
 package AST;
 import SYMBOL_TABLE.*;
 import TYPES.*;
-import TEMP.*;
 
 public class AST_FUNCTION_VAR_DOT_NO_ARGS extends AST_FUNCTION
 {

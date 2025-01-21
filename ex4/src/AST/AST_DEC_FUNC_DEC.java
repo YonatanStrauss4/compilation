@@ -63,8 +63,8 @@ public class AST_DEC_FUNC_DEC extends AST_DEC
 		return null;
 	}
 
-    public TEMP IRme()
-    {
+    public TEMP IRme() {
+        // IRme the function decleration
         if (func_dec != null) 
         {
             return func_dec.IRme();

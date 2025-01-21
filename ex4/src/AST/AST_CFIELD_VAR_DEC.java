@@ -1,6 +1,5 @@
 package AST;
 import TYPES.*;
-import TEMP.*;
 
 public class AST_CFIELD_VAR_DEC extends AST_CFIELD
 {

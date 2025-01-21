@@ -118,10 +118,14 @@ public class AST_FUNCTION_ARGS extends AST_FUNCTION
 
     public TEMP IRme() {
         TEMP t = null;
+        // semant the variable to get his type
         if (funcArgs != null) t = funcArgs.IRme();
+        // check if the variable is TYPE_CLASS
         if (funcName.equals("PrintInt")) {
+            // PrintInt is a special case
             IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(t,IR.getInstance().currLine));    
         } else {
+            // call the function
             IR.getInstance().Add_IRcommand(new IRcommand_CallFunction(funcName, t,IR.getInstance().currLine));
         }
         return null;

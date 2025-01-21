@@ -104,9 +104,10 @@ public class AST_STMT_RETURN_EXP extends AST_STMT
         return returnExp;
     }
 
-    public TEMP IRme()
-    {
+    public TEMP IRme() {
+        // IRme the return expression
         TEMP t = exp.IRme();
+        // add the return command to the IR
         IR.getInstance().Add_IRcommand(new IRcommand_Return(t,IR.getInstance().currLine));
         return null;
     }

@@ -1,6 +1,5 @@
 package AST;
 import TYPES.*;
-import TEMP.TEMP;
 import IR.*;
 import TEMP.*;
 
@@ -175,54 +174,40 @@ public class AST_EXP_BINOP extends AST_EXP
 
 	public TEMP IRme()
 	{
+		// get the two sides of the binop
 		TEMP t1 = null;
 		TEMP t2 = null;
 		TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-				
+
 		if (left  != null) t1 = left.IRme();
 		if (right != null) t2 = right.IRme();
 		
+		// add the IR command for the binop
 		if (OP == 0) {
 			if (this.isString) {
-				IR.
-				getInstance().
-				Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2,IR.getInstance().currLine));
+				IR.getInstance().Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2,IR.getInstance().currLine));
 			}
 			else {
-				IR.
-				getInstance().
-				Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
+				IR.getInstance().Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
 		}
 		if (OP == 1) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 2) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 3) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 4) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		if (OP == 5) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1,IR.getInstance().currLine));
 		}
 		if (OP == 6) {
-			IR.
-			getInstance().
-			Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
 		return dst;
 	}

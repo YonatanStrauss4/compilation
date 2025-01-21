@@ -184,8 +184,10 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 	}
 
 	public TEMP IRme() {
+		// add alocate command to IR
 		IR.getInstance().Add_IRcommand(new IRcommand_Allocate(varName,IR.getInstance().currLine));
 		if (exp != null){
+			// add store command to IR
 			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme(),IR.getInstance().currLine));
 		}
 		return null;

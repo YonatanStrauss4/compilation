@@ -1,6 +1,5 @@
 package AST;
 import TYPES.*;
-import TEMP.*;
 
 public class AST_DEC_ARRAY_TYPE_DEF extends AST_DEC
 {

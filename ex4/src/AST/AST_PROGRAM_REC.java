@@ -60,7 +60,6 @@ public class AST_PROGRAM_REC extends AST_PROGRAM
 		if (dec != null) {
 			dec.IRme();
 		}
-
 		if (decList != null) {
 			decList.IRme();
 		}

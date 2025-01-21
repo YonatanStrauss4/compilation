@@ -1,6 +1,5 @@
 package AST;
 import TYPES.*;
-import TEMP.*;
 
 public class AST_NEW_TYPE extends AST_NEW_EXP
 {
