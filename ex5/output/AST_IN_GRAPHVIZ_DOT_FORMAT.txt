@@ -1,0 +1,726 @@
+digraph
+{
+graph [ordering = "out"]
+v0 [label = "TYPE
+INT"];
+v1 [label = "ARRAY
+TYPEDEF
+...->IntArray"];
+v1 -> v0;
+v2 [label = "DEC
+ARRAY TYPE DEF"];
+v2 -> v1;
+v3 [label = "TYPE
+ID
+...->IntArray"];
+v4 [label = "ARRAY
+TYPEDEF
+...->Mat"];
+v4 -> v3;
+v5 [label = "DEC
+ARRAY TYPE DEF"];
+v5 -> v4;
+v6 [label = "TYPE
+STRING"];
+v7 [label = "ARRAY
+TYPEDEF
+...->strArray"];
+v7 -> v6;
+v8 [label = "DEC
+ARRAY TYPE DEF"];
+v8 -> v7;
+v9 [label = "TYPE
+INT"];
+v10 [label = "INT(7)"];
+v11 [label = "VAR DEC
+ARGSk"];
+v11 -> v9;
+v11 -> v10;
+v12 [label = "DECLARATION
+VAR DEC"];
+v12 -> v11;
+v13 [label = "TYPE
+STRING"];
+v14 [label = "STRING
+'yon'"];
+v15 [label = "VAR DEC
+ARGSyoni"];
+v15 -> v13;
+v15 -> v14;
+v16 [label = "DECLARATION
+VAR DEC"];
+v16 -> v15;
+v17 [label = "TYPE
+ID
+...->IntArray"];
+v18 [label = "EXP
+NIL"];
+v19 [label = "VAR DEC
+ARGSarr"];
+v19 -> v17;
+v19 -> v18;
+v20 [label = "DECLARATION
+VAR DEC"];
+v20 -> v19;
+v21 [label = "TYPE
+INT"];
+v22 [label = "INT(30)"];
+v23 [label = "VAR DEC
+ARGSglob"];
+v23 -> v21;
+v23 -> v22;
+v24 [label = "DECLARATION
+VAR DEC"];
+v24 -> v23;
+v25 [label = "TYPE
+INT"];
+v26 [label = "VAR DEC
+NO ARGS
+poly"];
+v26 -> v25;
+v27 [label = "DECLARATION
+VAR DEC"];
+v27 -> v26;
+v28 [label = "TYPE
+STRING"];
+v29 [label = "VAR DEC
+NO ARGS
+name"];
+v29 -> v28;
+v30 [label = "DECLARATION
+VAR DEC"];
+v30 -> v29;
+v31 [label = "TYPE
+VOID"];
+v32 [label = "TYPE
+INT"];
+v33 [label = "VAR DEC
+NO ARGS
+love"];
+v33 -> v32;
+v34 [label = "STMT
+VAR
+DEC"];
+v34 -> v33;
+v35 [label = "TYPE
+STRING"];
+v36 [label = "VAR DEC
+NO ARGS
+bro"];
+v36 -> v35;
+v37 [label = "STMT
+VAR
+DEC"];
+v37 -> v36;
+v38 [label = "TYPE
+ID
+...->IntArray"];
+v39 [label = "VAR DEC
+NO ARGS
+newnewarray"];
+v39 -> v38;
+v40 [label = "STMT
+VAR
+DEC"];
+v40 -> v39;
+v41 [label = "TYPE
+INT"];
+v42 [label = "INT(5)"];
+v43 [label = "VAR DEC
+ARGSj"];
+v43 -> v41;
+v43 -> v42;
+v44 [label = "STMT
+VAR
+DEC"];
+v44 -> v43;
+v45 [label = "TYPE
+STRING"];
+v46 [label = "STRING
+'yon'"];
+v47 [label = "VAR DEC
+ARGSstr"];
+v47 -> v45;
+v47 -> v46;
+v48 [label = "STMT
+VAR
+DEC"];
+v48 -> v47;
+v49 [label = "TYPE
+ID
+...->IntArray"];
+v50 [label = "TYPE
+INT"];
+v51 [label = "INT(5)"];
+v52 [label = "NEW TYPE
+EXP IN BRACKS"];
+v52 -> v50;
+v52 -> v51;
+v53 [label = "VAR DEC
+NEW EXPnewArr"];
+v53 -> v49;
+v53 -> v52;
+v54 [label = "STMT
+VAR
+DEC"];
+v54 -> v53;
+v55 [label = "TYPE
+ID
+...->Mat"];
+v56 [label = "TYPE
+ID
+...->IntArray"];
+v57 [label = "INT(3)"];
+v58 [label = "NEW TYPE
+EXP IN BRACKS"];
+v58 -> v56;
+v58 -> v57;
+v59 [label = "VAR DEC
+NEW EXPmatr"];
+v59 -> v55;
+v59 -> v58;
+v60 [label = "STMT
+VAR
+DEC"];
+v60 -> v59;
+v61 [label = "VAR
+SIMPLE
+(j)"];
+v62 [label = "INT(7)"];
+v63 [label = "STMT
+ASSIGN
+"];
+v63 -> v61;
+v63 -> v62;
+v64 [label = "TYPE
+INT"];
+v65 [label = "INT(10)"];
+v66 [label = "VAR DEC
+ARGSx"];
+v66 -> v64;
+v66 -> v65;
+v67 [label = "STMT
+VAR
+DEC"];
+v67 -> v66;
+v68 [label = "VAR
+SIMPLE
+(j)"];
+v69 [label = "VAR
+SIMPLE
+(x)"];
+v70 [label = "EXP
+VAR"];
+v70 -> v69;
+v71 [label = "STMT
+ASSIGN
+"];
+v71 -> v68;
+v71 -> v70;
+v72 [label = "INT(1)"];
+v73 [label = "VAR
+SIMPLE
+(str)"];
+v74 [label = "STRING
+'world'"];
+v75 [label = "STMT
+ASSIGN
+"];
+v75 -> v73;
+v75 -> v74;
+v76 [label = "TYPE
+INT"];
+v77 [label = "INT(40)"];
+v78 [label = "VAR DEC
+ARGSk"];
+v78 -> v76;
+v78 -> v77;
+v79 [label = "STMT
+VAR
+DEC"];
+v79 -> v78;
+v80 [label = "STMT
+LIST
+"];
+v80 -> v79;
+v81 [label = "STMT
+LIST
+"];
+v81 -> v75;
+v81 -> v80;
+v82 [label = "IF (left)
+THEN right"];
+v82 -> v72;
+v82 -> v81;
+v83 [label = "TYPE
+INT"];
+v84 [label = "EXP
+MINUS INT
+(100)"];
+v85 [label = "VAR DEC
+ARGSk"];
+v85 -> v83;
+v85 -> v84;
+v86 [label = "STMT
+VAR
+DEC"];
+v86 -> v85;
+v87 [label = "TYPE
+STRING"];
+v88 [label = "STRING
+'newString'"];
+v89 [label = "VAR DEC
+ARGSnewStr"];
+v89 -> v87;
+v89 -> v88;
+v90 [label = "STMT
+VAR
+DEC"];
+v90 -> v89;
+v91 [label = "VAR
+SIMPLE
+(str)"];
+v92 [label = "STRING
+'newStr'"];
+v93 [label = "STMT
+ASSIGN
+"];
+v93 -> v91;
+v93 -> v92;
+v94 [label = "VAR
+SIMPLE
+(str)"];
+v95 [label = "VAR
+SIMPLE
+(yoni)"];
+v96 [label = "EXP
+VAR"];
+v96 -> v95;
+v97 [label = "STMT
+ASSIGN
+"];
+v97 -> v94;
+v97 -> v96;
+v98 [label = "VAR
+SIMPLE
+(j)"];
+v99 [label = "VAR
+SIMPLE
+(k)"];
+v100 [label = "EXP
+VAR"];
+v100 -> v99;
+v101 [label = "STMT
+ASSIGN
+"];
+v101 -> v98;
+v101 -> v100;
+v102 [label = "VAR
+SIMPLE
+(newArr)"];
+v103 [label = "INT(3)"];
+v104 [label = "VAR
+SUBSCRIPT
+...[...]"];
+v104 -> v102;
+v104 -> v103;
+v105 [label = "INT(5)"];
+v106 [label = "STMT
+ASSIGN
+"];
+v106 -> v104;
+v106 -> v105;
+v107 [label = "VAR
+SIMPLE
+(k)"];
+v108 [label = "VAR
+SIMPLE
+(newArr)"];
+v109 [label = "INT(3)"];
+v110 [label = "VAR
+SUBSCRIPT
+...[...]"];
+v110 -> v108;
+v110 -> v109;
+v111 [label = "EXP
+VAR"];
+v111 -> v110;
+v112 [label = "STMT
+ASSIGN
+"];
+v112 -> v107;
+v112 -> v111;
+v113 [label = "VAR
+SIMPLE
+(glob)"];
+v114 [label = "VAR
+SIMPLE
+(j)"];
+v115 [label = "EXP
+VAR"];
+v115 -> v114;
+v116 [label = "STMT
+ASSIGN
+"];
+v116 -> v113;
+v116 -> v115;
+v117 [label = "VAR
+SIMPLE
+(yoni)"];
+v118 [label = "STRING
+'hi'"];
+v119 [label = "STMT
+ASSIGN
+"];
+v119 -> v117;
+v119 -> v118;
+v120 [label = "VAR
+SIMPLE
+(yoni)"];
+v121 [label = "VAR
+SIMPLE
+(newStr)"];
+v122 [label = "EXP
+VAR"];
+v122 -> v121;
+v123 [label = "STMT
+ASSIGN
+"];
+v123 -> v120;
+v123 -> v122;
+v124 [label = "TYPE
+ID
+...->strArray"];
+v125 [label = "TYPE
+STRING"];
+v126 [label = "INT(10)"];
+v127 [label = "NEW TYPE
+EXP IN BRACKS"];
+v127 -> v125;
+v127 -> v126;
+v128 [label = "VAR DEC
+NEW EXPstringarray"];
+v128 -> v124;
+v128 -> v127;
+v129 [label = "STMT
+VAR
+DEC"];
+v129 -> v128;
+v130 [label = "VAR
+SIMPLE
+(stringarray)"];
+v131 [label = "INT(2)"];
+v132 [label = "VAR
+SUBSCRIPT
+...[...]"];
+v132 -> v130;
+v132 -> v131;
+v133 [label = "STRING
+'abc'"];
+v134 [label = "STMT
+ASSIGN
+"];
+v134 -> v132;
+v134 -> v133;
+v135 [label = "VAR
+SIMPLE
+(stringarray)"];
+v136 [label = "INT(3)"];
+v137 [label = "VAR
+SUBSCRIPT
+...[...]"];
+v137 -> v135;
+v137 -> v136;
+v138 [label = "VAR
+SIMPLE
+(yoni)"];
+v139 [label = "EXP
+VAR"];
+v139 -> v138;
+v140 [label = "STMT
+ASSIGN
+"];
+v140 -> v137;
+v140 -> v139;
+v141 [label = "VAR
+SIMPLE
+(yoni)"];
+v142 [label = "VAR
+SIMPLE
+(stringarray)"];
+v143 [label = "INT(2)"];
+v144 [label = "VAR
+SUBSCRIPT
+...[...]"];
+v144 -> v142;
+v144 -> v143;
+v145 [label = "EXP
+VAR"];
+v145 -> v144;
+v146 [label = "STMT
+ASSIGN
+"];
+v146 -> v141;
+v146 -> v145;
+v147 [label = "STMT
+LIST
+"];
+v147 -> v146;
+v148 [label = "STMT
+LIST
+"];
+v148 -> v140;
+v148 -> v147;
+v149 [label = "STMT
+LIST
+"];
+v149 -> v134;
+v149 -> v148;
+v150 [label = "STMT
+LIST
+"];
+v150 -> v129;
+v150 -> v149;
+v151 [label = "STMT
+LIST
+"];
+v151 -> v123;
+v151 -> v150;
+v152 [label = "STMT
+LIST
+"];
+v152 -> v119;
+v152 -> v151;
+v153 [label = "STMT
+LIST
+"];
+v153 -> v116;
+v153 -> v152;
+v154 [label = "STMT
+LIST
+"];
+v154 -> v112;
+v154 -> v153;
+v155 [label = "STMT
+LIST
+"];
+v155 -> v106;
+v155 -> v154;
+v156 [label = "STMT
+LIST
+"];
+v156 -> v101;
+v156 -> v155;
+v157 [label = "STMT
+LIST
+"];
+v157 -> v97;
+v157 -> v156;
+v158 [label = "STMT
+LIST
+"];
+v158 -> v93;
+v158 -> v157;
+v159 [label = "STMT
+LIST
+"];
+v159 -> v90;
+v159 -> v158;
+v160 [label = "STMT
+LIST
+"];
+v160 -> v86;
+v160 -> v159;
+v161 [label = "STMT
+LIST
+"];
+v161 -> v82;
+v161 -> v160;
+v162 [label = "STMT
+LIST
+"];
+v162 -> v71;
+v162 -> v161;
+v163 [label = "STMT
+LIST
+"];
+v163 -> v67;
+v163 -> v162;
+v164 [label = "STMT
+LIST
+"];
+v164 -> v63;
+v164 -> v163;
+v165 [label = "STMT
+LIST
+"];
+v165 -> v60;
+v165 -> v164;
+v166 [label = "STMT
+LIST
+"];
+v166 -> v54;
+v166 -> v165;
+v167 [label = "STMT
+LIST
+"];
+v167 -> v48;
+v167 -> v166;
+v168 [label = "STMT
+LIST
+"];
+v168 -> v44;
+v168 -> v167;
+v169 [label = "STMT
+LIST
+"];
+v169 -> v40;
+v169 -> v168;
+v170 [label = "STMT
+LIST
+"];
+v170 -> v37;
+v170 -> v169;
+v171 [label = "STMT
+LIST
+"];
+v171 -> v34;
+v171 -> v170;
+v172 [label = "FUNC DEC
+NO ARGS
+Function name:main"];
+v172 -> v31;
+v172 -> v171;
+v173 [label = "DEC
+FUNC DEC"];
+v173 -> v172;
+v174 [label = "TYPE
+ID
+...->Mat"];
+v175 [label = "VAR DEC
+NO ARGS
+matrix"];
+v175 -> v174;
+v176 [label = "DECLARATION
+VAR DEC"];
+v176 -> v175;
+v177 [label = "TYPE
+STRING"];
+v178 [label = "STRING
+'of'"];
+v179 [label = "VAR DEC
+ARGSman"];
+v179 -> v177;
+v179 -> v178;
+v180 [label = "DECLARATION
+VAR DEC"];
+v180 -> v179;
+v181 [label = "TYPE
+INT"];
+v182 [label = "EXP
+MINUS INT
+(5)"];
+v183 [label = "VAR DEC
+ARGSy"];
+v183 -> v181;
+v183 -> v182;
+v184 [label = "DECLARATION
+VAR DEC"];
+v184 -> v183;
+v185 [label = "TYPE
+STRING"];
+v186 [label = "STRING
+'yon'"];
+v187 [label = "VAR DEC
+ARGSball"];
+v187 -> v185;
+v187 -> v186;
+v188 [label = "DECLARATION
+VAR DEC"];
+v188 -> v187;
+v189 [label = "TYPE
+STRING"];
+v190 [label = "STRING
+''"];
+v191 [label = "VAR DEC
+ARGSempty"];
+v191 -> v189;
+v191 -> v190;
+v192 [label = "DECLARATION
+VAR DEC"];
+v192 -> v191;
+v193 [label = "DEC
+LIST
+"];
+v193 -> v192;
+v194 [label = "DEC
+LIST
+"];
+v194 -> v188;
+v194 -> v193;
+v195 [label = "DEC
+LIST
+"];
+v195 -> v184;
+v195 -> v194;
+v196 [label = "DEC
+LIST
+"];
+v196 -> v180;
+v196 -> v195;
+v197 [label = "DEC
+LIST
+"];
+v197 -> v176;
+v197 -> v196;
+v198 [label = "DEC
+LIST
+"];
+v198 -> v173;
+v198 -> v197;
+v199 [label = "DEC
+LIST
+"];
+v199 -> v30;
+v199 -> v198;
+v200 [label = "DEC
+LIST
+"];
+v200 -> v27;
+v200 -> v199;
+v201 [label = "DEC
+LIST
+"];
+v201 -> v24;
+v201 -> v200;
+v202 [label = "DEC
+LIST
+"];
+v202 -> v20;
+v202 -> v201;
+v203 [label = "DEC
+LIST
+"];
+v203 -> v16;
+v203 -> v202;
+v204 [label = "DEC
+LIST
+"];
+v204 -> v12;
+v204 -> v203;
+v205 [label = "DEC
+LIST
+"];
+v205 -> v8;
+v205 -> v204;
+v206 [label = "DEC
+LIST
+"];
+v206 -> v5;
+v206 -> v205;
+v207 [label = "DEC
+LIST
+"];
+v207 -> v2;
+v207 -> v206;
+}

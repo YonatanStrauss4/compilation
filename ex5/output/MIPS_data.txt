@@ -1,0 +1,28 @@
+.data
+
+	string_access_violation: .asciiz "Access Violation"
+	string_illegal_div_by_0: .asciiz "Illegal Division By Zero"
+	string_invalid_ptr_dref: .asciiz "Invalid Pointer Dereference"
+
+	g_k: .word 7
+	str_yon: .asciiz "yon"
+	g_yoni: .word str_yon
+	g_arr: .word 0
+	g_glob: .word 30
+	g_poly: .word 0
+	g_name: .word 0
+	str_world: .asciiz "world"
+	str_newString: .asciiz "newString"
+	str_newStr: .asciiz "newStr"
+	str_hi: .asciiz "hi"
+	str_abc: .asciiz "abc"
+	g_matrix: .word 0
+	str_of: .asciiz "of"
+	g_man: .word str_of
+	g_y: .word -5
+	g_ball: .word str_yon
+	str_: .asciiz ""
+	g_empty: .word str_
+
+.text
+
