@@ -111,9 +111,19 @@ public class AST_CLASS_DEC_SIMPLE extends AST_CLASS_DEC
     
     public TEMP IRme()
     {
+        // find the class in the symbol table
         TYPE_CLASS cls = (TYPE_CLASS)SYMBOL_TABLE.getInstance().findClassInSymbolTable(className);
+
+        // create a list of the field names
         List<String> fieldNames = new ArrayList<>();
 
+        // insert the class to the classes map
+        CLASSES_MAP.getInstance().insertClass(cls.name, null);
+
+        // begin class parse for the offset table
+        OFFSET_TABLE.getInstance().enterClass(cls.name);
+
+        // get the fields of the class
         if (cls != null) {
             for (TYPE_LIST t = cls.data_members; t != null; t = t.tail) {
                 if (t.head instanceof TYPE_CLASS_VAR_DEC) {
@@ -121,13 +131,28 @@ public class AST_CLASS_DEC_SIMPLE extends AST_CLASS_DEC
                     fieldNames.add(varDec.name);
                 }
             }
+
+            // add the class to the IR
             IR.getInstance().Add_IRcommand(new IRcommand_Class_Dec(className, fieldNames, IR.getInstance().currLine));
         }
+
+        // set inside class and current class
         SYMBOL_TABLE.getInstance().set_inside_class(true);
         SYMBOL_TABLE.getInstance().set_current_class(cls);
+
+        // recursively IRme the class body
         if (classBody != null) classBody.IRme();
+
+        // end the class declaration in the IR, this will add the virtual table to the .data section in the MIPS file
+        IR.getInstance().Add_IRcommand(new IRcommand_Class_End_Dec(SYMBOL_TABLE.getInstance().get_current_class().name, IR.getInstance().currLine));
+
+        // end the class parse in the offset table
+        OFFSET_TABLE.getInstance().endClassParse();
+
+        // reset the current class and inside class
         SYMBOL_TABLE.getInstance().set_current_class(null);
         SYMBOL_TABLE.getInstance().set_inside_class(false);
+
         
         return null;
     }

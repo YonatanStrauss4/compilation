@@ -52,16 +52,7 @@ public class AST_EXP_VAR extends AST_EXP {
 	}
 
 	public TEMP IRme() {
-		if(var instanceof AST_VAR_SUBSCRIPT){
-			TEMP arr = ((AST_VAR_SUBSCRIPT)var).arrayName.IRme();
-			TEMP idx = ((AST_VAR_SUBSCRIPT)var).idxValue.IRme();
-			TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-			IR.getInstance().Add_IRcommand(new IRcommand_Array_Access(dst, arr, idx, IR.getInstance().currLine));
-			return dst;
-		}
-		else{
-			TEMP vari = var.IRme();
-			return vari;
-		}
+		TEMP vari = var.IRme();
+		return vari;
 	}
 }

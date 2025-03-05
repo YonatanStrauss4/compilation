@@ -10,7 +10,8 @@ public abstract class AST_FUNC_DEC extends AST_Node
         return null;
     }
 
-    public TEMP IRme() {
+    public TEMP IRme() 
+    {
         return null;
     }
 }

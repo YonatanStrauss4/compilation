@@ -8,9 +8,9 @@ public abstract class AST_CLASS_DEC extends AST_Node
     {
         return null;
     }
+    
     public TEMP IRme()
     {
-        
         return null;
     }
 }

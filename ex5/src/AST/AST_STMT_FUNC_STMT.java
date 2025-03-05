@@ -46,7 +46,8 @@ public class AST_STMT_FUNC_STMT extends AST_STMT
 
     public TEMP IRme() {		
         // IRme the function statement
-        if (funcStmt != null) {
+        if (funcStmt != null) 
+        {
             funcStmt.IRme();
         }
         return null;

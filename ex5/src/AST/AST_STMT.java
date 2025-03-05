@@ -9,15 +9,18 @@ public abstract class AST_STMT extends AST_Node
 	/*********************************************************/
 	/* The default message for an unknown AST statement node */
 	/*********************************************************/
-	public void PrintMe() {
+	public void PrintMe() 
+	{
 		System.out.print("UNKNOWN AST STATEMENT NODE\n");
 	}
 	
-	public TYPE SemantMe() {
+	public TYPE SemantMe() 
+	{
         	return null;
     }
 	
-	public TEMP IRme() {
+	public TEMP IRme() 
+	{
 		return null;
 	}
 }

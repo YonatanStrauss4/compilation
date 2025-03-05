@@ -114,22 +114,33 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
     }
 
     public TEMP IRme() {
+
+        // recursively IRme the arguments
         List<TEMP> args = null;
         if (funcArgs != null) {
             args = funcArgs.IRme(new ArrayList<>());
         }
 
-        if(funcName.equals("PrintInt")){
+        // check if function is a print int function, if so, handle it correctly
+        if(funcName.equals("PrintInt"))
+        {
             IR.getInstance().Add_IRcommand(new IRcommand_PrintInt(args.get(0), IR.getInstance().currLine));
             return null;
         }
-        else if(funcName.equals("PrintString")){
+
+        // check if function is a print string function, if so, handle it correctly
+        else if(funcName.equals("PrintString"))
+        {
             IR.getInstance().Add_IRcommand(new IRcommand_PrintString(args.get(0), IR.getInstance().currLine));
             return null;
         }
-        else{
+
+        // else, treat it as a function with arguments
+        else
+        {
             IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_Args_Void(funcName, args, IR.getInstance().currLine));
         }
+
         return null;
     }
 }

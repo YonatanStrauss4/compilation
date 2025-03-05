@@ -106,18 +106,34 @@ public class AST_VAR_SIMPLE extends AST_VAR
 	}
 
 	public TEMP IRme() {
-		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP(); 	
-		// check if the variable is global
-		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
-		if (offset == -1){
-			// the variable is global
-			IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, IR.getInstance().currLine));
+		// get fresh TEMP
+		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP(); 
 
-		}	
+		// get the offset of the variable
+		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+		
+		// the variable is global
+		if (offset == -1){
+			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
+			if(type.equals("STRING")){
+				IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, true, IR.getInstance().currLine));
+			}
+			else{
+				IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, false, IR.getInstance().currLine));
+			}
+
+		}
+		
+		// the variable is a function parameter
+		else if(offset > 0){
+			IR.getInstance().Add_IRcommand(new IRcommand_Load_Param(t, offset, varName,  IR.getInstance().currLine));
+		}
+
+		// the variable is a local variable
 		else{
-			// the variable is local
 			IR.getInstance().Add_IRcommand(new IRcommand_Load_Local_Var(t, varName, offset, IR.getInstance().currLine));
 		}
+		
 		return t;
 	}
 }

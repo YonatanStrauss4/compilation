@@ -49,7 +49,10 @@ public class AST_EXP_NIL extends AST_EXP
 
 	public TEMP IRme()
 	{
+		// get fresh TEMP
 		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
+
+		// add IR command for nil
 		IR.getInstance().Add_IRcommand(new IRcommand_Nil(t, IR.getInstance().currLine));
 		return t;
 	}

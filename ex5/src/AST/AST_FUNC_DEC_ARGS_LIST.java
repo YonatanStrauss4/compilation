@@ -102,6 +102,7 @@ public class AST_FUNC_DEC_ARGS_LIST extends AST_Node
 		}
 	}
 
+	// return the arguments as a list of strings
 	public List<String> getArgumentsAsList() {
 		List<String> arguments = new ArrayList<>();
 		AST_FUNC_DEC_ARGS_LIST current = this;

@@ -46,20 +46,28 @@ public class IR {
 
 	}
 
-	public IRcommand findLastDecFunctionCommand(){
+	public IRcommand_DecFunction findLastDecFunctionCommand() {
+		IRcommand_DecFunction lastDecFunction = null;
+
+		// Check if the head itself is an IRcommand_DecFunction
 		if (head instanceof IRcommand_DecFunction) {
-			return head;
+			lastDecFunction = (IRcommand_DecFunction) head;
 		}
-		IRcommandList it = tail;
-		while(it != null){
-			if(it.head instanceof IRcommand_DecFunction){
-				return it.head;
+
+		// Traverse the tail list
+		IRcommandList current = tail;
+		while (current != null) {
+			if (current.head instanceof IRcommand_DecFunction) {
+				lastDecFunction = (IRcommand_DecFunction) current.head;
 			}
-			it = it.tail;
+			current = current.tail;
 		}
-		return null;
+
+		return lastDecFunction;
 	}
-	
+
+
+
 	// USUAL SINGLETON IMPLEMENTATION ...
 	private static IR instance = null;
 

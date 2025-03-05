@@ -5,11 +5,13 @@ import IR.*;
 
 public abstract class AST_VAR extends AST_Node
 {
-   public TYPE SemantMe() {
+   public TYPE SemantMe() 
+   {
         return null;
     }
 
-    public TEMP IRme() {
+    public TEMP IRme() 
+    {
         return null;
     }
 }

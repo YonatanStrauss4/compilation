@@ -174,48 +174,84 @@ public class AST_EXP_BINOP extends AST_EXP
 
 	public TEMP IRme()
 	{
-		// get the two sides of the binop
+		// IR the two sides of the binop
 		TEMP t1 = null;
 		TEMP t2 = null;
 
-		if (left  != null) t1 = left.IRme();
-		if (right != null) t2 = right.IRme();
+		if (left  != null) 
+		{	
+			t1 = left.IRme();
+		}
+		if (right != null) 
+		{
+			t2 = right.IRme();
+		}
+
+		// get a fresh temp
 		TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
 
 		
 		// add the IR command for the binop
+		// 0 - add
 		if (OP == 0) {
-			if (this.isString) {
+			// if we are adding strings
+			if (this.isString) 
+			{
 				IR.getInstance().Add_IRcommand(new IRcommand_Binop_Add_Strings(dst,t1,t2,IR.getInstance().currLine));
 			}
-			else {
+
+			// if we are adding integers
+			else 
+			{	
 				IR.getInstance().Add_IRcommand(new IRcommand_Binop_Add_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
 		}
-		if (OP == 1) {
+
+		// 1 - sub
+		if (OP == 1) 
+		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Sub_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
-		if (OP == 2) {
+
+		// 2 - mul
+		if (OP == 2) 
+		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Mul_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
-		if (OP == 3) {
+
+		// 3 - div
+		if (OP == 3) 
+		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Binop_Div_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
-		if (OP == 4) {
+
+		// 4 - <
+		if (OP == 4) 
+		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t1,t2,IR.getInstance().currLine));
 		}
-		if (OP == 5) {
+
+		// 5 - >
+		if (OP == 5) 
+		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Binop_LT_Integers(dst,t2,t1,IR.getInstance().currLine));
 		}
-		if (OP == 6) {
-			if(left instanceof AST_EXP_STRING && right instanceof AST_EXP_STRING){
+
+		// 6 - ==
+		if (OP == 6) 
+		{
+			// check if we are comparing strings
+			if(left instanceof AST_EXP_STRING && right instanceof AST_EXP_STRING)
+			{
 				IR.getInstance().Add_IRcommand(new IRcommand_binop_EQ_Strings(dst,t1,t2,IR.getInstance().currLine));
 			}
-			else{
+
+			// check if we are comparing integers
+			else
+			{
 				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
 	 	} 	 
 		return dst;
 	}
-
 }

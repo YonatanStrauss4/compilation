@@ -68,8 +68,15 @@ public class AST_STMT_LIST extends AST_Node {
 
 	public TEMP IRme(){
 		//IRme the stmt list recursively, if not null
-		if (head != null) head.IRme();
-		if (tail != null) tail.IRme();
+		if (head != null) 
+		{
+			head.IRme();
+		}	
+
+		if (tail != null) 
+		{
+			tail.IRme();
+		}
 		
 		return null;
 	}

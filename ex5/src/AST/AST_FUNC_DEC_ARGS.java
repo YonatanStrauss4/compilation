@@ -149,10 +149,9 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
 
     public TEMP IRme() {
 
-        
-
-        // [1] Allocate fresh labels for function entry and exit
+        // Allocate fresh labels for function entry and exit
         String label_func_end = IRcommand.getFreshLabel(this.funcName + "_end");
+
         // Initialize the function start label with the function name
         StringBuilder labelBuilder = new StringBuilder(this.funcName + "(");
 
@@ -165,31 +164,51 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
             }
         }
         labelBuilder.append(")_start");
+
+        // Add the function to the class in the CLASSES_MAP, if its a method
+        if(SYMBOL_TABLE.getInstance().get_inside_class()){
+            String clssName = SYMBOL_TABLE.getInstance().get_current_class().name;
+
+            CLASSES_MAP.getInstance().insertMethod(clssName, this.funcName);
+        }
+
+        // Enter the scope function to the OFFSET_TABLE
         OFFSET_TABLE.getInstance().enterFunction(this.funcName, argNames);
 
+        // build the label for the IR command
         String label_func_start = IRcommand.getFreshLabel(labelBuilder.toString());
 
-        // [2] Add function entry label
+        // Add function entry label IR command
         IR.getInstance().Add_IRcommand(new IRcommand_DecFunction(label_func_start, 0, this.funcName, IR.getInstance().currLine));
-        // [3] Generate IR code for the function body
+
+        // set the current function in the symbol table and set inside function to true
         SYMBOL_TABLE.getInstance().set_inside_function(true);
         SYMBOL_TABLE.getInstance().set_current_function(((TYPE_FUNCTION)SYMBOL_TABLE.getInstance().find(this.funcName)));
+
+        // this is in a case that the function is a class method so we couldnt find it in the symbol table
+        if(((TYPE_FUNCTION)SYMBOL_TABLE.getInstance().find(this.funcName)) == null){
+            TYPE_CLASS currCls = SYMBOL_TABLE.getInstance().get_current_class();
+            TYPE_FUNCTION currFunc = currCls.findFunction(this.funcName);
+            SYMBOL_TABLE.getInstance().set_current_function(currFunc);
+        }
+
+        // Generate IR code for the function body
         if (this.body != null) {
             body.IRme();
         }
-        
-        IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, IR.getInstance().currLine));
-    
 
-        SYMBOL_TABLE.getInstance().set_current_function(null);
-        SYMBOL_TABLE.getInstance().set_inside_function(false);
-        // [4] Add function exit label
+        // Update the number of locals in the function decleration IR command
         ((IRcommand_DecFunction)IR.getInstance().findLastDecFunctionCommand()).updateNumOfLocals(OFFSET_TABLE.getInstance().getNumOfLocals());
 
-        
+        // Add function exit label IR command, this will also invoke the epilogue in the MIPS code
+        IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, IR.getInstance().currLine));
+    
+        // end the function scope in the symbol table and set inside function to false
+        SYMBOL_TABLE.getInstance().set_current_function(null);
+        SYMBOL_TABLE.getInstance().set_inside_function(false);
 
-        OFFSET_TABLE.getInstance().printTable();
-        OFFSET_TABLE.getInstance().endFunctionParse(this.funcName);
+        // end the function scope in the offset table
+        OFFSET_TABLE.getInstance().endFunctionParse();
 
         return null;
     }

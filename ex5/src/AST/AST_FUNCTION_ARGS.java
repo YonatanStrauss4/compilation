@@ -103,10 +103,6 @@ public class AST_FUNCTION_ARGS extends AST_FUNCTION
         if(funcArgs != null){
             args = funcArgs.SemantMe();  // semant the arguments of the function call
         }
-        
-        //System.out.println((((TYPE_FUNCTION)funcFindType).params).head.name);
-        //System.out.println(((TYPE_CLASS_VAR_DEC)(((TYPE_FUNCTION)funcFindType).params).head).type.name);
-        //System.out.println(args.head.name);
 
         if(!(args.checkArgumentsList(((TYPE_FUNCTION)funcFindType).params))){
             System.out.format(">> ERROR(%d) mismatch in types of arguments in function call\n", this.line, funcName);
@@ -118,11 +114,17 @@ public class AST_FUNCTION_ARGS extends AST_FUNCTION
     }
 
     public TEMP IRme() {
+
+        // recursively IRme the arguments
         List<TEMP> args = null;
         if (funcArgs != null) {
             args = funcArgs.IRme(new ArrayList<>());
         }
+
+        // get a fresh TEMP 
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+
+        // add IR command for function call
         IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_Args_Not_Void(dst, funcName, args, IR.getInstance().currLine));
         return dst;
     }

@@ -79,41 +79,37 @@ public class AST_STMT_WHILE extends AST_STMT
     }
 
     public TEMP IRme() {
-
+        // start a new scope
         OFFSET_TABLE.getInstance().pushInnerScopeStart();
 
-		// [1] Allocate 2 fresh labels
-        int line = IR.getInstance().currLine;
+		// Allocate 2 fresh labels
 		String label_end   = IRcommand.getFreshLabel("while_end");
 		String label_start = IRcommand.getFreshLabel("while_start");
 	
-		// [2] entry label for the while
+		// entry label for the while
         IRcommand lbl_strt_cmd = new IRcommand_Label(label_start,IR.getInstance().currLine,true);
 		IR.getInstance().Add_IRcommand(lbl_strt_cmd);
 
-		// [3] cond.IRme();
+		// cond.IRme();
 		TEMP cond_temp = cond.IRme();
 
-		// [4] Jump conditionally to the loop end
+		// Jump conditionally to the loop end
         IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp,label_end,IR.getInstance().currLine);
 		IR.getInstance().Add_IRcommand(jmp_if_eq_zero);		
 
-		// [5] body.IRme()
+		// body.IRme()
 		body.IRme();
 
-		// [6] Jump to the loop entry
+		// Jump to the loop entry
         IRcommand jmp_to_strt = new IRcommand_Jump_Label(label_start,IR.getInstance().currLine);
 		IR.getInstance().Add_IRcommand(jmp_to_strt);		
 
-		// [7] Loop end label
+		// Loop end label
         IRcommand lbl_end_cmd = new IRcommand_Label(label_end,IR.getInstance().currLine,false);
 		IR.getInstance().Add_IRcommand(lbl_end_cmd);
-
-    
-
+        
+        // end the scope
         OFFSET_TABLE.getInstance().endInnerScope();
-
-		// [9] return null
 		return null;
 	}
 

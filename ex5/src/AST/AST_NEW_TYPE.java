@@ -60,6 +60,7 @@ public class AST_NEW_TYPE extends AST_NEW_EXP
     
     public String getTypeName()
     {
+        // get the type name
         if(type instanceof AST_TYPE_ID){
             return ((AST_TYPE_ID)type).getTypeName();
         }

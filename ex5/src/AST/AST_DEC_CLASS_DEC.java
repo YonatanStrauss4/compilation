@@ -44,7 +44,7 @@ public class AST_DEC_CLASS_DEC extends AST_DEC
 		AST_GRAPHVIZ.getInstance().logNode(
 			SerialNumber,
 			"DEC\nCLASS DEC\n");
-		
+		if(classDec != null) {classDec.PrintMe();}
 		/****************************************/
 		/* PRINT Edges to AST GRAPHVIZ DOT file */
 		/****************************************/

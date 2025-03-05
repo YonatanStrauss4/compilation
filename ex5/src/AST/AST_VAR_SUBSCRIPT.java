@@ -99,9 +99,14 @@ public class AST_VAR_SUBSCRIPT extends AST_VAR
 
 	public TEMP IRme()
 	{
+		// IRme the array and the index
 		TEMP arrayTemp = arrayName.IRme();
 		TEMP idxTemp = idxValue.IRme();
+
+		// get a fresh TEMP for the result
 		TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+
+		// IR command for array access
 		if(arrayTemp != null && idxTemp != null)
 		{
 			IR.getInstance().Add_IRcommand(new IRcommand_Array_Access(dst, arrayTemp, idxTemp, IR.getInstance().currLine));

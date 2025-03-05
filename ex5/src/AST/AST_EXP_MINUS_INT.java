@@ -63,6 +63,8 @@ public class AST_EXP_MINUS_INT extends AST_EXP
 	public TEMP IRme() {
 		// return a new TEMP with the value of i
 		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
+
+		// Add IR command to load the minus integer value into the new TEMP
 		IR.getInstance().Add_IRcommand(new IRcommandConstInt(t, 0-this.i, IR.getInstance().currLine));
 		return t;
 	}

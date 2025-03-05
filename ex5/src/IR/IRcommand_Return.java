@@ -6,14 +6,10 @@ import MIPS.*;
 public class IRcommand_Return extends IRcommand {
 
     TEMP return_value;
-    String varName;
-    String funcName;
     int lineNumber;
     
-    public IRcommand_Return(TEMP return_value, String varName, String funcName, int line) {
+    public IRcommand_Return(TEMP return_value, int line) {
         this.return_value = return_value;
-        this.varName = varName;
-        this.funcName = funcName;
         this.lineNumber = line;
     }
 

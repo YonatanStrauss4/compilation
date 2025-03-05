@@ -1,56 +1,8 @@
 array IntArray = int[];
-array Mat =      IntArray[];
-
-array strArray = string[];
-
-
-int k := 7;
-string yoni := "yon";
-IntArray arr := nil;
-int glob := 30;
-int poly;
-string name;
 
 void main(){
-    int love;
-    string bro;
-    IntArray newnewarray;
-    int j := 5;
-    string str := "yon";
-    IntArray newArr := new int[5];
-    Mat matr := new IntArray[3];
-    j := 7;
-    int x := 10;
-    j := x;
-    if(1){
-        str := "world";
-        int k := 40;
-
-    }
-    int k := -100;
-    string newStr := "newString";
-    str := "newStr";
-    str := yoni;
-    j := k;
-
-
-    newArr[3] := 5;
-    k := newArr[3];
-
-    glob := j;
-
-    yoni := "hi";
-    yoni := newStr;
-
-    strArray stringarray := new string[10];
-    stringarray[2] := "abc";
-    stringarray[3] := yoni;
-    yoni := stringarray[2];
-
+    IntArray arr := new int[7];
+    arr[5] := 7;
+    int x := arr[5];
+    PrintInt(x);
 }
-
-Mat matrix;
-string man := "of";
-int y := -5;
-string ball := "yon";
-string empty := "";

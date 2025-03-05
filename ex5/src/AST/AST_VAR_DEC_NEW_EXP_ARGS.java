@@ -155,29 +155,43 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
 
     public TEMP IRme()
     {
-
-        if(SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
-			OFFSET_TABLE.getInstance().pushVariable(variable);
-		}
-        
+        // check if variable with new is a class instance
         String className = null;
         if(new_exp instanceof AST_NEW_TYPE){
             AST_NEW_TYPE t_id = (AST_NEW_TYPE)new_exp;
             className = t_id.getTypeName();
+
+            // push the class intance to the offset table
+            OFFSET_TABLE.getInstance().pushVariable(variable, "CLASS", true, className);
         }
         
+        else{
+            // push the array intance to the offset table
+            OFFSET_TABLE.getInstance().pushVariable(variable, "ARRAY", false, null);
+        }
 
+        // IRme for new_exp
         TEMP new_exp_temp = new_exp.IRme();
+
+        // get a Fresh TEMP
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+
+        // get the offset of the variable
         int offset = OFFSET_TABLE.getInstance().findVariableOffset(variable);
+
+        // check if the expression is a new array
         if(new_exp instanceof AST_NEW_TYPE_EXP_IN_BRACKS){
             IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(dst, new_exp_temp, IR.getInstance().currLine));
             IR.getInstance().Add_IRcommand(new IRcommand_Store(variable, dst, offset, IR.getInstance().currLine));
         }
+        
+        // the expression is a new class
         else{
-            IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(dst, className, IR.getInstance().currLine, true));
+            IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(dst, className, IR.getInstance().currLine));
             IR.getInstance().Add_IRcommand(new IRcommand_Store(variable, dst, offset,IR.getInstance().currLine));
         }
+
+        // return the dst register
         return dst;
     }
 }

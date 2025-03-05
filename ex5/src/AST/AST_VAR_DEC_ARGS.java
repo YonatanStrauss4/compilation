@@ -185,45 +185,83 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 
 	public TEMP IRme() {
 
-		if(SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
-			OFFSET_TABLE.getInstance().pushVariable(varName);
+
+
+		// check if variable is global, if so, enter it to the table of global variables
+		if(!SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
+			if(t instanceof AST_TYPE_INT){
+                OFFSET_TABLE.getInstance().enterGlobal(varName, "INT");
+            }
+            else if(t instanceof AST_TYPE_STRING){
+                OFFSET_TABLE.getInstance().enterGlobal(varName, "STRING");
+            }
+            else{   
+			    OFFSET_TABLE.getInstance().enterGlobal(varName, "ID");
+            }
 		}
 
+		// check if variable is local, if so, enter it to the table of local variables
+		else if(SYMBOL_TABLE.getInstance().get_inside_function()){
+			if(t instanceof AST_TYPE_INT){
+                OFFSET_TABLE.getInstance().pushVariable(varName, "INT", false, null);
+            }
+            else if(t instanceof AST_TYPE_STRING){
+                OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
+            }
+		}
+
+
+		// check if variable is a class member, if so, enter it to the table of class members
+		else{
+			String clssName = SYMBOL_TABLE.getInstance().get_current_class().name;  
+			if(t instanceof AST_TYPE_INT){
+				if(exp instanceof AST_EXP_INT){
+					CLASSES_MAP.getInstance().insertField(varName, clssName, "INT", ((AST_EXP_INT)exp).i);
+				}
+				else if(exp instanceof AST_EXP_MINUS_INT)
+					CLASSES_MAP.getInstance().insertField(varName, clssName, "INT", ((AST_EXP_MINUS_INT)exp).i);
+			}
+			else if(t instanceof AST_TYPE_STRING){
+				String s = ((AST_EXP_STRING)exp).value;
+				s = s.substring(1, s.length() - 1);
+				CLASSES_MAP.getInstance().insertField(varName, clssName, "str_" + s, 0);
+			}
+		}
+
+
+		// get the oofset of the variable (-1 if it is global)
 		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
-
+		// the variable is global
 		if(offset == -1){
-			if(exp instanceof AST_EXP_INT){
-				IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(((AST_EXP_INT)exp).i ,varName, IR.getInstance().currLine));
-			}
-			else if(exp instanceof AST_EXP_STRING){
-				exp.IRme();
-				IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(((AST_EXP_STRING)exp).value ,varName, IR.getInstance().currLine));
-			}
+			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
+            if(type != null){
+				if(exp instanceof AST_EXP_INT){
+					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(((AST_EXP_INT)exp).i ,varName, IR.getInstance().currLine));
+				}
+				else if(exp instanceof AST_EXP_STRING){
+					exp.IRme();
+					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(((AST_EXP_STRING)exp).value ,varName, IR.getInstance().currLine));
+				}
 
-			else if(exp instanceof AST_EXP_NIL){
-				IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(0 ,varName,IR.getInstance().currLine));
+				else if(exp instanceof AST_EXP_NIL){
+					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(0 ,varName,IR.getInstance().currLine));
+				}
+				else if(exp instanceof AST_EXP_MINUS_INT){
+					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(-((AST_EXP_MINUS_INT)exp).i ,varName,IR.getInstance().currLine));
+				}
 			}
-			else if(exp instanceof AST_EXP_MINUS_INT){
-				IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(-((AST_EXP_MINUS_INT)exp).i ,varName,IR.getInstance().currLine));
+			else{
+				exp.IRme();
 			}
         }
+		
+		// the variable is local
         else{
-			
-			IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Local_Args(varName,IR.getInstance().currLine));
-			if (exp != null){
-				if(exp instanceof AST_EXP_STRING){
-					IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme(), offset, IR.getInstance().currLine));
-
-				}
-
-
-				else if(exp instanceof AST_EXP_INT || exp instanceof AST_EXP_MINUS_INT){
-					IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, exp.IRme(), offset, IR.getInstance().currLine));
-				}
-			}
+			IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Local_Args(varName, IR.getInstance().currLine));
+			TEMP dst = exp.IRme();
+			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, dst, offset, IR.getInstance().currLine));
         }
 	
 		return null;
 	}
-
 }

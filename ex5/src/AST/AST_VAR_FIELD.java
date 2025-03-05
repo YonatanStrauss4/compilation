@@ -9,6 +9,7 @@ public class AST_VAR_FIELD extends AST_VAR
 
 	public AST_VAR var;
 	public String variableDataMemberName;
+	public String side = "R";
 	public int line;
 	
 	/******************/
@@ -101,9 +102,39 @@ public class AST_VAR_FIELD extends AST_VAR
 
 	public TEMP IRme()
 	{
+		// IRme the variable
 		TEMP t = var.IRme();
+
+		// get a fresh TEMP
 		TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-		IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, IR.getInstance().currLine));
-		return dst;
+		
+		// get the class instance of the variable
+		OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(((AST_VAR_SIMPLE)var).varName);
+
+		//get the offset of the field
+		int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+
+		// check if the field is a class instance
+		OFFSET_TABLE_ENTRY checkIfFieldIsClassInstance = OFFSET_TABLE.getInstance().findClassInstance(variableDataMemberName);
+
+		// if the field is a class instance, we need to return t (recursive)
+		if(checkIfFieldIsClassInstance == null && side.equals("L"))
+		{
+			IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, offset, IR.getInstance().currLine));
+			return t;
+		}
+
+		// if the field is not a class instance, we need to return dst (no recursion)
+		else
+		{
+			IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, offset, IR.getInstance().currLine));
+			return dst;
+		}
+	}
+
+	// IRme helper to tell that we are in the left side of the assignmnet
+	public TEMP IRmeHelper(String side){
+		this.side = side;
+		return IRme();
 	}
 }

@@ -2,18 +2,21 @@ package IR;
 import java.util.*;
 import TEMP.*;
 import IR.*;
+import MIPS.*;
 
 public class IRcommand_Access_Field extends IRcommand {
 	
 	int lineNumber;	
 	TEMP dst;
     TEMP var;
+	int offset;
     String fieldName;
 	
-	public IRcommand_Access_Field(TEMP dst, TEMP var, String fieldName, int line) {
+	public IRcommand_Access_Field(TEMP dst, TEMP var, String fieldName, int offset, int line) {
         this.lineNumber = line;
         this.dst = dst;
         this.fieldName = fieldName;
+		this.offset = offset;
         this.var = var;
 	}
 
@@ -25,6 +28,6 @@ public class IRcommand_Access_Field extends IRcommand {
 	}
 	
 	public void MIPSme(){
-		
+		MIPSGenerator.getInstance().access_field(dst, var, fieldName, offset);
 	}
 }

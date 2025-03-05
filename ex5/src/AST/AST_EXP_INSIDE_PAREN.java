@@ -37,12 +37,14 @@ public class AST_EXP_INSIDE_PAREN extends AST_EXP
         if (expInParen != null) AST_GRAPHVIZ.getInstance().logEdge(SerialNumber, expInParen.SerialNumber);
     }
 
-    public TYPE SemantMe() {
+    public TYPE SemantMe() 
+    {
         // semant the expression inside the parenthesis
         return expInParen.SemantMe();
     }
 
-    public TEMP IRme() {
+    public TEMP IRme() 
+    {
         return expInParen.IRme();
     }   
 }

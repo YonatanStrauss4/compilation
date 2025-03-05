@@ -40,9 +40,8 @@ public abstract class AST_Node
 		return name.equals("class") || name.equals("nil") || name.equals("extends") || name.equals("new") || name.equals("if") || name.equals("while") || name.equals("int") || name.equals("string") || name.equals("array") || name.equals("void") || name.equals("return");
 	}
 
-
-
-	public TEMP IRme(){
+	public TEMP IRme()
+	{
 		return null;
 	}
 

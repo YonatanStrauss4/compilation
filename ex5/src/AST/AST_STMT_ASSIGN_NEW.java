@@ -1,6 +1,8 @@
 package AST;
 import TYPES.*;
 import TEMP.*;
+import IR.*;
+import MIPS.*;
 
 public class AST_STMT_ASSIGN_NEW extends AST_STMT
 {
@@ -104,5 +106,97 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
         }
 
         return null;
+    }
+
+    public TEMP IRme()
+    {
+        // if the variable is a simple variable
+		if(var instanceof AST_VAR_SIMPLE){
+            // IRme the new expression
+			TEMP src = newExp.IRme();	
+
+            // get the offset of the variable
+            String varName = ((AST_VAR_SIMPLE)var).varName;
+            int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+
+            // IRme the variable
+            TEMP t = var.IRme();
+
+            // if the expression is a class instance
+            if(newExp instanceof AST_NEW_TYPE)
+            {
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(t, ((AST_TYPE_ID)(((AST_NEW_TYPE)newExp).type)).typeName, IR.getInstance().currLine));
+            }
+
+            // if the expression is a new array
+            else
+            {
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(t, src, IR.getInstance().currLine));
+            }
+
+            // store the new expression in the variable temp
+            IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, t, offset, IR.getInstance().currLine));
+		}
+
+		// if the variable is a subscript variable
+		if(var instanceof AST_VAR_SUBSCRIPT){
+
+            // IRme the index and the new expression and get the array name and index
+			TEMP index = ((AST_VAR_SUBSCRIPT)var).idxValue.IRme();
+			TEMP newVal = newExp.IRme();
+			TEMP arr = ((AST_VAR_SUBSCRIPT)var).arrayName.IRme();
+            TEMP src = newExp.IRme();
+
+            // if the expression is a class instance
+            if(newExp instanceof AST_NEW_TYPE)
+            {
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(arr, ((AST_TYPE_ID)(((AST_NEW_TYPE)newExp).type)).typeName, IR.getInstance().currLine));
+            }
+
+            // if the expression is a new array
+            else
+            {
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(arr, src, IR.getInstance().currLine));
+            }
+
+            // set the array with the new expression
+			IR.getInstance().Add_IRcommand(new IRcommand_Set_Array(arr, index, newVal, IR.getInstance().currLine));
+		}
+
+		// if the variable is a field variable
+		if(var instanceof AST_VAR_FIELD){
+            // get the class instance name and the variable data member name
+			String variableDataMemberName = ((AST_VAR_FIELD)var).variableDataMemberName;
+			String classInstanceName = ((AST_VAR_SIMPLE)(((AST_VAR_FIELD)var).var)).varName;
+
+            // get the class instance and IRme the new expression and the variable, and get the offset of the variable
+			OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(classInstanceName);
+			TEMP classInstanceTemp = ((AST_VAR_FIELD)var).IRmeHelper("L");
+			TEMP src = newExp.IRme();
+			int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+
+            // if the new expression is a class instance
+            if(newExp instanceof AST_NEW_TYPE){
+                // update the class entry in the offset table to be the runtime class name
+                OFFSET_TABLE_ENTRY entry = OFFSET_TABLE.getInstance().findClassInstance(classInstanceName);
+                entry.className = ((AST_TYPE_ID)(((AST_NEW_TYPE)newExp).type)).typeName;
+                entry.isClassInstance = true;
+
+                // allocate a new class instance
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(classInstanceTemp, entry.className, IR.getInstance().currLine));
+            }
+
+            // if the new expression is a new array
+            else{
+
+                // allocate a new array
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(classInstanceTemp, src, IR.getInstance().currLine));
+            }
+
+            // set the field with the new expression
+			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, src, variableDataMemberName, offset, IR.getInstance().currLine));
+			
+		}
+		return null; 
     }
 }

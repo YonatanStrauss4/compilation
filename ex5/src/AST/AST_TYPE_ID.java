@@ -73,7 +73,9 @@ public class AST_TYPE_ID extends AST_TYPE
         return t;
     }
 
-    public String getTypeName(){
+    // get the type name
+    public String getTypeName()
+    {
         return typeName;
     }
 }

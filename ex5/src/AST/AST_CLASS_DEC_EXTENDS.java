@@ -125,13 +125,25 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
 
     public TEMP IRme()
     {
-        TYPE_CLASS cls = (TYPE_CLASS)SYMBOL_TABLE.getInstance().findClassInSymbolTable(className);
+        // find the class in the symbol table
+        TYPE_CLASS cls = (TYPE_CLASS)SYMBOL_TABLE.getInstance().find(className);
         TYPE_CLASS currCls = null;
+
+        // make another class for inheritance traversal
         if(cls != null){
             currCls = cls;
         }
+
+        // initialize list for the fields of the class
         List<String> fieldNames = new ArrayList<>();
 
+        // insert class to classes map  with its father
+        CLASSES_MAP.getInstance().insertClass(cls.name, cls.father.name);
+
+        // begin class parse for the offset table
+        OFFSET_TABLE.getInstance().enterClass(cls.name);
+
+        // we look for all the fields of the class and its ancestors
         while (cls != null) {
             for (TYPE_LIST t = cls.data_members; t != null; t = t.tail) {
                 if (t.head instanceof TYPE_CLASS_VAR_DEC) {
@@ -141,13 +153,27 @@ public class AST_CLASS_DEC_EXTENDS extends AST_CLASS_DEC
             }
             cls = cls.father;
         }
+
+        // add the class declaration as an IR command with the list of fields names
         IR.getInstance().Add_IRcommand(new IRcommand_Class_Dec(className, fieldNames, IR.getInstance().currLine));
 
+        // set inside class and current class
         SYMBOL_TABLE.getInstance().set_inside_class(true);
         SYMBOL_TABLE.getInstance().set_current_class(currCls);
+
+        // recursively call the IRme of the class body
         if (classBody != null) classBody.IRme();
+
+        // end the class declaration in the IR, this will add the virtual table to the .data section in the MIPS file
+        IR.getInstance().Add_IRcommand(new IRcommand_Class_End_Dec(SYMBOL_TABLE.getInstance().get_current_class().name, IR.getInstance().currLine));
+
+        // end the class parse in the offset table
+        OFFSET_TABLE.getInstance().endClassParse();
+
+        // reset the current class and inside class
         SYMBOL_TABLE.getInstance().set_current_class(null);
         SYMBOL_TABLE.getInstance().set_inside_class(false);
+
         
         return null;
     }

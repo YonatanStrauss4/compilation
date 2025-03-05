@@ -107,15 +107,9 @@ public class AST_STMT_RETURN_EXP extends AST_STMT
     public TEMP IRme() {
         // IRme the return expression
         TEMP t = exp.IRme();
-        String varName = null;
-        if(exp instanceof AST_EXP_VAR && ((AST_EXP_VAR)exp).var instanceof AST_VAR_SIMPLE){
-            varName = ((AST_VAR_SIMPLE)((AST_EXP_VAR)exp).var).varName;
-        }
 
-        TYPE_FUNCTION currFunc = SYMBOL_TABLE.getInstance().get_current_function();
-        String funcName = currFunc.name;
         // add the return command to the IR
-        IR.getInstance().Add_IRcommand(new IRcommand_Return(t, varName, funcName, IR.getInstance().currLine));
+        IR.getInstance().Add_IRcommand(new IRcommand_Return(t, IR.getInstance().currLine));
         return null;
     }
     

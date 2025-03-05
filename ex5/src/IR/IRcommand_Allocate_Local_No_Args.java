@@ -30,5 +30,6 @@ public class IRcommand_Allocate_Local_No_Args extends IRcommand {
 	public void MIPSme()
 	{
 		MIPSGenerator.getInstance().allocate_local_no_args(offset, dst);
+		
 	}
 }

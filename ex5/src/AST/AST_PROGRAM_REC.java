@@ -65,7 +65,5 @@ public class AST_PROGRAM_REC extends AST_PROGRAM
 		}
 
 		return null;
-	}
-
-	
+	}	
 }

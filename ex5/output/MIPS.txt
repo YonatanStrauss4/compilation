@@ -4,27 +4,42 @@
 	string_illegal_div_by_0: .asciiz "Illegal Division By Zero"
 	string_invalid_ptr_dref: .asciiz "Invalid Pointer Dereference"
 
-	g_k: .word 7
-	str_yon: .asciiz "yon"
-	g_yoni: .word str_yon
-	g_arr: .word 0
-	g_glob: .word 30
-	g_poly: .word 0
-	g_name: .word 0
-	str_world: .asciiz "world"
-	str_newString: .asciiz "newString"
-	str_newStr: .asciiz "newStr"
-	str_hi: .asciiz "hi"
-	str_abc: .asciiz "abc"
-	g_matrix: .word 0
-	str_of: .asciiz "of"
-	g_man: .word str_of
-	g_y: .word -5
-	g_ball: .word str_yon
-	str_: .asciiz ""
-	g_empty: .word str_
 
 .text
+
+
+	abort_access_violation:
+	la $s0, string_access_violation
+	lw $s0, 0($s0)
+
+	# inline implementation of PrintString:
+	move $a0, $s0
+	li $v0, 4
+	syscall
+	li $v0, 10
+	syscall
+
+	abort_illegal_division_by_0:
+	la $s0, string_illegal_div_by_0
+	lw $s0, 0($s0)
+
+	# inline implementation of PrintString:
+	move $a0, $s0
+	li $v0, 4
+	syscall
+	li $v0, 10
+	syscall
+
+	abort_invalid_ptr_dref:
+	la $s0, string_invalid_ptr_dref
+	lw $s0, 0($s0)
+
+	# inline implementation of PrintString:
+	move $a0, $s0
+	li $v0, 4
+	syscall
+	li $v0, 10
+	syscall
 
 user_main:
 	# prologue:
@@ -53,151 +68,63 @@ user_main:
 	sw $t8, 0($sp)
 	subu $sp, $sp, 4
 	sw $t9, 0($sp)
-	subu $sp, $sp, 48
+	subu $sp, $sp, 8
 
-	li $t0, 0
-	sw $t0, -44($fp)
-	li $t1, 0
-	sw $t1, -48($fp)
-	li $t2, 0
-	sw $t2, -52($fp)
-	li $t3, 5
-	sw $t3, -56($fp)
-	la $t4, str_yon
-	sw $t4, -60($fp)
-	li $t5, 5
+	li $t0, 7
 	li $v0, 9
-	move $a0, $t5
+	move $a0, $t0
 	add $a0, $a0, 1
 	mul $a0, $a0, 4
 	syscall
-	move $t6, $v0
-	sw $t5, 0($t6)
-	sw $t6, -64($fp)
-	li $t7, 3
-	li $v0, 9
-	move $a0, $t7
-	add $a0, $a0, 1
-	mul $a0, $a0, 4
+	move $t1, $v0
+	sw $t0, 0($t1)
+	sw $t1, -44($fp)
+	li $t2, 5
+	li $t3, 7
+	lw $t4, -44($fp)
+	bltz $t2, abort_access_violation
+	lw $s0, 0($t4)
+	bge $t2, $s0, abort_access_violation
+	move $s0, $t2
+	add $s0, $s0, 1
+	mul $s0, $s0, 4
+	addu $s0, $s0, $t4
+	sw $t3, 0($s0)
+	lw $t5, -44($fp)
+	li $t6, 5
+	bltz $t6, abort_access_violation
+	lw $s0, 0($t5)
+	bge $t6, $s0, abort_access_violation
+	move $s0, $t6
+	add $s0, $s0, 1
+	mul $s0, $s0, 4
+	addu $s0, $s0, $t5
+	lw $t7, 0($s0)
+	sw $t7, -48($fp)
+	lw $t8, -48($fp)
+
+	# inline implementation of PrintInt:
+	move $a0, $t8
+	li $v0, 1
 	syscall
-	move $t8, $v0
-	sw $t7, 0($t8)
-	sw $t8, -68($fp)
-	li $t9, 7
-	sw $t9, -56($fp)
-	li $t10, 10
-	sw $t10, -72($fp)
-	lw $t11, -72($fp)
-	sw $t11, -56($fp)
-	li $t12, 1
-	beq $t12, 0, Label_3_if_end
-	la $t13, str_world
-	sw $t13, -60($fp)
-	li $t14, 40
-	sw $t14, -76($fp)
-Label_3_if_end:
-	li $t15, -100
-	sw $t15, -76($fp)
-	la $t16, str_newString
-	sw $t16, -80($fp)
-	la $t17, str_newStr
-	sw $t17, -60($fp)
-	lw $t18, g_yoni
-	sw $t18, -60($fp)
-	lw $t19, -76($fp)
-	sw $t19, -56($fp)
-	li $t20, 3
-	li $t21, 5
-	lw $t22, -64($fp)
-	bltz $t20, abort
-	lw $s0, 0($t22)
-	bge $t20, $s0, abort
-	move $s0, $t20
-	add $s0, $s0, 1
-	mul $s0, $s0, 4
-	addu $s0, $s0, $t22
-	sw $t21, 0($s0)
-	lw $t23, -64($fp)
-	li $t24, 3
-	bltz $t24, abort
-	lw $s0, 0($t23)
-	bge $t24, $s0, abort
-	move $s0, $t24
-	add $s0, $s0, 1
-	mul $s0, $s0, 4
-	addu $s0, $s0, $t23
-	lw $t25, 0($s0)
-	sw $t25, -76($fp)
-	lw $t26, -56($fp)
-	sw $t26, 0(g_glob)
-	la $t27, str_hi
-	sw $t27, 0(g_yoni)
-	lw $t28, -80($fp)
-	sw $t28, 0(g_yoni)
-	li $t29, 10
-	li $v0, 9
-	move $a0, $t29
-	add $a0, $a0, 1
-	mul $a0, $a0, 4
-	syscall
-	move $t30, $v0
-	sw $t29, 0($t30)
-	sw $t30, -84($fp)
-	li $t31, 2
-	la $t32, str_abc
-	lw $t33, -84($fp)
-	bltz $t31, abort
-	lw $s0, 0($t33)
-	bge $t31, $s0, abort
-	move $s0, $t31
-	add $s0, $s0, 1
-	mul $s0, $s0, 4
-	addu $s0, $s0, $t33
-	sw $t32, 0($s0)
-	li $t34, 3
-	lw $t35, g_yoni
-	lw $t36, -84($fp)
-	bltz $t34, abort
-	lw $s0, 0($t36)
-	bge $t34, $s0, abort
-	move $s0, $t34
-	add $s0, $s0, 1
-	mul $s0, $s0, 4
-	addu $s0, $s0, $t36
-	sw $t35, 0($s0)
-	lw $t37, -84($fp)
-	li $t38, 2
-	bltz $t38, abort
-	lw $s0, 0($t37)
-	bge $t38, $s0, abort
-	move $s0, $t38
-	add $s0, $s0, 1
-	mul $s0, $s0, 4
-	addu $s0, $s0, $t37
-	lw $t39, 0($s0)
-	sw $t39, 0(g_yoni)
 
 	# epilogue:
 	move $sp, $fp
-	lw $t9, -4($sp)
-	lw $t8, -8($sp)
-	lw $t7, -12($sp)
-	lw $t6, -16($sp)
-	lw $t5, -20($sp)
-	lw $t4, -24($sp)
-	lw $t3, -28($sp)
-	lw $t2, -32($sp)
-	lw $t1, -36($sp)
-	lw $t0, -40($sp)
+	lw $t0, -4($sp)
+	lw $t1, -8($sp)
+	lw $t2, -12($sp)
+	lw $t3, -16($sp)
+	lw $t4, -20($sp)
+	lw $t5, -24($sp)
+	lw $t6, -28($sp)
+	lw $t7, -32($sp)
+	lw $t8, -36($sp)
+	lw $t9, -40($sp)
 	lw $fp, 0($sp)
 	lw $ra, 4($sp)
 	addu $sp, $sp, 8
 	jr $ra
 
-
-	abort:
-	li $v0, 10
-	syscall
 
 main:
 	jal user_main

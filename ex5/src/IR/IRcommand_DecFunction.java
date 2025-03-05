@@ -5,7 +5,7 @@ import MIPS.*;
 public class IRcommand_DecFunction extends IRcommand {
 
 	String label_name;
-	String funcName;
+	public String funcName;
     int numOfLocals;
 	int lineNumber;
 	

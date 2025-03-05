@@ -114,17 +114,59 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
     
     public TEMP IRme() {
 
-        if(SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
-			OFFSET_TABLE.getInstance().pushVariable(varName);
+        // check if variable is global
+        if(!SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
+			if(t instanceof AST_TYPE_INT){
+                OFFSET_TABLE.getInstance().enterGlobal(varName, "INT");
+            }
+            else if(t instanceof AST_TYPE_STRING){
+                OFFSET_TABLE.getInstance().enterGlobal(varName, "STRING");
+            }
+            else{   
+			    OFFSET_TABLE.getInstance().enterGlobal(varName, "ID");
+            }
 		}
 
-        int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+        // check if variable is local
+        else if(SYMBOL_TABLE.getInstance().get_inside_function()){
+            if(t instanceof AST_TYPE_INT){
+                OFFSET_TABLE.getInstance().pushVariable(varName, "INT", false, null);
+            }
+            else if(t instanceof AST_TYPE_STRING){
+                OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
+            }
+            else{   
+			    OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+            }
+		}
 
-        if(offset == -1){
-				IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_No_Args(varName, IR.getInstance().currLine));
+        // check if variable is a class member
+        else{
+            String clssName = SYMBOL_TABLE.getInstance().get_current_class().name;
+            if(t instanceof AST_TYPE_INT){
+            CLASSES_MAP.getInstance().insertField(varName, clssName, "INT", 0);
+            }
+            else if(t instanceof AST_TYPE_STRING){
+                CLASSES_MAP.getInstance().insertField(varName, clssName, "STRING", 0);
+            }
+            else{
+                CLASSES_MAP.getInstance().insertField(varName, clssName, "ID", 0);
+            }
         }
 
-        else{
+        // get the offset of the variable
+        int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+
+        // check if variable is global
+        if(offset == -1){
+            String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
+            if(type != null){
+			    IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_No_Args(varName, IR.getInstance().currLine));
+            }
+        }
+
+        // check if variable is local
+        else if(offset < 0){
             TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
             IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Local_No_Args(dst, offset, varName, IR.getInstance().currLine));
         }

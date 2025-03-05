@@ -11,7 +11,6 @@ public class TYPE_FUNCTION extends TYPE
 	/* types of input params */
 	/*************************/
 	public TYPE_LIST params;
-	public String name;
 	
 	/****************/
 	/* CTROR(S) ... */

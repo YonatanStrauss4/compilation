@@ -107,24 +107,42 @@ public class AST_STMT_ASSIGN extends AST_STMT
 	public TEMP IRme(){
 		// if the variable is a simple variable
 		if(var instanceof AST_VAR_SIMPLE){
+
+			// get the offset and IRme the expression
 			int offset = OFFSET_TABLE.getInstance().findVariableOffset(((AST_VAR_SIMPLE)var).varName);	
 			TEMP src = exp.IRme();	
+
+			// add IR command to store the expression in the variable
 			IR.getInstance().Add_IRcommand(new IRcommand_Store(((AST_VAR_SIMPLE)var).varName, src, offset, IR.getInstance().currLine));
 		}
+
 		// if the variable is a subscript variable
 		if(var instanceof AST_VAR_SUBSCRIPT){
+
+			// IRme the relevant variables
 			TEMP index = ((AST_VAR_SUBSCRIPT)var).idxValue.IRme();
 			TEMP newVal = exp.IRme();
 			TEMP arr = ((AST_VAR_SUBSCRIPT)var).arrayName.IRme();
+
+			// add IR command to set the array
 			IR.getInstance().Add_IRcommand(new IRcommand_Set_Array(arr, index, newVal, IR.getInstance().currLine));
 		}
 
 		// if the variable is a field variable
 		if(var instanceof AST_VAR_FIELD){
-			String name = ((AST_VAR_FIELD)var).variableDataMemberName;
+
+			// get the class instance, the data member name and IRme the expression and the variable
+			String variableDataMemberName = ((AST_VAR_FIELD)var).variableDataMemberName;
+			String classInstanceName = ((AST_VAR_SIMPLE)(((AST_VAR_FIELD)var).var)).varName;
+			OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(classInstanceName);
+			TEMP classInstanceTemp = ((AST_VAR_FIELD)var).IRmeHelper("L");
 			TEMP src = exp.IRme();
-			TEMP classInstanceTemp = var.IRme();
-			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, src, name, IR.getInstance().currLine));
+
+			// get the offset of the variable
+			int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+
+			// add IR command to set the field
+			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, src, variableDataMemberName, offset, IR.getInstance().currLine));
 			
 		}
 		return null;

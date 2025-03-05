@@ -104,6 +104,7 @@ public class AST_NEW_TYPE_EXP_IN_BRACKS extends AST_NEW_EXP
 
     public TEMP IRme()
 	{
+        // IRme the size of the array
         TEMP size = arraySize.IRme();
         return size;
 	}

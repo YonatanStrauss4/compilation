@@ -79,8 +79,16 @@ public class AST_CFIELD_REC extends AST_Node
 
 	public TEMP IRme()
 	{
-		if (cF != null) cF.IRme();
-		if (cFR != null) cFR.IRme();
+		if (cF != null) 
+		{
+			cF.IRme();
+		}
+
+		if (cFR != null) 
+		{
+			cFR.IRme();
+		}
+		
 		return null;
 	}
 

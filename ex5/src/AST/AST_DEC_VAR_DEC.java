@@ -49,11 +49,13 @@ public class AST_DEC_VAR_DEC extends AST_DEC
 		return null;
 	}
 
-	public TEMP IRme() {
+	public TEMP IRme() 
+	{
 		// IRme the variable declaration
 		if(varDec != null) 
+		{
 			return varDec.IRme();
+		}
 		return null;
 	}
-	
 }

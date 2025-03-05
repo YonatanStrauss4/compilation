@@ -88,30 +88,30 @@ public class AST_STMT_IF extends AST_STMT
 	}
 
     public TEMP IRme() {
+		// Push new scope
 		OFFSET_TABLE.getInstance().pushInnerScopeStart();
 
-		// [1] Allocate 2 fresh labels
+		// Allocate 2 fresh labels
 		String label_start = IRcommand.getFreshLabel("if_start");
 		String label_end = IRcommand.getFreshLabel("if_end");
 
-		// [3] cond.IRme();
+		// cond.IRme();
 		TEMP cond_temp = cond.IRme();
 
-		// [4] Jump conditionally to the if end
+		// Jump conditionally to the if end
 		IRcommand jmp_if_eq_zero = new IRcommand_Jump_If_Eq_To_Zero(cond_temp, label_end,IR.getInstance().currLine);
 		IR.getInstance().Add_IRcommand(jmp_if_eq_zero);		
 
-		// [5] body.IRme()
+		// body.IRme()
 		body.IRme();
 
-		// [6] If end label
+		// If end label
 		IRcommand lbl_end_cmd = new IRcommand_Label(label_end,IR.getInstance().currLine,false);
 		IR.getInstance().Add_IRcommand(lbl_end_cmd);
 
-		// [7] update CFG
-
+		// Pop scope
 		OFFSET_TABLE.getInstance().endInnerScope();
-		// [8] return null
+	
 		return null;
 	}
 }

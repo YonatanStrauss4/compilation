@@ -49,19 +49,40 @@ public class AST_EXP_STRING extends AST_EXP
 
 	public TEMP IRme()
 	{
+		// deleting the quotes from the string
 		String strValue = value.substring(1, value.length() - 1);
+
+		// if the string is not in the map, add it
 		if(!MAP_OF_STRINGS.getInstance().containsKey(value)){
+
+			// add the string to the .data section
 			IR.getInstance().Add_IRcommand(new IRcommand_Const_String(value, "str_" + strValue, IR.getInstance().currLine));
-			System.out.println("Adding string to map: " + value + " -> str_" + strValue);
+
+			// add the string to the map
     		MAP_OF_STRINGS.getInstance().put(value, "str_" + strValue);
 		}
+
+		// if we are not inside a class or a function, return null, we already allocated the string
 		if(!SYMBOL_TABLE.getInstance().get_inside_class() && !SYMBOL_TABLE.getInstance().get_inside_function()){
 			return null;
 		}
-		else{
-			TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
-			IR.getInstance().Add_IRcommand(new IRcommand_Load_Const_String(t, MAP_OF_STRINGS.getInstance().get(value), IR.getInstance().currLine));
-			return t;
+
+		// we are not in the global scope
+		else {
+
+			// get the first entry in the offset table
+			OFFSET_TABLE_ENTRY entry = OFFSET_TABLE.getInstance().offsetTable.get(0);
+
+			// we want to ensure that this string is not a data member of a class before loading it
+			if (OFFSET_TABLE.getInstance().offsetTable.size() != 1 || !entry.type.equals("CLASS")) {
+				
+				// load the string from the map
+				TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP();
+				IR.getInstance().Add_IRcommand(new IRcommand_Load_Const_String(t, MAP_OF_STRINGS.getInstance().get(value), IR.getInstance().currLine));
+				return t;
+			}
+
+			return null;
 		}
 	}
 }

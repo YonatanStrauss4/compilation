@@ -45,11 +45,10 @@ public class AST_EXP_FUNCTION extends AST_EXP
 	}
 
     public TEMP IRme() {
-        // generate the IR for the function call
+        // IRme the function call
         if(funcExp != null) {
             return funcExp.IRme();
         }
-        System.out.println("SHOULD NOT GET HERE");
         return null;
     }
 }
