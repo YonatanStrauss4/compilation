@@ -97,7 +97,8 @@ public class AST_FUNC_STMT_VAR_DOT_NO_ARGS extends AST_FUNC_STMT
     public TEMP IRme()
     {
         TEMP t = var.IRme();
-        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_No_Args_Void(t, funcName, IR.getInstance().currLine));
+        int offset = 1; // need to changeeeeee 
+        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_No_Args_Void(t, funcName, offset, IR.getInstance().currLine));
         return null;
     }   
 }

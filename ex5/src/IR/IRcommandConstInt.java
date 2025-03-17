@@ -8,14 +8,14 @@ public class IRcommandConstInt extends IRcommand {
 	TEMP t;
 	int value;
 	int lineNumber;
-	String tLabeled;
 	
 	public IRcommandConstInt(TEMP t,int value,int line) {
 		this.lineNumber = line;
 		this.t = t;
 		this.value = value;
-		this.tLabeled = t.toString()+";"+line;
+		def.add(t.toString());
 	}
+
 
 	public void printIR() {
 		System.out.println(t.toString() + " := " + String.format("%d", value));

@@ -2,6 +2,7 @@ package AST;
 import TYPES.*;
 import SYMBOL_TABLE.*;
 import TEMP.*;
+import IR.*;
 
 public class AST_STMT_RETURN_NO_EXP extends AST_STMT
 {
@@ -63,5 +64,14 @@ public class AST_STMT_RETURN_NO_EXP extends AST_STMT
 
         // return TYPE_VOID (because return doesnt have an expression)
         return TYPE_VOID.getInstance();
+    }
+
+    public TEMP IRme() {
+        
+        String funcName = SYMBOL_TABLE.getInstance().get_current_function().name;
+
+        // add the return command to the IR
+        IR.getInstance().Add_IRcommand(new IRcommand_Return_No_Exp(funcName, IR.getInstance().currLine));
+        return null; 
     }
 }

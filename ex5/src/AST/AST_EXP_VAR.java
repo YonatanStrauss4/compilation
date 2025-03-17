@@ -7,6 +7,7 @@ import IR.*;
 public class AST_EXP_VAR extends AST_EXP {
 
 	public AST_VAR var;
+	public String varType;
 
 	// CONSTRUCTOR(S)
 	public AST_EXP_VAR(AST_VAR var) {
@@ -48,6 +49,7 @@ public class AST_EXP_VAR extends AST_EXP {
 	public TYPE SemantMe() {
 		// semant the variable
 		TYPE type = var.SemantMe();
+		varType = type.name;
 		return type;
 	}
 

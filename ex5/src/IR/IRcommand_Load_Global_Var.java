@@ -15,6 +15,8 @@ public class IRcommand_Load_Global_Var extends IRcommand {
 		this.var_name = var_name;
 		this.isString = isString;
 		this.lineNumber = line;
+		def.add(dst.toString());
+
 	}
 
 	public void printIR() {

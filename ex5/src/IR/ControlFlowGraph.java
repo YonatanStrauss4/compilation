@@ -1,6 +1,7 @@
 package IR;
 import java.util.*;
 
+
 public class ControlFlowGraph {
 
     public IRcommand head;
@@ -37,6 +38,73 @@ public class ControlFlowGraph {
 		src.next.add(trgt);
         trgt.prev.add(src);
 	}
+
+
+    public void computeLiveness() {
+        printControlGraph(true);  // Print the control graph for debugging
+
+        // Use TreeSet to store the commands, sorted by line number in descending order
+        TreeSet<IRcommand> worklist = new TreeSet<>(new Comparator<IRcommand>() {
+            public int compare(IRcommand cmd1, IRcommand cmd2) {
+                // Compare commands based on line number in descending order
+                return Integer.compare(cmd2.lineNumber, cmd1.lineNumber);
+            }
+        });
+
+        // Set to track commands we've already processed
+        Set<IRcommand> processedCommands = new HashSet<>();
+
+        // Step 1: Add the last command to the worklist
+        worklist.add(this.tail);
+
+        // Step 2: Process the worklist
+        while (!worklist.isEmpty() && !(worklist.first() instanceof IRcommand_DecFunction)) {
+            IRcommand cmd = worklist.pollFirst();  // Get the highest line command (first in TreeSet)
+
+            // Backup old values
+            Set<String> oldIn = new HashSet<>(cmd.inSet);
+
+            // Compute OUT[n]
+            cmd.inSet.clear();
+            for (IRcommand succ : cmd.next) {
+                cmd.inSet.addAll(succ.outSet);
+            }
+
+            // Compute IN[n]
+            cmd.outSet.clear();
+            cmd.outSet.addAll(cmd.use);
+            Set<String> tempIn = new HashSet<>(cmd.inSet);
+            tempIn.removeAll(cmd.def);
+            cmd.outSet.addAll(tempIn);
+
+            // Debug print to show IN and OUT sets
+            System.out.println("Processing line " + cmd.lineNumber);
+            System.out.println("IN: " + cmd.inSet);
+            System.out.println("OUT: " + cmd.outSet);
+
+            // If the command is not processed, add it to processedCommands
+            if (!processedCommands.contains(cmd)) {
+                processedCommands.add(cmd);
+                // Always add predecessors to worklist
+                for (IRcommand pred : cmd.prev) {
+                    worklist.add(pred);  // Add predecessor to worklist
+                }
+            }
+            // If the command is processed, check if IN has changed and add its predecessors if needed
+            else if (!cmd.inSet.equals(oldIn)) {
+                // If IN changed, add predecessors to the worklist
+                for (IRcommand pred : cmd.prev) {
+                    worklist.add(pred);  // Add predecessor to worklist
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 
     public void printControlGraph(boolean withNextCmds) {
         IRcommand curr = this.head;

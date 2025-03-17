@@ -2,6 +2,7 @@
 /* PACKAGE */
 /***********/
 package IR;
+import java.util.*;
 
 /*******************/
 /* GENERAL IMPORTS */
@@ -13,16 +14,20 @@ package IR;
 
 public class IR {
 
-	private IRcommand head = null;
-	private IRcommandList tail = null;
+	public IRcommand head = null;
+	public IRcommandList tail = null;
 	public ControlFlowGraph controlGraph = new ControlFlowGraph();
 	public int currLine = 0;
+	private Map<String, Integer> regMap = new HashMap<>(); // Store register allocation
 
 	/*
 	 * Adds a new IR command to the list. Initializes the list if empty, appends to the end if not,
 	 * updates the control graph with the new command, and increments the command line counter.
 	 */
 	public void Add_IRcommand(IRcommand cmd) {
+		if (cmd.lineNumber == 0) {
+        	cmd.lineNumber = currLine;  // Assign the current line number to the command
+    	}
 		if ((head == null) && (tail == null))
 		{
 			this.head = cmd;
@@ -66,6 +71,16 @@ public class IR {
 		return lastDecFunction;
 	}
 
+ 
+ 	// Getter for register allocation map
+    public Map<String, Integer> getRegMap() {
+        return regMap;
+    }
+
+    // Setter for register allocation map
+    public void setRegMap(Map<String, Integer> regMap) {
+        this.regMap = regMap;
+    }
 
 
 	// USUAL SINGLETON IMPLEMENTATION ...

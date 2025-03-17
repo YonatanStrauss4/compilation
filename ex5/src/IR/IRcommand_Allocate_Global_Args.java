@@ -16,7 +16,7 @@ public class IRcommand_Allocate_Global_Args extends IRcommand {
 		this.lineNumber = line;
 	}
 
-	
+
 	/**
 	 * Prints the IR command for allocating the variable.
 	 */

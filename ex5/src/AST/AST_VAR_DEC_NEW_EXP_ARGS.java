@@ -160,7 +160,7 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         if(new_exp instanceof AST_NEW_TYPE){
             AST_NEW_TYPE t_id = (AST_NEW_TYPE)new_exp;
             className = t_id.getTypeName();
-
+            
             // push the class intance to the offset table
             OFFSET_TABLE.getInstance().pushVariable(variable, "CLASS", true, className);
         }
@@ -182,13 +182,13 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         // check if the expression is a new array
         if(new_exp instanceof AST_NEW_TYPE_EXP_IN_BRACKS){
             IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(dst, new_exp_temp, IR.getInstance().currLine));
-            IR.getInstance().Add_IRcommand(new IRcommand_Store(variable, dst, offset, IR.getInstance().currLine));
+            IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(variable, dst, offset, IR.getInstance().currLine));
         }
         
         // the expression is a new class
         else{
             IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(dst, className, IR.getInstance().currLine));
-            IR.getInstance().Add_IRcommand(new IRcommand_Store(variable, dst, offset,IR.getInstance().currLine));
+            IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(variable, dst, offset,IR.getInstance().currLine));
         }
 
         // return the dst register

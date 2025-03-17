@@ -208,6 +208,9 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
             else if(t instanceof AST_TYPE_STRING){
                 OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
             }
+			else{
+				OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+			}
 		}
 
 
@@ -231,7 +234,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 
 		// get the oofset of the variable (-1 if it is global)
 		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
-		// the variable is global
+		// the variable is global or a class member
 		if(offset == -1){
 			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
             if(type != null){
@@ -250,16 +253,14 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(-((AST_EXP_MINUS_INT)exp).i ,varName,IR.getInstance().currLine));
 				}
 			}
-			else{
-				exp.IRme();
-			}
+
         }
 		
 		// the variable is local
         else{
 			IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Local_Args(varName, IR.getInstance().currLine));
 			TEMP dst = exp.IRme();
-			IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, dst, offset, IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(varName, dst, offset, IR.getInstance().currLine));   // need to fix
         }
 	
 		return null;

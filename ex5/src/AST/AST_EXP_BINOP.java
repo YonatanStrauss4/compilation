@@ -241,15 +241,19 @@ public class AST_EXP_BINOP extends AST_EXP
 		if (OP == 6) 
 		{
 			// check if we are comparing strings
-			if(left instanceof AST_EXP_STRING && right instanceof AST_EXP_STRING)
+			if((left instanceof AST_EXP_INT && right instanceof AST_EXP_INT) || ((left instanceof AST_EXP_VAR && right instanceof AST_EXP_VAR) && ((AST_EXP_VAR)left).varType.equals("int") && ((AST_EXP_VAR)right).varType.equals("int")))
 			{
-				IR.getInstance().Add_IRcommand(new IRcommand_binop_EQ_Strings(dst,t1,t2,IR.getInstance().currLine));
+				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
 
 			// check if we are comparing integers
-			else
+			else if((left instanceof AST_EXP_STRING && right instanceof AST_EXP_STRING) || ((left instanceof AST_EXP_VAR && right instanceof AST_EXP_VAR) && ((AST_EXP_VAR)left).varType.equals("string") && ((AST_EXP_VAR)right).varType.equals("string")))
 			{
-				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
+				IR.getInstance().Add_IRcommand(new IRcommand_binop_EQ_Strings(dst,t1,t2,IR.getInstance().currLine));
+			}
+			else 
+			{
+				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Addresses(dst,t1,t2,IR.getInstance().currLine));
 			}
 	 	} 	 
 		return dst;

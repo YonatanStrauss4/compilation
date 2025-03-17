@@ -18,7 +18,10 @@ public class IRcommand_Access_Field extends IRcommand {
         this.fieldName = fieldName;
 		this.offset = offset;
         this.var = var;
+		this.def.add(dst.toString());
+		this.use.add(var.toString());
 	}
+
 
 	/**
 	 * Prints the IR command for allocating the variable.

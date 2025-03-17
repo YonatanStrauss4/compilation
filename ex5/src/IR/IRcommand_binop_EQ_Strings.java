@@ -15,13 +15,18 @@ public class IRcommand_binop_EQ_Strings extends IRcommand {
 		this.t1 = t1;
 		this.t2 = t2;
 		this.lineNumber = line;
+        def.add(dst.toString());
+        use.add(t1.toString());
+        use.add(t2.toString());
 	}
+
+
 
 	public void printIR() {
 		System.out.println(dst.toString() + " := " + t1.toString() + " == " + t2.toString());
 	}
 	
 	public void MIPSme(){
-		MIPSGenerator.getInstance().string_equality(t1,t2,dst);
+		MIPSGenerator.getInstance().checkStringEquality(dst, t1, t2);
 	}
 }

@@ -112,14 +112,36 @@ public class AST_VAR_SIMPLE extends AST_VAR
 		// get the offset of the variable
 		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
 		
-		// the variable is global
+		// the variable is not a local variable
 		if (offset == -1){
-			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
-			if(type.equals("STRING")){
-				IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, true, IR.getInstance().currLine));
+			// we need now to check if maybe we are in a method and the variable is a class instance
+			TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
+																			System.out.println("775555555555777777" + varName);	
+
+
+			// we are in a method
+			if(currClass != null){
+				String className = currClass.name;
+				int fieldOffset = CLASSES_MAP.getInstance().getFieldOffset(className, varName);
+
+
+				// the variable is a field of the class or the classes it extends
+				if(fieldOffset != -1){
+					IR.getInstance().Add_IRcommand(new IRcommand_Load_Field(t, varName, fieldOffset, IR.getInstance().currLine));
+					return t;
+
+				}
 			}
+
+			// the variable is a global variable
 			else{
-				IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, false, IR.getInstance().currLine));
+				String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
+				if(type.equals("STRING")){
+					IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, true, IR.getInstance().currLine));
+				}
+				else{
+					IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, false, IR.getInstance().currLine));
+				}
 			}
 
 		}

@@ -108,6 +108,10 @@ public class AST_STMT_WHILE extends AST_STMT
         IRcommand lbl_end_cmd = new IRcommand_Label(label_end,IR.getInstance().currLine,false);
 		IR.getInstance().Add_IRcommand(lbl_end_cmd);
         
+        // [8] update CFG
+        IR.getInstance().controlGraph.update_CFG(jmp_to_strt,lbl_strt_cmd);
+        IR.getInstance().controlGraph.update_CFG(jmp_if_eq_zero,lbl_end_cmd);
+        
         // end the scope
         OFFSET_TABLE.getInstance().endInnerScope();
 		return null;

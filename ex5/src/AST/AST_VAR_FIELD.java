@@ -65,6 +65,8 @@ public class AST_VAR_FIELD extends AST_VAR
 	{
 		// semant the variable
 		TYPE type = var.SemantMe();
+		this.varClassName = type.name;
+
 		
 		// check if the variable is TYPE_CLASS
 		if(!(type instanceof TYPE_CLASS)){
@@ -109,10 +111,13 @@ public class AST_VAR_FIELD extends AST_VAR
 		TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
 		
 		// get the class instance of the variable
-		OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(((AST_VAR_SIMPLE)var).varName);
+
+		// need to find the class name
+		String className = this.varClassName;
+		System.out.println("className: " + className);
 
 		//get the offset of the field
-		int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+		int offset = CLASSES_MAP.getInstance().getFieldOffset(className, variableDataMemberName);
 
 		// check if the field is a class instance
 		OFFSET_TABLE_ENTRY checkIfFieldIsClassInstance = OFFSET_TABLE.getInstance().findClassInstance(variableDataMemberName);

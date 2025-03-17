@@ -91,9 +91,8 @@ public class AST_FUNC_STMT_NO_ARGS extends AST_FUNC_STMT
 
     public TEMP IRme()
     {
-            TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-            // call the function
-            IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Void(funcName, IR.getInstance().currLine));
+        // call the function
+        IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Void(funcName, IR.getInstance().currLine));
         return null;
     }   
 }

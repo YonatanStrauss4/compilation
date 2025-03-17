@@ -116,6 +116,7 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
 
         // check if variable is global
         if(!SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
+
 			if(t instanceof AST_TYPE_INT){
                 OFFSET_TABLE.getInstance().enterGlobal(varName, "INT");
             }

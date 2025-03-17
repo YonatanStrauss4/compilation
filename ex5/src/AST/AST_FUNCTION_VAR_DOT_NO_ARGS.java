@@ -115,7 +115,8 @@ public class AST_FUNCTION_VAR_DOT_NO_ARGS extends AST_FUNCTION
     {
         TEMP t = var.IRme();
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_No_Args_Not_Void(dst, t, funcName, IR.getInstance().currLine));
+        int offset = 1; // need to changeeeeee
+        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_No_Args_Not_Void(dst, t, funcName, offset, IR.getInstance().currLine));
         return dst;
     }   
 }

@@ -117,7 +117,8 @@ public class AST_FUNC_STMT_VAR_DOT_ARGS extends AST_FUNC_STMT
     {
         TEMP t = var.IRme();
         List<TEMP> args = funcArgs.IRme(new ArrayList<>());
-        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_Args_Void(t, args, funcName, IR.getInstance().currLine));
+        int offset = 1; // need to changeeeeeeeee
+        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_Args_Void(t, args, funcName, offset, IR.getInstance().currLine));
         return null;
     }
 }

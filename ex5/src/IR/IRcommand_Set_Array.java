@@ -14,7 +14,11 @@ public class IRcommand_Set_Array extends IRcommand {
         this.index = index;
         this.value = value;
         this.line = line;
+        use.add(array.toString());
+        use.add(index.toString());
+        use.add(value.toString());
     }
+
 
 	public void printIR() {
         System.out.println("array set: " + array.toString() + " " + index.toString() + " " + value.toString());

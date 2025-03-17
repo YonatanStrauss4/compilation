@@ -61,11 +61,12 @@ public class OFFSET_TABLE {
             }
         }
         // If not found in variable entries, check function entry
-        if (!offsetTable.isEmpty()) {
-            OFFSET_TABLE_ENTRY functionEntry = offsetTable.firstElement();
-            if (functionEntry.args != null) {
-                for (int i = 0; i < functionEntry.args.size(); i++) {
-                    if (functionEntry.args.get(i).equals(varName)) {
+        iterator = offsetTable.listIterator(offsetTable.size());
+        while (iterator.hasPrevious()) {
+            OFFSET_TABLE_ENTRY entry = iterator.previous();
+            if ("FUNCTION".equals(entry.type) && entry.args != null) {
+                for (int i = 0; i < entry.args.size(); i++) {
+                    if (entry.args.get(i).equals(varName)) {
                         return i * 4 + 8;
                     }
                 }
@@ -121,6 +122,7 @@ public class OFFSET_TABLE {
         if (!offsetTable.isEmpty() && "FUNCTION".equals(offsetTable.peek().type)) {
             offsetTable.pop();
         }
+
         localOffset = -44;
         scope = 1;
         numOfLocals = 0;

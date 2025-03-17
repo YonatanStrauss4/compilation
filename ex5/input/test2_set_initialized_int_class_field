@@ -1,0 +1,10 @@
+
+class g{
+    int k := -5;
+}
+
+void main(){
+    g newIns := new g;
+    newIns.k := 10;
+    PrintInt(newIns.k);
+}

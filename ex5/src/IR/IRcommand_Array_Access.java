@@ -15,9 +15,11 @@ public class IRcommand_Array_Access extends IRcommand {
         this.arrayTemp = arrayTemp;
         this.index = index;
         this.dst = dst;
+		this.def.add(dst.toString());
+		this.use.add(arrayTemp.toString());
+		this.use.add(index.toString());
     
 	}
-
 
 	/**
 	 * Prints the IR command for allocating the variable.

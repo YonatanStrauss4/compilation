@@ -118,7 +118,8 @@ public class AST_FUNCTION_VAR_DOT_ARGS extends AST_FUNCTION
         TEMP t = var.IRme();
         List<TEMP> args = funcArgs.IRme(new ArrayList<>());
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_Args_Not_Void(dst, t, args, funcName, IR.getInstance().currLine));
+        int offset = 1; // need to changeeeeee
+        IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_Args_Not_Void(dst, t, args, offset, funcName, IR.getInstance().currLine));
         return dst;
     }
 }

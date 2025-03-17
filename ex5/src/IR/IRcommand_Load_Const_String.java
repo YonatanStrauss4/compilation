@@ -13,7 +13,10 @@ public class IRcommand_Load_Const_String extends IRcommand {
 		this.dst = dst;
 		this.stringName = stringName;
 		this.lineNumber = line;
+		def.add(dst.toString());
+
 	}
+
 
 	public void printIR() {
 			System.out.println(String.format("%s := load(constant: %s)", dst.toString(), stringName));

@@ -1,0 +1,10 @@
+
+class g{
+    string hi := "hello";
+}
+
+void main(){
+    g newIns := new g;
+    newIns.hi := "shalom";
+    PrintString(newIns.hi);
+}

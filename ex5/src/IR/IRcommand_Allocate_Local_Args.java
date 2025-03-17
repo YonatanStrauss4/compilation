@@ -23,7 +23,6 @@ public class IRcommand_Allocate_Local_Args extends IRcommand {
 	}
 
 	public void MIPSme(){
-
 	}
 
 }

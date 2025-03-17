@@ -17,7 +17,12 @@ public class IRcommand_Binop_Sub_Integers extends IRcommand {
 		this.t2 = t2;
 		this.lineNumber = line;
 		this.dstLabeled = dst.toString()+";"+line;
+        def.add(dst.toString());
+        use.add(t1.toString());
+        use.add(t2.toString());
 	}
+
+
 
     public void printIR() {
         System.out.println(dst.toString() + " := " + t1.toString() + " - " + t2.toString());

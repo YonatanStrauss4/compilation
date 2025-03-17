@@ -201,7 +201,7 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
         ((IRcommand_DecFunction)IR.getInstance().findLastDecFunctionCommand()).updateNumOfLocals(OFFSET_TABLE.getInstance().getNumOfLocals());
 
         // Add function exit label IR command, this will also invoke the epilogue in the MIPS code
-        IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, IR.getInstance().currLine));
+        IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, funcName, IR.getInstance().currLine));
     
         // end the function scope in the symbol table and set inside function to false
         SYMBOL_TABLE.getInstance().set_current_function(null);

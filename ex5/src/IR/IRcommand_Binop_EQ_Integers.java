@@ -15,6 +15,9 @@ public class IRcommand_Binop_EQ_Integers extends IRcommand {
 		this.t1 = t1;
 		this.t2 = t2;
 		this.lineNumber = line;
+		def.add(dst.toString());
+        use.add(t1.toString());
+        use.add(t2.toString());
 	}
 
 	public void printIR() {

@@ -16,6 +16,8 @@ public class IRcommand_Set_Field extends IRcommand {
         this.name = name;
         this.offset = offset;
         this.line = line;
+        use.add(classInstanceTemp.toString());
+        use.add(var.toString());
     }
 
 	public void printIR() {

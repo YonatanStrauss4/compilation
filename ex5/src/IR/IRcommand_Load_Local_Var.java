@@ -15,6 +15,7 @@ public class IRcommand_Load_Local_Var extends IRcommand {
 		this.var_name = var_name;
 		this.offset = offset;
 		this.lineNumber = line;
+		def.add(dst.toString());
 	}
 
 	public void printIR() {

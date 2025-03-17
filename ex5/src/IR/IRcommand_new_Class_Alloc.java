@@ -13,6 +13,8 @@ public class IRcommand_new_Class_Alloc extends IRcommand {
         this.lineNumber = line;
         this.dst = dst;
         this.className = className;
+		def.add(dst.toString());
+
 	}
 
 	/**

@@ -17,6 +17,8 @@ public class IRcommand_Allocate_Local_No_Args extends IRcommand {
 		this.dst = dst;
 		this.offset = offet;
 		this.lineNumber = lineNumber;
+		this.def.add(dst.toString());
+
 	}
 
 

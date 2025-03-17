@@ -133,9 +133,8 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
             {
                 IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(t, src, IR.getInstance().currLine));
             }
-
             // store the new expression in the variable temp
-            IR.getInstance().Add_IRcommand(new IRcommand_Store(varName, t, offset, IR.getInstance().currLine));
+            IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(varName, t, offset, IR.getInstance().currLine));  //need to add cases
 		}
 
 		// if the variable is a subscript variable
@@ -167,13 +166,12 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
 		if(var instanceof AST_VAR_FIELD){
             // get the class instance name and the variable data member name
 			String variableDataMemberName = ((AST_VAR_FIELD)var).variableDataMemberName;
-			String classInstanceName = ((AST_VAR_SIMPLE)(((AST_VAR_FIELD)var).var)).varName;
+			String classInstanceName = this.var.varClassName;
 
             // get the class instance and IRme the new expression and the variable, and get the offset of the variable
-			OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(classInstanceName);
-			TEMP classInstanceTemp = ((AST_VAR_FIELD)var).IRmeHelper("L");
 			TEMP src = newExp.IRme();
-			int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+		    TEMP newTemp = TEMP_FACTORY.getInstance().getFreshTEMP(); 
+			int offset = CLASSES_MAP.getInstance().getFieldOffset(classInstanceName, variableDataMemberName);
 
             // if the new expression is a class instance
             if(newExp instanceof AST_NEW_TYPE){
@@ -183,18 +181,18 @@ public class AST_STMT_ASSIGN_NEW extends AST_STMT
                 entry.isClassInstance = true;
 
                 // allocate a new class instance
-                IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(classInstanceTemp, entry.className, IR.getInstance().currLine));
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(newTemp, entry.className, IR.getInstance().currLine));
             }
 
             // if the new expression is a new array
             else{
-
                 // allocate a new array
-                IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(classInstanceTemp, src, IR.getInstance().currLine));
+                IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(newTemp, src, IR.getInstance().currLine));
             }
 
+            TEMP classInstanceTemp = ((AST_VAR_FIELD)var).IRmeHelper("L");
             // set the field with the new expression
-			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, src, variableDataMemberName, offset, IR.getInstance().currLine));
+			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, newTemp, variableDataMemberName, offset, IR.getInstance().currLine));
 			
 		}
 		return null; 

@@ -11,6 +11,7 @@ public class IRcommand_PrintInt extends IRcommand {
 	public IRcommand_PrintInt(TEMP t, int line) {
 		this.t = t;
 		this.lineNumber = line;
+		use.add(t.toString());
 	}
 
 	public void printIR() {

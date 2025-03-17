@@ -65,12 +65,18 @@ public class Main
 			/* PRINT IR CMDS                                                                       */
 			/* Comment out next line to print the IR Commands (true means next cmds also printed)  */
 			System.out.println("========IR CMDS========");
-			IR.getInstance().controlGraph.printControlGraph(false);                             
+			IR.getInstance().controlGraph.printControlGraph(true);                             
 			/***************************************************************************************/
 
 			/***********************/
 			/* [9] MIPS the IR ... */
 			/***********************/
+			InterferenceGraph ig = new InterferenceGraph();
+			ig.buildInterferenceGraph();
+			Map<String, Integer> regMap = ig.allocateRegisters();
+			System.out.println("========REGISTER ALLOCATION========");
+			System.out.println(regMap);
+			IR.getInstance().setRegMap(regMap);
 			IR.getInstance().MIPSme();
 
 			/**************************************/

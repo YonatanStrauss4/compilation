@@ -108,12 +108,44 @@ public class AST_STMT_ASSIGN extends AST_STMT
 		// if the variable is a simple variable
 		if(var instanceof AST_VAR_SIMPLE){
 
+			String varName = ((AST_VAR_SIMPLE)var).varName;
 			// get the offset and IRme the expression
-			int offset = OFFSET_TABLE.getInstance().findVariableOffset(((AST_VAR_SIMPLE)var).varName);	
+			int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);	
 			TEMP src = exp.IRme();	
 
-			// add IR command to store the expression in the variable
-			IR.getInstance().Add_IRcommand(new IRcommand_Store(((AST_VAR_SIMPLE)var).varName, src, offset, IR.getInstance().currLine));
+
+			if (offset == -1){
+				// we need now to check if maybe we are in a method and the variable is a class instance
+				TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
+
+				// we are in a method
+				if(currClass != null){
+					String className = currClass.name;
+					int fieldOffset = CLASSES_MAP.getInstance().getFieldOffset(className, varName);
+
+					// the variable is a field of the class or the classes it extends
+					if(fieldOffset != -1){
+						IR.getInstance().Add_IRcommand(new IRcommand_Store_Field(varName, src, fieldOffset, IR.getInstance().currLine));
+					}
+				}
+
+				// the variable is a global variable
+				else{
+					IR.getInstance().Add_IRcommand(new IRcommand_Store_Global(varName, src, IR.getInstance().currLine));
+				}
+
+			}
+		
+			// the variable is a function parameter
+			else if(offset > 0){
+				IR.getInstance().Add_IRcommand(new IRcommand_Store_param(varName, src, offset, IR.getInstance().currLine));
+			}
+
+			// the variable is a local variable
+			else{
+				IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(varName, src, offset, IR.getInstance().currLine));
+			}
+				// add IR command to store the expression in the variable
 		}
 
 		// if the variable is a subscript variable

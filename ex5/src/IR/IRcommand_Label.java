@@ -15,6 +15,7 @@ public class IRcommand_Label extends IRcommand {
 		this.isScopeStart = isScopeStart;
 	}
 
+
 	public void printIR() {
 		System.out.println(label_name + ":");
 	}

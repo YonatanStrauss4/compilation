@@ -16,6 +16,12 @@ public class IRcommand_Call_Function_Args_Not_Void extends IRcommand {
 		this.dst = dst;
         this.args = args;
 		this.lineNumber = line;
+		if (dst != null) {
+		def.add(dst.toString());
+		}
+		for (TEMP arg : args) {
+			use.add(arg.toString());
+		}
     }
 
 	public void printIR(){
@@ -23,9 +29,9 @@ public class IRcommand_Call_Function_Args_Not_Void extends IRcommand {
 	}
 
 	public void MIPSme(){
-		for (int i = 0; i < args.size(); i++) {
+		for (int i = args.size() - 1; i >= 0; i--) {
 			TEMP arg = args.get(i);
-			MIPSGenerator.getInstance().storeParam(arg);
+			MIPSGenerator.getInstance().storeParamForCall(arg);
 		}
 
 		MIPSGenerator.getInstance().jalNotVoid(dst, funcName, args.size());

@@ -109,6 +109,9 @@ public class AST_STMT_IF extends AST_STMT
 		IRcommand lbl_end_cmd = new IRcommand_Label(label_end,IR.getInstance().currLine,false);
 		IR.getInstance().Add_IRcommand(lbl_end_cmd);
 
+		IR.getInstance().controlGraph.update_CFG(jmp_if_eq_zero,lbl_end_cmd);
+
+
 		// Pop scope
 		OFFSET_TABLE.getInstance().endInnerScope();
 	
