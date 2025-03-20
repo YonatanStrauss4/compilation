@@ -116,8 +116,6 @@ public class AST_VAR_SIMPLE extends AST_VAR
 		if (offset == -1){
 			// we need now to check if maybe we are in a method and the variable is a class instance
 			TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
-																			System.out.println("775555555555777777" + varName);	
-
 
 			// we are in a method
 			if(currClass != null){

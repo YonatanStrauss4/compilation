@@ -71,7 +71,13 @@ public class AST_STMT_RETURN_NO_EXP extends AST_STMT
         String funcName = SYMBOL_TABLE.getInstance().get_current_function().name;
 
         // add the return command to the IR
-        IR.getInstance().Add_IRcommand(new IRcommand_Return_No_Exp(funcName, IR.getInstance().currLine));
+        if(SYMBOL_TABLE.getInstance().get_inside_class()){
+            String clsName = SYMBOL_TABLE.getInstance().get_current_class().name;
+            IR.getInstance().Add_IRcommand(new IRcommand_Return_No_Exp(funcName, true, clsName, IR.getInstance().currLine));
+        }
+        else{
+            IR.getInstance().Add_IRcommand(new IRcommand_Return_No_Exp(funcName, false, null, IR.getInstance().currLine));
+        }
         return null; 
     }
 }

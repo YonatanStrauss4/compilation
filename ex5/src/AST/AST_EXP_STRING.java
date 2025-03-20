@@ -51,7 +51,7 @@ public class AST_EXP_STRING extends AST_EXP
 	{
 		// deleting the quotes from the string
 		String strValue = value.substring(1, value.length() - 1);
-
+		System.out.println("STRING111111: " + strValue);
 		// if the string is not in the map, add it
 		if(!MAP_OF_STRINGS.getInstance().containsKey(value)){
 

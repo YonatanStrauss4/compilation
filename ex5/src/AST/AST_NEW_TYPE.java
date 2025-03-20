@@ -1,5 +1,7 @@
 package AST;
 import TYPES.*;
+import TEMP.*;
+import IR.*;
 
 public class AST_NEW_TYPE extends AST_NEW_EXP
 {
@@ -56,6 +58,16 @@ public class AST_NEW_TYPE extends AST_NEW_EXP
     {
         // semant the type
         return type.SemantMe();
+    }
+
+    public TEMP IRme()
+    {
+        TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+        // get the type name
+        String typeName = getTypeName();
+
+        IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(dst, typeName, IR.getInstance().currLine));
+        return dst;
     }
     
     public String getTypeName()

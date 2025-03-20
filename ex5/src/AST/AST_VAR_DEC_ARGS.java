@@ -185,8 +185,6 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 
 	public TEMP IRme() {
 
-
-
 		// check if variable is global, if so, enter it to the table of global variables
 		if(!SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
 			if(t instanceof AST_TYPE_INT){
@@ -209,7 +207,14 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
                 OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
             }
 			else{
-				OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+				String typeName = ((AST_TYPE_ID)t).typeName;
+				TYPE classEntry = SYMBOL_TABLE.getInstance().find(typeName);
+				if(classEntry != null){
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", true, typeName);
+				}
+				else{
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+				}
 			}
 		}
 

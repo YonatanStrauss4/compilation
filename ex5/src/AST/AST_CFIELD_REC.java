@@ -79,17 +79,16 @@ public class AST_CFIELD_REC extends AST_Node
 
 	public TEMP IRme()
 	{
-		if (cF != null) 
+		// First, generate IR for the current class field `cF`
+		TEMP t = cF.IRme();
+
+		// If `cFR` is not null, generate IR for the rest of the class fields
+		if (cFR != null)
 		{
-			cF.IRme();
+			cFR.IRme(); // Recursively call IRme on the next part of the list
 		}
 
-		if (cFR != null) 
-		{
-			cFR.IRme();
-		}
-		
-		return null;
+		return t;  // Return the TEMP generated for `cF`, or null if no TEMP was generated
 	}
 
 

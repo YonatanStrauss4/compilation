@@ -104,8 +104,10 @@ public class AST_NEW_TYPE_EXP_IN_BRACKS extends AST_NEW_EXP
 
     public TEMP IRme()
 	{
+        TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
         // IRme the size of the array
         TEMP size = arraySize.IRme();
-        return size;
+        IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(dst, size, IR.getInstance().currLine));
+        return dst;
 	}
 }

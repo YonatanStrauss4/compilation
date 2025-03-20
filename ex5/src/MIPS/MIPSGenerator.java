@@ -319,7 +319,8 @@ public class MIPSGenerator
 	public void loadGlobal(TEMP dst, String var_name)
 	{
 		int idx = getAllocatedReg(dst.toString());
-		fileWriter.format("\tlw $t%d, g_%s\n", idx, var_name);
+		fileWriter.format("\tla $t%d, g_%s\n", idx, var_name);
+		fileWriter.format("\tlw $t%d, 0($t%d)\n", idx, idx);
 	}
 
 	// load global string
@@ -340,7 +341,7 @@ public class MIPSGenerator
 	public void loadField(TEMP dst, int offset)
 	{
 		int idx = getAllocatedReg(dst.toString());
-		fileWriter.format("\tlw $s0, 8($sp)\n");
+		fileWriter.format("\tlw $s0, 8($fp)\n");
 		fileWriter.format("\tlw $t%d, %d($s0)\n", idx, offset);
 	}
 
@@ -355,7 +356,8 @@ public class MIPSGenerator
 	public void storeGlobal(TEMP src, String var_name)
 	{
 		int idxsrc = getAllocatedReg(src.toString());
-		fileWriter.format("\tsw $t%d, 0(g_%s)\n",idxsrc ,var_name);
+		fileWriter.format("\tla $s0, g_%s\n", var_name);
+		fileWriter.format("\tsw $t%d, 0($s0)\n",idxsrc);
 	}
 
 	// store function parameter
@@ -374,7 +376,7 @@ public class MIPSGenerator
 	public void storeField(TEMP src, int offset)
 	{
 		int idxsrc = getAllocatedReg(src.toString());
-		fileWriter.format("\tlw $s0, 8($sp)\n");
+		fileWriter.format("\tlw $s0, 8($fp)\n");
 		fileWriter.format("\tsw $t%d, %d($s0)\n",idxsrc ,offset);
 	}
 
@@ -430,7 +432,7 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, 4\n");
 		fileWriter.format("\tmove $t%d, $v0\n", idxdst);
@@ -442,7 +444,7 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, %d\n", (numOfArgs+1)*WORD_SIZE);
 	}
@@ -452,7 +454,7 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, 4\n");
 	}
