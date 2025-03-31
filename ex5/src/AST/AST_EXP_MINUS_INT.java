@@ -57,6 +57,7 @@ public class AST_EXP_MINUS_INT extends AST_EXP
 	public TYPE SemantMe()
 	{
 		// return TYPE_INT
+		varType = TYPE_INT.getInstance().name;
 		return TYPE_INT.getInstance();
 	}
 

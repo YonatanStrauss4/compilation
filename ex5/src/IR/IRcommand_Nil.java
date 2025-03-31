@@ -1,6 +1,7 @@
 package IR;
 import java.util.*;
 import TEMP.*;
+import MIPS.*;
 
 public class IRcommand_Nil extends IRcommand {
 
@@ -18,6 +19,9 @@ public class IRcommand_Nil extends IRcommand {
         System.out.println(dst.toString() + " := Nil");
     }
 
-    public void MIPSme(){}
+    public void MIPSme()
+    {
+        MIPSGenerator.getInstance().li(dst, 0);
+    }
 
 }

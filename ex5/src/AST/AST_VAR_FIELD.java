@@ -114,7 +114,6 @@ public class AST_VAR_FIELD extends AST_VAR
 
 		// need to find the class name
 		String className = this.varClassName;
-		System.out.println("className: " + className);
 
 		//get the offset of the field
 		int offset = CLASSES_MAP.getInstance().getFieldOffset(className, variableDataMemberName);
@@ -122,19 +121,9 @@ public class AST_VAR_FIELD extends AST_VAR
 		// check if the field is a class instance
 		OFFSET_TABLE_ENTRY checkIfFieldIsClassInstance = OFFSET_TABLE.getInstance().findClassInstance(variableDataMemberName);
 
-		// if the field is a class instance, we need to return t (recursive)
-		if(checkIfFieldIsClassInstance == null && side.equals("L"))
-		{
-			IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, offset, IR.getInstance().currLine));
-			return t;
-		}
-
-		// if the field is not a class instance, we need to return dst (no recursion)
-		else
-		{
-			IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, offset, IR.getInstance().currLine));
-			return dst;
-		}
+		
+		IR.getInstance().Add_IRcommand(new IRcommand_Access_Field(dst, t, variableDataMemberName, offset, IR.getInstance().currLine));
+		return dst;
 	}
 
 	// IRme helper to tell that we are in the left side of the assignmnet

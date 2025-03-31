@@ -20,13 +20,14 @@ public class MIPSGenerator
 	private int WORD_SIZE = 4;
     private PrintWriter fileWriter;
     private PrintWriter dataWriter;
-    private static final String DIRNAME = "./output/";
-    private static final String MIPS_FILENAME = "MIPS.txt";
+    private static String DIRNAME = "./output/";
+    private static String MIPS_FILENAME;
     private static final String DATA_FILENAME = "MIPS_data.txt";
 	Map<String, Integer> regMap = IR.getInstance().getRegMap();
 
 
 	public int getAllocatedReg(String regName) {
+		System.out.println("getAllocatedReg8888: " + regName);
 		if (regMap.containsKey(regName)) {
 			return regMap.get(regName);
 		}
@@ -319,7 +320,8 @@ public class MIPSGenerator
 	public void loadGlobal(TEMP dst, String var_name)
 	{
 		int idx = getAllocatedReg(dst.toString());
-		fileWriter.format("\tlw $t%d, g_%s\n", idx, var_name);
+		fileWriter.format("\tla $t%d, g_%s\n", idx, var_name);
+		fileWriter.format("\tlw $t%d, 0($t%d)\n", idx, idx);
 	}
 
 	// load global string
@@ -340,7 +342,7 @@ public class MIPSGenerator
 	public void loadField(TEMP dst, int offset)
 	{
 		int idx = getAllocatedReg(dst.toString());
-		fileWriter.format("\tlw $s0, 8($sp)\n");
+		fileWriter.format("\tlw $s0, 8($fp)\n");
 		fileWriter.format("\tlw $t%d, %d($s0)\n", idx, offset);
 	}
 
@@ -355,7 +357,8 @@ public class MIPSGenerator
 	public void storeGlobal(TEMP src, String var_name)
 	{
 		int idxsrc = getAllocatedReg(src.toString());
-		fileWriter.format("\tsw $t%d, 0(g_%s)\n",idxsrc ,var_name);
+		fileWriter.format("\tla $s0, g_%s\n", var_name);
+		fileWriter.format("\tsw $t%d, 0($s0)\n",idxsrc);
 	}
 
 	// store function parameter
@@ -374,7 +377,7 @@ public class MIPSGenerator
 	public void storeField(TEMP src, int offset)
 	{
 		int idxsrc = getAllocatedReg(src.toString());
-		fileWriter.format("\tlw $s0, 8($sp)\n");
+		fileWriter.format("\tlw $s0, 8($fp)\n");
 		fileWriter.format("\tsw $t%d, %d($s0)\n",idxsrc ,offset);
 	}
 
@@ -430,7 +433,7 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, 4\n");
 		fileWriter.format("\tmove $t%d, $v0\n", idxdst);
@@ -442,7 +445,7 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, %d\n", (numOfArgs+1)*WORD_SIZE);
 	}
@@ -452,10 +455,56 @@ public class MIPSGenerator
 		fileWriter.format("\tsubu $sp, $sp, 4\n");
 		fileWriter.format("\tsw $t%d, 0($sp)\n", idxvar);
 		fileWriter.format("\tlw $s0, 0($t%d)\n", idxvar);
-		fileWriter.format("\t$s1, %d($s0)\n", offset);
+		fileWriter.format("\tlw $s1, %d($s0)\n", offset);
 		fileWriter.format("\tjalr $s1\n");
 		fileWriter.format("\taddu $sp, $sp, 4\n");
 	}
+
+	public void jokerCallNotArgsVoid(int offset) {
+		fileWriter.format("\tlw $s0, 8($fp)\n");  // Load 'this'
+		fileWriter.format("\tsubu $sp, $sp, 4\n");
+		fileWriter.format("\tsw $s0, 0($sp)\n");
+		fileWriter.format("\tlw $s1, 0($s0)\n");  // Load VMT
+		fileWriter.format("\tlw $s2, %d($s1)\n", offset);  // Load method address from VMT
+		fileWriter.format("\tjalr $s2\n");  // Jump to method
+		fileWriter.format("\taddu $sp, $sp, 4\n");
+	}
+
+	public void jokerCallArgsVoid(int offset, int numOfArgs) {
+		fileWriter.format("\tlw $s0, 8($fp)\n");  // Load 'this'
+		fileWriter.format("\tsubu $sp, $sp, 4\n");
+		fileWriter.format("\tsw $s0, 0($sp)\n");
+		fileWriter.format("\tlw $s1, 0($s0)\n");  // Load VMT
+		fileWriter.format("\tlw $s2, %d($s1)\n", offset);  // Load method address from VMT
+		fileWriter.format("\tjalr $s2\n");  // Jump to method
+		fileWriter.format("\taddu $sp, $sp, %d\n", (numOfArgs+1)*WORD_SIZE);
+	}
+
+	public void jokerCallArgsNotVoid(TEMP dst, int offset, int numOfArgs){
+		int idxdst = getAllocatedReg(dst.toString());
+		fileWriter.format("\tlw $s0, 8($fp)\n");  // Load 'this'
+		fileWriter.format("\tsubu $sp, $sp, 4\n");
+		fileWriter.format("\tsw $s0, 0($sp)\n");
+		fileWriter.format("\tlw $s1, 0($s0)\n");  // Load VMT
+		fileWriter.format("\tlw $s2, %d($s1)\n", offset);  // Load method address from VMT
+		fileWriter.format("\tjalr $s2\n");  // Jump to method
+		fileWriter.format("\taddu $sp, $sp, %d\n", (numOfArgs+1)*WORD_SIZE);
+		fileWriter.format("\tmove $t%d, $v0\n", idxdst);
+	} 
+
+	public void jokerCallNotArgsNotVoid(TEMP dst, int offset){
+		int idxdst = getAllocatedReg(dst.toString());
+		fileWriter.format("\tlw $s0, 8($fp)\n");  // Load 'this'
+		fileWriter.format("\tsubu $sp, $sp, 4\n");
+		fileWriter.format("\tsw $s0, 0($sp)\n");
+		fileWriter.format("\tlw $s1, 0($s0)\n");  // Load VMT
+		fileWriter.format("\tlw $s2, %d($s1)\n", offset);  // Load method address from VMT
+		fileWriter.format("\tjalr $s2\n");  // Jump to method
+		fileWriter.format("\taddu $sp, $sp, 4\n");
+		fileWriter.format("\tmove $t%d, $v0\n", idxdst);
+	} 
+
+
 
 
 	public void addStrings(TEMP dst, TEMP src1, TEMP src2) {
@@ -799,6 +848,30 @@ public class MIPSGenerator
 	/*****************************/
 	protected MIPSGenerator() {}
 
+
+	public void setOutoutputFileName(String name)
+	{
+		try {
+			MIPS_FILENAME = name;
+            instance.fileWriter = new PrintWriter(name);
+            instance.dataWriter = new PrintWriter(DIRNAME + DATA_FILENAME);
+
+            instance.dataWriter.println(".data");
+			instance.dataWriter.format("\n");
+            instance.dataWriter.format("\tstring_access_violation: .asciiz \"Access Violation\"\n");
+            instance.dataWriter.format("\tstring_illegal_div_by_0: .asciiz \"Illegal Division By Zero\"\n");
+            instance.dataWriter.format("\tstring_invalid_ptr_dref: .asciiz \"Invalid Pointer Dereference\"\n");
+			instance.dataWriter.format("\n");
+
+			instance.dataWriter.format("\t# Global variables\n");
+			instance.dataWriter.format("\n");
+			instance.dataWriter.format("\t max: .word 32767\n");
+			instance.dataWriter.format("\t min: .word -32768\n");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+	}
 	/******************************/
 	/* GET SINGLETON INSTANCE ... */
 	/******************************/
@@ -808,33 +881,18 @@ public class MIPSGenerator
 	{
 		 if (instance == null) {
             instance = new MIPSGenerator();
-            try {
-                instance.fileWriter = new PrintWriter(DIRNAME + MIPS_FILENAME);
-                instance.dataWriter = new PrintWriter(DIRNAME + DATA_FILENAME);
-
-                instance.dataWriter.println(".data");
-				instance.dataWriter.format("\n");
-                instance.dataWriter.format("\tstring_access_violation: .asciiz \"Access Violation\"\n");
-                instance.dataWriter.format("\tstring_illegal_div_by_0: .asciiz \"Illegal Division By Zero\"\n");
-                instance.dataWriter.format("\tstring_invalid_ptr_dref: .asciiz \"Invalid Pointer Dereference\"\n");
-				instance.dataWriter.format("\n");
-
-				instance.dataWriter.format("\t# Global variables\n");
-				instance.dataWriter.format("\n");
-				instance.dataWriter.format("\t max: .word 32767\n");
-				instance.dataWriter.format("\t min: .word -32768\n");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         return instance;
     }
 
 	// merge the data and text sections into a single file called MIPS.txt
 	private void mergeFiles() {
+		System.out.println("Merging files...");	
+		System.out.println("mipsfile: " + MIPS_FILENAME);
+		System.out.println("datafile: " + DATA_FILENAME);
+		System.out.println("dir: " + DIRNAME);
         try (BufferedWriter mergedWriter = new BufferedWriter(new FileWriter(DIRNAME + "MIPS_final.txt"));
-             BufferedWriter textWriter = new BufferedWriter(new FileWriter(DIRNAME + "MIPS.txt", true));
+             BufferedWriter textWriter = new BufferedWriter(new FileWriter(MIPS_FILENAME, true));
              BufferedWriter dataReader = new BufferedWriter(new FileWriter(DIRNAME + "MIPS_data.txt", true))) {
 
             // Write .data section first
@@ -846,7 +904,7 @@ public class MIPSGenerator
             dataScanner.close();
 
             // Write .text section
-            File textFile = new File(DIRNAME + MIPS_FILENAME);
+            File textFile = new File(MIPS_FILENAME);
             java.util.Scanner textScanner = new java.util.Scanner(textFile);
             while (textScanner.hasNextLine()) {
                 mergedWriter.write(textScanner.nextLine() + "\n");

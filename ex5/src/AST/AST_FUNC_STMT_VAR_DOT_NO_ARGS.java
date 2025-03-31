@@ -65,6 +65,7 @@ public class AST_FUNC_STMT_VAR_DOT_NO_ARGS extends AST_FUNC_STMT
     {
         // semant the variable to get his type
         TYPE varType = var.SemantMe();
+        var.varClassName = varType.name;
 
         // check if the variable is TYPE_CLASS
 		if(!(varType instanceof TYPE_CLASS)){
@@ -83,7 +84,7 @@ public class AST_FUNC_STMT_VAR_DOT_NO_ARGS extends AST_FUNC_STMT
                 }
             }
         }
-       
+       System.out.println("funcSearch: " + funcName);
         TYPE funcSearch = ((TYPE_CLASS)varType).findFunctionInInheritanceTree(funcName);
         if (funcSearch == null){
             System.out.format(">> ERROR(%d) %s is not a data memeber of the class or the classes it extends\n", this.line, funcName);
@@ -97,7 +98,8 @@ public class AST_FUNC_STMT_VAR_DOT_NO_ARGS extends AST_FUNC_STMT
     public TEMP IRme()
     {
         TEMP t = var.IRme();
-        int offset = 1; // need to changeeeeee 
+        String className = var.varClassName;
+        int offset = CLASSES_MAP.getInstance().getMethodOffset(className, funcName);
         IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_No_Args_Void(t, funcName, offset, IR.getInstance().currLine));
         return null;
     }   

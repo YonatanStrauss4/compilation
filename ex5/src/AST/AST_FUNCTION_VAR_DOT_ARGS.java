@@ -73,6 +73,7 @@ public class AST_FUNCTION_VAR_DOT_ARGS extends AST_FUNCTION
     {
         // semant the variable to get his type
         TYPE varType = var.SemantMe();
+        var.varClassName = varType.name;
 
         // check if the variable is TYPE_CLASS
 		if(!(varType instanceof TYPE_CLASS)){
@@ -118,7 +119,8 @@ public class AST_FUNCTION_VAR_DOT_ARGS extends AST_FUNCTION
         TEMP t = var.IRme();
         List<TEMP> args = funcArgs.IRme(new ArrayList<>());
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
-        int offset = 1; // need to changeeeeee
+        String className = var.varClassName;
+        int offset = CLASSES_MAP.getInstance().getMethodOffset(className, funcName);
         IR.getInstance().Add_IRcommand(new IRcommand_Virtual_Call_Args_Not_Void(dst, t, args, offset, funcName, IR.getInstance().currLine));
         return dst;
     }

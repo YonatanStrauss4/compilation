@@ -44,6 +44,7 @@ public class AST_EXP_NIL extends AST_EXP
 	public TYPE SemantMe()
 	{
 		// return TYPE_NIL
+		varType = TYPE_NIL.getInstance().name;
 		return TYPE_NIL.getInstance();
 	}
 

@@ -39,7 +39,9 @@ public class AST_EXP_FUNCTION extends AST_EXP
     public TYPE SemantMe() {
         // semant the function call
 		if(funcExp != null) {
-            return funcExp.SemantMe();
+            TYPE t = funcExp.SemantMe();
+            varType = t.name;
+            return t;
         }
         return null;
 	}

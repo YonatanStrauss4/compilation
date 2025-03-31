@@ -107,25 +107,32 @@ public class AST_STMT_ASSIGN extends AST_STMT
 	public TEMP IRme(){
 		// if the variable is a simple variable
 		if(var instanceof AST_VAR_SIMPLE){
-
 			String varName = ((AST_VAR_SIMPLE)var).varName;
+
 			// get the offset and IRme the expression
-			int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);	
+			int offset = 0;
+			if(SYMBOL_TABLE.getInstance().get_inside_class()){
+				offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 1);
+			}
+			else{
+				offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 0);
+			}
+
 			TEMP src = exp.IRme();	
-
-
 			if (offset == -1){
 				// we need now to check if maybe we are in a method and the variable is a class instance
 				TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
-
 				// we are in a method
 				if(currClass != null){
 					String className = currClass.name;
 					int fieldOffset = CLASSES_MAP.getInstance().getFieldOffset(className, varName);
-
 					// the variable is a field of the class or the classes it extends
 					if(fieldOffset != -1){
 						IR.getInstance().Add_IRcommand(new IRcommand_Store_Field(varName, src, fieldOffset, IR.getInstance().currLine));
+					}
+					// the variable is a global variable
+					else{
+						IR.getInstance().Add_IRcommand(new IRcommand_Store_Global(varName, src, IR.getInstance().currLine));
 					}
 				}
 
@@ -150,7 +157,6 @@ public class AST_STMT_ASSIGN extends AST_STMT
 
 		// if the variable is a subscript variable
 		if(var instanceof AST_VAR_SUBSCRIPT){
-
 			// IRme the relevant variables
 			TEMP index = ((AST_VAR_SUBSCRIPT)var).idxValue.IRme();
 			TEMP newVal = exp.IRme();
@@ -162,16 +168,15 @@ public class AST_STMT_ASSIGN extends AST_STMT
 
 		// if the variable is a field variable
 		if(var instanceof AST_VAR_FIELD){
-
 			// get the class instance, the data member name and IRme the expression and the variable
 			String variableDataMemberName = ((AST_VAR_FIELD)var).variableDataMemberName;
-			String classInstanceName = ((AST_VAR_SIMPLE)(((AST_VAR_FIELD)var).var)).varName;
-			OFFSET_TABLE_ENTRY clsInstance = OFFSET_TABLE.getInstance().findClassInstance(classInstanceName);
-			TEMP classInstanceTemp = ((AST_VAR_FIELD)var).IRmeHelper("L");
+			String classInstanceName = var.varClassName;
+			TYPE clsInstance = SYMBOL_TABLE.getInstance().find(classInstanceName);
+			TEMP classInstanceTemp = ((AST_VAR_FIELD)var).var.IRme();
 			TEMP src = exp.IRme();
 
 			// get the offset of the variable
-			int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.className, variableDataMemberName);
+			int offset = CLASSES_MAP.getInstance().getFieldOffset(clsInstance.name, variableDataMemberName);
 
 			// add IR command to set the field
 			IR.getInstance().Add_IRcommand(new IRcommand_Set_Field(classInstanceTemp, src, variableDataMemberName, offset, IR.getInstance().currLine));

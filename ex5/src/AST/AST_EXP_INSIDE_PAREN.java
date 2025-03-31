@@ -40,7 +40,9 @@ public class AST_EXP_INSIDE_PAREN extends AST_EXP
     public TYPE SemantMe() 
     {
         // semant the expression inside the parenthesis
-        return expInParen.SemantMe();
+        TYPE type = expInParen.SemantMe();
+        varType = type.name;
+        return type;
     }
 
     public TEMP IRme() 

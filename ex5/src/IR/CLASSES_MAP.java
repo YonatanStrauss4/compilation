@@ -32,10 +32,23 @@ public class CLASSES_MAP {
         return instance;
     }
 
-    // Insert a class with empty stacks
+    // Insert a class with inherited fields and methods from its parent
     public void insertClass(String className, String parentName) {
         if (!map.containsKey(className)) {
-            map.put(className, new ClassEntry(parentName));
+            ClassEntry newClassEntry = new ClassEntry(parentName);
+
+            // Inherit fields and methods from the parent class
+            if (parentName != null && map.containsKey(parentName)) {
+                ClassEntry parentEntry = map.get(parentName);
+
+                // Copy fields
+                newClassEntry.fields.addAll(parentEntry.fields);
+
+                // Copy methods
+                newClassEntry.methods.addAll(parentEntry.methods);
+            }
+
+            map.put(className, newClassEntry);
         }
     }
 
@@ -50,63 +63,41 @@ public class CLASSES_MAP {
         classEntry.fields.push(newField);
     }
 
-    // Insert a method into a class
     public void insertMethod(String className, String methodName) {
         ClassEntry classEntry = map.get(className);
         if (classEntry == null) {
             return;
         }
 
-        METHOD_ENTRY newMethod = new METHOD_ENTRY(methodName, className);
-        classEntry.methods.push(newMethod);
-
-    }
-
-
-    // Retrieve all fields (including inherited)
-    public List<FIELD_ENTRY> getFields(String className) {
-        List<FIELD_ENTRY> fields = new ArrayList<>();
-        collectFields(className, fields, new HashSet<>());
-        return fields;
-    }
-
-    private void collectFields(String className, List<FIELD_ENTRY> fields, Set<String> visitedClasses) {
-        if (className == null || visitedClasses.contains(className)) return;
-
-        ClassEntry classEntry = map.get(className);
-        if (classEntry == null) return;  // Avoid NullPointerException
-
-        visitedClasses.add(className);
-
-        // First, recursively collect fields from the parent class
-        if (classEntry.parentName != null && !classEntry.parentName.isEmpty()) {
-            collectFields(classEntry.parentName, fields, visitedClasses);
-        }
-
-        // Then add the fields from the current class
-        fields.addAll(classEntry.fields);
-    }
-
-// Retrieve all methods (including inherited, without duplicates)
-    public List<METHOD_ENTRY> getMethods(String className) {
-        List<METHOD_ENTRY> methods = new ArrayList<>();
-        collectMethods(className, methods, new HashSet<>());
-        return methods;
-    }
-
-    private void collectMethods(String className, List<METHOD_ENTRY> methods, Set<String> visitedClasses) {
-        if (className == null || visitedClasses.contains(className)) return;
-
-        visitedClasses.add(className);
-        ClassEntry classEntry = map.get(className);
-        if (classEntry != null) {
-            for (METHOD_ENTRY method : classEntry.methods) {
-                if (methods.stream().noneMatch(m -> m.methodName.equals(method.methodName))) {
-                    methods.add(method);
-                }
+        // Iterate through the stack to check for the method
+        for (int i = 0; i < classEntry.methods.size(); i++) {
+            if (classEntry.methods.get(i).methodName.equals(methodName)) {
+                // Modify the method entry in place instead of removing and reinserting
+                classEntry.methods.set(i, new METHOD_ENTRY(methodName, className));
+                return;
             }
-            collectMethods(classEntry.parentName, methods, visitedClasses);
         }
+
+        // If the method doesn't exist, push a new one onto the stack
+        classEntry.methods.push(new METHOD_ENTRY(methodName, className));
+    }
+
+    // Retrieve all fields (only those defined in the class, no inherited fields)
+    public List<FIELD_ENTRY> getFields(String className) {
+        ClassEntry classEntry = map.get(className);
+        if (classEntry == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(classEntry.fields);
+    }
+
+    // Retrieve all methods (only those defined in the class, no inherited methods)
+    public List<METHOD_ENTRY> getMethods(String className) {
+        ClassEntry classEntry = map.get(className);
+        if (classEntry == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(classEntry.methods);
     }
 
     // get field offset
@@ -114,7 +105,7 @@ public class CLASSES_MAP {
         List<FIELD_ENTRY> fields = getFields(className);
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).fieldName.equals(fieldName)) {
-                return (i+1)*4;
+                return (i + 1) * 4;
             }
         }
         return -1;
@@ -125,17 +116,39 @@ public class CLASSES_MAP {
         return getFields(className).size();
     }
 
+    // get method offset
+    public int getMethodOffset(String className, String methodName) {
+        List<METHOD_ENTRY> methods = getMethods(className);
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i).methodName.equals(methodName)) {
+                return i * 4;
+            }
+        }
+        return -1;
+    }
+
+    // get number of methods for a specific class
+    public int getNumOfMethods(String className) {
+        return getMethods(className).size();
+    }
+
     // print the classes map
     public void printTable() {
         System.out.println("CLASSES MAP:");
         for (Map.Entry<String, ClassEntry> entry : map.entrySet()) {
             System.out.println("Class: " + entry.getKey() + " | Parent: " + entry.getValue().parentName);
             System.out.println("Fields:");
-            for (FIELD_ENTRY field : entry.getValue().fields) {
+            // Print fields from bottom to top
+            List<FIELD_ENTRY> fields = new ArrayList<>(entry.getValue().fields);
+            Collections.reverse(fields);
+            for (FIELD_ENTRY field : fields) {
                 System.out.println(field);
             }
             System.out.println("Methods:");
-            for (METHOD_ENTRY method : entry.getValue().methods) {
+            // Print methods from bottom to top
+            List<METHOD_ENTRY> methods = new ArrayList<>(entry.getValue().methods);
+            Collections.reverse(methods);
+            for (METHOD_ENTRY method : methods) {
                 System.out.println(method);
             }
         }

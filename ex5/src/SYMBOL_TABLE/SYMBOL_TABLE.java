@@ -207,6 +207,21 @@ public class SYMBOL_TABLE
 	
 		return null; // Return null if not found
 	}
+
+	public String findLowestClassWithMethod(TYPE_CLASS cls, String methodName){
+		TYPE_CLASS current = cls;
+		while (current != null) {
+			TYPE_LIST methods = current.data_members;
+			TYPE e = methods.search(methodName); // Search for the method in the current class
+			if (e != null) {
+				return current.name; // Return the class name and method name if found
+			}
+			current = current.father; // Move up the inheritance tree
+		}
+		return null; // Return null if not found
+	}
+
+		
 	
 	
 	public static int n=0;

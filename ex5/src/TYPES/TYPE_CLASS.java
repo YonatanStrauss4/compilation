@@ -1,4 +1,5 @@
 package TYPES;
+import SYMBOL_TABLE.*;
 
 public class TYPE_CLASS extends TYPE
 {
@@ -63,6 +64,13 @@ public class TYPE_CLASS extends TYPE
 	}
 
 	public TYPE findFunctionInInheritanceTree(String name){
+		TYPE_CLASS_VAR_DEC_LIST t = SYMBOL_TABLE.getInstance().currentClassFunctionMembers;
+		while(t != null && t.head != null){
+			if(t.head.name.equals(name)){
+				return (TYPE_FUNCTION)(t.head.type);
+			}
+			t = t.tail;
+		}
 		TYPE_CLASS curr_father = this;
 		while(curr_father != null){
 			TYPE_FUNCTION func = curr_father.findFunction(name);
@@ -75,6 +83,13 @@ public class TYPE_CLASS extends TYPE
 	}
 
 	public TYPE findVariableInInheritanceTree(String name){
+		TYPE_CLASS_VAR_DEC_LIST t = SYMBOL_TABLE.getInstance().currentClassVariableMembers;
+		while(t != null && t.head != null){
+			if(t.head.name.equals(name)){
+				return (TYPE_CLASS_VAR_DEC)(t.head.type);
+			}
+			t = t.tail;
+		}
 		TYPE_CLASS curr_father = this;
 		while(curr_father != null){
 			TYPE_CLASS_VAR_DEC var = curr_father.findVariable(name);

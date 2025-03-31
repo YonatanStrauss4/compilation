@@ -14,7 +14,7 @@ public class IRcommand_new_Array_Alloc extends IRcommand {
 		this.lineNumber = line;
         this.arraySize = arraySize;
 		this.dst = dst;
-		def.add(dst.toString());
+		use.add(dst.toString());
 		use.add(arraySize.toString());
 	}
 

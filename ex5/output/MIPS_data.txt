@@ -8,6 +8,13 @@
 
 	 max: .word 32767
 	 min: .word -32768
+	str_Having: .asciiz "Having"
+	g_s1: .word str_Having
+	str_said: .asciiz "said"
+	g_s2: .word str_said
+	str_that: .asciiz "that"
+	g_s3: .word str_that
+	str_Citroen: .asciiz "Citroen"
 
 .text
 

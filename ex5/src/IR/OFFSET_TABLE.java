@@ -52,7 +52,7 @@ public class OFFSET_TABLE {
     }
 
     // Method to find the offset of a variable
-    public int findVariableOffset(String varName) {
+    public int findVariableOffset(String varName, int k) {
         ListIterator<OFFSET_TABLE_ENTRY> iterator = offsetTable.listIterator(offsetTable.size());
         while (iterator.hasPrevious()) {
             OFFSET_TABLE_ENTRY entry = iterator.previous();
@@ -67,7 +67,7 @@ public class OFFSET_TABLE {
             if ("FUNCTION".equals(entry.type) && entry.args != null) {
                 for (int i = 0; i < entry.args.size(); i++) {
                     if (entry.args.get(i).equals(varName)) {
-                        return i * 4 + 8;
+                        return (i+k) * 4 + 8;
                     }
                 }
             }

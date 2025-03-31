@@ -171,23 +171,18 @@ public class AST_VAR_DEC_NEW_EXP_ARGS extends AST_VAR_DEC
         }
 
         // IRme for new_exp
-        TEMP new_exp_temp = new_exp.IRme();
-
-        // get a Fresh TEMP
-        TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
+        TEMP dst = new_exp.IRme();
 
         // get the offset of the variable
-        int offset = OFFSET_TABLE.getInstance().findVariableOffset(variable);
+        int offset = OFFSET_TABLE.getInstance().findVariableOffset(variable, 0);
 
         // check if the expression is a new array
         if(new_exp instanceof AST_NEW_TYPE_EXP_IN_BRACKS){
-            IR.getInstance().Add_IRcommand(new IRcommand_new_Array_Alloc(dst, new_exp_temp, IR.getInstance().currLine));
             IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(variable, dst, offset, IR.getInstance().currLine));
         }
         
         // the expression is a new class
         else{
-            IR.getInstance().Add_IRcommand(new IRcommand_new_Class_Alloc(dst, className, IR.getInstance().currLine));
             IR.getInstance().Add_IRcommand(new IRcommand_Store_Local(variable, dst, offset,IR.getInstance().currLine));
         }
 

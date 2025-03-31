@@ -179,7 +179,13 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
         String label_func_start = IRcommand.getFreshLabel(labelBuilder.toString());
 
         // Add function entry label IR command
-        IR.getInstance().Add_IRcommand(new IRcommand_DecFunction(label_func_start, 0, this.funcName, IR.getInstance().currLine));
+        if(SYMBOL_TABLE.getInstance().get_inside_class()){
+            String clsName = SYMBOL_TABLE.getInstance().get_current_class().name;
+            IR.getInstance().Add_IRcommand(new IRcommand_DecFunction(label_func_start, 0, this.funcName, true, clsName, IR.getInstance().currLine));
+        }
+        else{
+            IR.getInstance().Add_IRcommand(new IRcommand_DecFunction(label_func_start, 0, this.funcName, false, null, IR.getInstance().currLine));
+        }
 
         // set the current function in the symbol table and set inside function to true
         SYMBOL_TABLE.getInstance().set_inside_function(true);
@@ -201,7 +207,13 @@ public class AST_FUNC_DEC_ARGS extends AST_FUNC_DEC
         ((IRcommand_DecFunction)IR.getInstance().findLastDecFunctionCommand()).updateNumOfLocals(OFFSET_TABLE.getInstance().getNumOfLocals());
 
         // Add function exit label IR command, this will also invoke the epilogue in the MIPS code
-        IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, funcName, IR.getInstance().currLine));
+        if(SYMBOL_TABLE.getInstance().get_inside_class()){
+            String clsName = SYMBOL_TABLE.getInstance().get_current_class().name;
+            IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, funcName, true, clsName, IR.getInstance().currLine));
+        }
+        else{
+            IR.getInstance().Add_IRcommand(new IRcommand_EndFunction(label_func_end, funcName, false, null, IR.getInstance().currLine));
+        }
     
         // end the function scope in the symbol table and set inside function to false
         SYMBOL_TABLE.getInstance().set_current_function(null);

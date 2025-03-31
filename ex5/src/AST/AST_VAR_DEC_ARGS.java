@@ -185,8 +185,6 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 
 	public TEMP IRme() {
 
-
-
 		// check if variable is global, if so, enter it to the table of global variables
 		if(!SYMBOL_TABLE.getInstance().get_inside_function() && !SYMBOL_TABLE.getInstance().get_inside_class()){
 			if(t instanceof AST_TYPE_INT){
@@ -209,7 +207,14 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
                 OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
             }
 			else{
-				OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+				String typeName = ((AST_TYPE_ID)t).typeName;
+				TYPE classEntry = SYMBOL_TABLE.getInstance().find(typeName);
+				if(classEntry != null){
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", true, typeName);
+				}
+				else{
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+				}
 			}
 		}
 
@@ -229,11 +234,15 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 				s = s.substring(1, s.length() - 1);
 				CLASSES_MAP.getInstance().insertField(varName, clssName, "str_" + s, 0);
 			}
+			else{
+				CLASSES_MAP.getInstance().insertField(varName, clssName, "ID", 0);
+			}
 		}
 
 
-		// get the oofset of the variable (-1 if it is global)
-		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+		// get the offset of the variable (-1 if it is global)
+		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 0);
+
 		// the variable is global or a class member
 		if(offset == -1){
 			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
@@ -251,6 +260,11 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 				}
 				else if(exp instanceof AST_EXP_MINUS_INT){
 					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(-((AST_EXP_MINUS_INT)exp).i ,varName,IR.getInstance().currLine));
+				}
+			}
+			else{
+				if(exp instanceof AST_EXP_STRING){
+					exp.IRme();
 				}
 			}
 

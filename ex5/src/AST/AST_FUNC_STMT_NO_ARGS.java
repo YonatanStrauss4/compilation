@@ -91,8 +91,16 @@ public class AST_FUNC_STMT_NO_ARGS extends AST_FUNC_STMT
 
     public TEMP IRme()
     {
-        // call the function
-        IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Void(funcName, IR.getInstance().currLine));
+        if(SYMBOL_TABLE.getInstance().get_current_class() != null) {
+            // if we are in a class, we need to add the this pointer to the function call
+            String lowestClassName = SYMBOL_TABLE.getInstance().findLowestClassWithMethod(SYMBOL_TABLE.getInstance().get_current_class(), funcName);
+            int offset = CLASSES_MAP.getInstance().getMethodOffset(lowestClassName, funcName); 
+            IR.getInstance().Add_IRcommand(new IRcommand_Joker_Call_Function_No_Args_Void(lowestClassName, offset, IR.getInstance().currLine));
+        }
+        else{
+            // call the function
+            IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Void(funcName, IR.getInstance().currLine));
+        }
         return null;
     }   
 }

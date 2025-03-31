@@ -110,14 +110,18 @@ public class AST_VAR_SIMPLE extends AST_VAR
 		TEMP t = TEMP_FACTORY.getInstance().getFreshTEMP(); 
 
 		// get the offset of the variable
-		int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
+		int offset = 0;
+		if(SYMBOL_TABLE.getInstance().get_inside_class()){
+			offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 1);
+		}
+		else{
+			offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 0);
+		}
 		
 		// the variable is not a local variable
 		if (offset == -1){
 			// we need now to check if maybe we are in a method and the variable is a class instance
 			TYPE_CLASS currClass = SYMBOL_TABLE.getInstance().get_current_class();
-																			System.out.println("775555555555777777" + varName);	
-
 
 			// we are in a method
 			if(currClass != null){
@@ -129,7 +133,16 @@ public class AST_VAR_SIMPLE extends AST_VAR
 				if(fieldOffset != -1){
 					IR.getInstance().Add_IRcommand(new IRcommand_Load_Field(t, varName, fieldOffset, IR.getInstance().currLine));
 					return t;
-
+				}
+				// the variable is a global variable
+				else{
+					String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
+					if(type.equals("STRING")){
+						IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, true, IR.getInstance().currLine));
+					}
+					else{
+						IR.getInstance().Add_IRcommand(new IRcommand_Load_Global_Var(t, varName, false, IR.getInstance().currLine));
+					}
 				}
 			}
 

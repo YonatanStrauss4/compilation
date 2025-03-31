@@ -92,8 +92,19 @@ public class AST_FUNCTION_NO_ARGS extends AST_FUNCTION
 
     public TEMP IRme()
     {
+
         TEMP dst = TEMP_FACTORY.getInstance().getFreshTEMP();
         IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Not_Void(dst, funcName, IR.getInstance().currLine));
+        if(SYMBOL_TABLE.getInstance().get_current_class() != null) {
+            // if we are in a class, we need to add the this pointer to the function call
+            String lowestClassName = SYMBOL_TABLE.getInstance().findLowestClassWithMethod(SYMBOL_TABLE.getInstance().get_current_class(), funcName);
+            int offset = CLASSES_MAP.getInstance().getMethodOffset(lowestClassName, funcName); 
+            IR.getInstance().Add_IRcommand(new IRcommand_Joker_Call_Function_No_Args_Not_Void(dst, offset, lowestClassName, IR.getInstance().currLine));
+        }
+        else{
+            // call the function
+        IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_No_Args_Not_Void(dst, funcName, IR.getInstance().currLine));
+        }
         return dst;
     }   
 }

@@ -41,7 +41,7 @@ public class ControlFlowGraph {
 
 
     public void computeLiveness() {
-        printControlGraph(true);  // Print the control graph for debugging
+        printControlGraph(false);  // Print the control graph for debugging
 
         // Use TreeSet to store the commands, sorted by line number in descending order
         TreeSet<IRcommand> worklist = new TreeSet<>(new Comparator<IRcommand>() {

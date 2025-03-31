@@ -103,6 +103,7 @@ public class AST_EXP_BINOP extends AST_EXP
 				System.out.format(">> ERROR(%d) /,<,>,-,* operations must be between two integers\n", this.line);
 				printError(this.line);
 			}
+			varType = "int";
 			return TYPE_INT.getInstance();
 		}
 		
@@ -110,16 +111,18 @@ public class AST_EXP_BINOP extends AST_EXP
 		if(this.OP == 0){
 			// check if + operation is between two strings or integers
 			if(!(t1 instanceof TYPE_INT && t2 instanceof TYPE_INT) && !(t1 instanceof TYPE_STRING && t2 instanceof TYPE_STRING)){
-				System.out.format(">> ERROR(%d) + operation be between two integers or two strings\n", this.line);
+				System.out.format(">> ERROR(%d) + operation must be between two integers or two strings\n", this.line);
 				printError(this.line);
 			}
 
 			// if + integers, return TYPE_INT
 			if(t1 instanceof TYPE_INT){
+				varType = "int";
 				return TYPE_INT.getInstance();
 			}
 			this.isString = true;
 			//return TYPE_STRING
+			varType = "string";
 			return TYPE_STRING.getInstance();
 		}
 		
@@ -164,11 +167,13 @@ public class AST_EXP_BINOP extends AST_EXP
 				}
 			}
 			
-			// binop returns int (or strings, if we use + on strings)
+			// binop returns int
+			varType = "int";
 			return TYPE_INT.getInstance();
 		}
 
-		// binop returns int (or strings, if we use + on strings)
+		// binop returns int
+		varType = "int";
 		return TYPE_INT.getInstance();
 	}
 
@@ -240,19 +245,17 @@ public class AST_EXP_BINOP extends AST_EXP
 		// 6 - ==
 		if (OP == 6) 
 		{
-			// check if we are comparing strings
-			if((left instanceof AST_EXP_INT && right instanceof AST_EXP_INT) || ((left instanceof AST_EXP_VAR && right instanceof AST_EXP_VAR) && ((AST_EXP_VAR)left).varType.equals("int") && ((AST_EXP_VAR)right).varType.equals("int")))
+			if(left.varType.equals("string") && right.varType.equals("string"))
+			{
+								System.out.println("2222222222");	
+
+				IR.getInstance().Add_IRcommand(new IRcommand_binop_EQ_Strings(dst,t1,t2,IR.getInstance().currLine));
+			}
+			else if(left.varType.equals("int") && right.varType.equals("int"))
 			{
 				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Integers(dst,t1,t2,IR.getInstance().currLine));
 			}
-
-			// check if we are comparing integers
-			else if((left instanceof AST_EXP_STRING && right instanceof AST_EXP_STRING) || ((left instanceof AST_EXP_VAR && right instanceof AST_EXP_VAR) && ((AST_EXP_VAR)left).varType.equals("string") && ((AST_EXP_VAR)right).varType.equals("string")))
-			{
-				IR.getInstance().Add_IRcommand(new IRcommand_binop_EQ_Strings(dst,t1,t2,IR.getInstance().currLine));
-			}
-			else 
-			{
+			else{
 				IR.getInstance().Add_IRcommand(new IRcommand_Binop_EQ_Addresses(dst,t1,t2,IR.getInstance().currLine));
 			}
 	 	} 	 

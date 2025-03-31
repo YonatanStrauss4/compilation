@@ -49,7 +49,8 @@ public class Main
 			/*************************/
 			/* [6] Print the AST ... */
 			/*************************/
-			AST.PrintMe();
+
+			// AST.PrintMe();
 
 			/**************************/
 			/* [7] Semant the AST ... */
@@ -77,16 +78,20 @@ public class Main
 			System.out.println("========REGISTER ALLOCATION========");
 			System.out.println(regMap);
 			IR.getInstance().setRegMap(regMap);
-			IR.getInstance().MIPSme();
+			
 
 			/**************************************/
 			/* [10] Finalize AST GRAPHIZ DOT file */
 			/**************************************/
-			AST_GRAPHVIZ.getInstance().finalizeFile();			
+			
+			// AST_GRAPHVIZ.getInstance().finalizeFile();			
 
 			/***************************/
 			/* [11] Finalize MIPS file */
 			/***************************/
+			System.out.println(outputFilename);
+			MIPSGenerator.getInstance().setOutoutputFileName(outputFilename);
+			IR.getInstance().MIPSme();
 			MIPSGenerator.getInstance().finalizeFile();			
 
 			/**************************/

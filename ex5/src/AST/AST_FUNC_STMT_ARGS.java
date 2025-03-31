@@ -115,6 +115,7 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
 
     public TEMP IRme() {
 
+        
         // recursively IRme the arguments
         List<TEMP> args = null;
         if (funcArgs != null) {
@@ -136,9 +137,17 @@ public class AST_FUNC_STMT_ARGS extends AST_FUNC_STMT
         }
 
         // else, treat it as a function with arguments
-        else
-        {
-            IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_Args_Void(funcName, args, IR.getInstance().currLine));
+        else{
+            if(SYMBOL_TABLE.getInstance().get_current_class() != null) {
+                // if we are in a class, we need to add the this pointer to the function call
+                String lowestClassName = SYMBOL_TABLE.getInstance().findLowestClassWithMethod(SYMBOL_TABLE.getInstance().get_current_class(), funcName);
+                int offset = CLASSES_MAP.getInstance().getMethodOffset(lowestClassName, funcName); 
+                IR.getInstance().Add_IRcommand(new IRcommand_Joker_Call_Function_Args_Void(args,lowestClassName, offset, IR.getInstance().currLine));
+            }
+            else{
+                // call the function
+                IR.getInstance().Add_IRcommand(new IRcommand_Call_Function_Args_Void(funcName, args, IR.getInstance().currLine));
+            }
         }
 
         return null;

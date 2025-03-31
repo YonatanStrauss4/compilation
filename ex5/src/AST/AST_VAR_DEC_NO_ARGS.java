@@ -136,9 +136,16 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
             else if(t instanceof AST_TYPE_STRING){
                 OFFSET_TABLE.getInstance().pushVariable(varName, "STRING", false, null);
             }
-            else{   
-			    OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
-            }
+            else{
+				String typeName = ((AST_TYPE_ID)t).typeName;
+				TYPE classEntry = SYMBOL_TABLE.getInstance().find(typeName);
+				if(classEntry != null){
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", true, typeName);
+				}
+				else{
+					OFFSET_TABLE.getInstance().pushVariable(varName, "ID", false, null);
+                }
+			}
 		}
 
         // check if variable is a class member
@@ -156,8 +163,7 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
         }
 
         // get the offset of the variable
-        int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName);
-
+        int offset = OFFSET_TABLE.getInstance().findVariableOffset(varName, 0);
         // check if variable is global
         if(offset == -1){
             String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
