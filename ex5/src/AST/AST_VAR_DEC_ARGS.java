@@ -246,7 +246,7 @@ public class AST_VAR_DEC_ARGS extends AST_VAR_DEC
 		// the variable is global or a class member
 		if(offset == -1){
 			String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
-            if(type != null){
+            if(type != null && !SYMBOL_TABLE.getInstance().get_inside_class()){
 				if(exp instanceof AST_EXP_INT){
 					IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_Args(((AST_EXP_INT)exp).i ,varName, IR.getInstance().currLine));
 				}
