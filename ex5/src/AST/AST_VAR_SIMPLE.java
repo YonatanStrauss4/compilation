@@ -83,6 +83,9 @@ public class AST_VAR_SIMPLE extends AST_VAR
 						printError(this.line);
 					}
 				}
+				else{
+					varFindType = SYMBOL_TABLE.getInstance().find(varName);
+				}
 			}
 			else {
 				varFindType = SYMBOL_TABLE.getInstance().find(varName);
