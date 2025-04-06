@@ -167,7 +167,7 @@ public class AST_VAR_DEC_NO_ARGS extends AST_VAR_DEC
         // check if variable is global
         if(offset == -1){
             String type = OFFSET_TABLE.getInstance().getGlobalType(varName);
-            if(type != null){
+            if(type != null && !SYMBOL_TABLE.getInstance().get_inside_class()){
 			    IR.getInstance().Add_IRcommand(new IRcommand_Allocate_Global_No_Args(varName, IR.getInstance().currLine));
             }
         }
