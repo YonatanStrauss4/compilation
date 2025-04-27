@@ -65,8 +65,8 @@ public class Main
 			/***************************************************************************************/
 			/* PRINT IR CMDS                                                                       */
 			/* Comment out next line to print the IR Commands (true means next cmds also printed)  */
-			System.out.println("========IR CMDS========");
-			IR.getInstance().controlGraph.printControlGraph(true);                             
+			// System.out.println("========IR CMDS========");
+			// IR.getInstance().controlGraph.printControlGraph(true);                             
 			/***************************************************************************************/
 
 			/***********************/
